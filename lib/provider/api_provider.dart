@@ -61,7 +61,7 @@ class ApiProvider {
       var response = await http.get(Uri.parse(url.toString()), headers: header);
       print("TEST get profile: ${response.body}");
       if (response.statusCode == 200) {
-        var bodyConvert = jsonDecode(response.body);
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
         if (bodyConvert['isError'] == false) {
           userProfileModel = UserProfileModel.fromMap(bodyConvert['result']);
           print("Thông tin model từ get profile: $userProfileModel");
@@ -177,7 +177,7 @@ class ApiProvider {
       print("TEST get all posts: ${response.body}");
 
       if (response.statusCode == 200) {
-        var bodyConvert = jsonDecode(response.body);
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
         if (bodyConvert['isError'] == false) {
           var postsJson = bodyConvert['result'] as List<dynamic>;
           posts = postsJson

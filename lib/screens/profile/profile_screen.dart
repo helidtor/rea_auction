@@ -9,9 +9,11 @@ import 'package:swp_project_web/widgets/bar/footer_web.dart';
 import 'package:swp_project_web/widgets/bar/top_bar.dart';
 import 'package:swp_project_web/widgets/button/gradient_button.dart';
 import 'package:swp_project_web/widgets/input/field_profile.dart';
+import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
 import 'package:swp_project_web/widgets/notification/toast.dart';
 import 'package:intl/intl.dart';
+import 'package:toastification/toastification.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -55,15 +57,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
             } else if (state is UpdateProfileSuccess) {
               Navigator.pop(context);
               router.go(RouteName.home);
-              showToast(
-                context: context,
-                msg: "Cập nhật thành công",
-                color: const Color.fromARGB(255, 32, 255, 76),
-                icon: const Icon(Icons.done, color: Colors.white),
-                colorText: Colors.white,
-                top: 650,
-                right: 650,
-              );
+              toastification.show(
+                  pauseOnHover: false,
+                  progressBarTheme: const ProgressIndicatorThemeData(
+                    color: Colors.green,
+                  ),
+                  icon: const Icon(
+                    Icons.check_circle,
+                    color: Colors.green,
+                  ),
+                  foregroundColor: Colors.black,
+                  context: context,
+                  type: ToastificationType.success,
+                  style: ToastificationStyle.minimal,
+                  title: const TextContent(
+                    contentText: "Cập nhật thành công!",
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  autoCloseDuration: const Duration(seconds: 2),
+                  animationDuration: const Duration(milliseconds: 500),
+                  alignment: Alignment.topRight);
             } else if (state is ChangeAvatarSuccess) {
               Navigator.pop(context);
               showToast(

@@ -30,8 +30,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         }
       } else if (event is StartLoginEvent) {
         if (event.username == "" || event.password == "") {
-          emit(
-              LoginFailure(error: "Tài khoản & mật khẩu không được để trống!"));
+          emit(const LoginFailure(
+              error: "Tài khoản & mật khẩu không được để trống!"));
         } else {
           var user = await ApiProvider.logins(
               username: event.username, password: event.password);
@@ -40,6 +40,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             prefs.setString("password", event.password);
 
             var userLogin = await ApiProvider.getProfile();
+            var getPost = await ApiProvider.getAllPosts();
             // await AuthService()
             //     .signInWithEmailAndPassword(user.email ?? "", event.password);
             // await ApiProvider.postToken();
@@ -52,7 +53,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     } catch (e) {
       print("Loi bloc: $e");
-      emit(LoginFailure(error: "Error!"));
+      emit(const LoginFailure(error: "Error!"));
     }
   }
 }
