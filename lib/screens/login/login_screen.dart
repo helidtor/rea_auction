@@ -17,13 +17,15 @@ import 'package:swp_project_web/screens/signup/sign_up_screen.dart';
 import 'package:swp_project_web/theme/pallete.dart';
 import 'package:swp_project_web/widgets/bar/top_bar.dart';
 import 'package:swp_project_web/widgets/button/gradient_button.dart';
+import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
 import 'package:swp_project_web/widgets/input/login_field.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:swp_project_web/widgets/input/login_field_password.dart';
-import 'package:swp_project_web/widgets/others/toast.dart';
+import 'package:swp_project_web/widgets/notification/toast.dart';
 import 'package:http/http.dart' as http;
+import 'package:toastification/toastification.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -62,36 +64,103 @@ class _LoginScreen extends State<LoginScreen> {
             if (state is LoginLoading) {
               onLoading(context);
               return;
-            } else if (state is LoginFirstState) { //chưa login
+            } else if (state is LoginFirstState) {
+              //chưa login
               Navigator.pop(context);
               checkLogin = true;
-            } else if (state is LoginSuccessState) { //login thành công
-              // Navigator.pop(context);
-              //update current user logined
-              // context
-              //     .read<AuthenticationRepository>()
-              //     .updateUser(state.userProfileModel);
-              if (state.userProfileModel.role == 1) {
-                router.go(RouteName.signup);
-              } else if (state.userProfileModel.role == 2) {
-                router.go(RouteName.signup);
-              } else if (state.userProfileModel.role == 3) {
+            } else if (state is LoginSuccessState) {
+              if (state.userProfileModel.role == 3) {
                 router.go(RouteName.home);
+                toastification.show(
+                    pauseOnHover: false,
+                    progressBarTheme: const ProgressIndicatorThemeData(
+                      color: Colors.green,
+                    ),
+                    icon: const Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                    ),
+                    foregroundColor: Colors.black,
+                    context: context,
+                    type: ToastificationType.success,
+                    style: ToastificationStyle.minimal,
+                    title: const TextContent(
+                      contentText: "Đăng nhập thành công!",
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    description: TextContent(
+                      contentText:
+                          "Chào mừng ${state.userProfileModel.firstName} ${state.userProfileModel.lastName}",
+                      color: Colors.black,
+                    ),
+                    autoCloseDuration: const Duration(seconds: 2),
+                    animationDuration: const Duration(milliseconds: 500),
+                    alignment: Alignment.topRight);
+                // showToast(
+                //   context: context,
+                //   colorText: Colors.white,
+                //   msg:
+                //       "Chào mừng ${state.userProfileModel.firstName} ${state.userProfileModel.lastName}",
+                //   color: Pallete.successColor,
+                //   icon:
+                //       const Icon(Icons.waving_hand_sharp, color: Colors.white),
+                //   top: 100,
+                //   right: 650,
+                // );
               } else {
-                showToast(
-                  context: context,
-                  msg: "You do not have access ${state.userProfileModel.email}",
-                  color: const Color.fromARGB(255, 100, 99, 97),
-                  icon: const Icon(Icons.warning),
-                );
+                toastification.show(
+                    pauseOnHover: false,
+                    progressBarTheme: const ProgressIndicatorThemeData(
+                      color: Colors.red,
+                    ),
+                    icon: const Icon(
+                      Icons.error_outline_rounded,
+                      color: Colors.red,
+                    ),
+                    foregroundColor: Colors.black,
+                    context: context,
+                    type: ToastificationType.error,
+                    style: ToastificationStyle.minimal,
+                    title: const TextContent(
+                      contentText: "Lỗi đăng nhập!",
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    description: const TextContent(
+                      contentText: "Không có thẩm quyền",
+                      color: Colors.black,
+                    ),
+                    autoCloseDuration: const Duration(seconds: 2),
+                    animationDuration: const Duration(milliseconds: 500),
+                    alignment: Alignment.topRight);
               }
             } else if (state is LoginFailure) {
-              showToast(
-                context: context,
-                msg: state.error,
-                color: Pallete.gradient3,
-                icon: const Icon(Icons.warning),
-              );
+              toastification.show(
+                  pauseOnHover: false,
+                  progressBarTheme: const ProgressIndicatorThemeData(
+                    color: Colors.orange,
+                  ),
+                  icon: const Icon(
+                    Icons.warning_amber_rounded,
+                    color: Colors.orange,
+                  ),
+                  foregroundColor: Colors.black,
+                  context: context,
+                  type: ToastificationType.warning,
+                  style: ToastificationStyle.minimal,
+                  title: const TextContent(
+                    contentText: "Lỗi đăng nhập!",
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  description: const TextContent(
+                    contentText: "Tài khoản hoặc mật khẩu không chính xác",
+                    color: Colors.black,
+                  ),
+                  autoCloseDuration: const Duration(seconds: 2),
+                  animationDuration: const Duration(milliseconds: 500),
+                  alignment: Alignment.topRight);
               Navigator.pop(context);
             }
           },
@@ -158,31 +227,23 @@ class _LoginScreen extends State<LoginScreen> {
                                   //     widthButton: 0.25,
                                   //   ),
                                   // ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () {
-                                            String username =
-                                                usernameController.text;
-                                            String password =
-                                                passwordController.text;
-                                            _bloc.add(StartLoginEvent(
-                                                username: username,
-                                                password: password));
-                                          },
-                                          child: const Text(
-                                            "Đăng nhập",
-                                            style: TextStyle(
-                                              color: Pallete.gradient3,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
+                                  InkWell(
+                                    onTap: () {
+                                      String username = usernameController.text;
+                                      String password = passwordController.text;
+                                      _bloc.add(StartLoginEvent(
+                                          username: username,
+                                          password: password));
+                                    },
+                                    child: const Text(
+                                      "Đăng nhập",
+                                      style: TextStyle(
+                                        color: Pallete.gradient3,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    ],
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                   const Text(
                                     'hoặc',

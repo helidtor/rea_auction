@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swp_project_web/constant/myToken.dart';
 import 'package:swp_project_web/firebase/auth.dart';
-import 'package:swp_project_web/models/response/user_profile_model.dart';
 import 'package:swp_project_web/provider/api_provider.dart';
 import 'package:swp_project_web/router/router.dart';
 import 'package:swp_project_web/theme/pallete.dart';
 import 'package:swp_project_web/widgets/input/text_content.dart';
-import 'package:swp_project_web/widgets/others/toast.dart';
+import 'package:toastification/toastification.dart';
 
 Future<void> clearToken() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -104,14 +103,38 @@ class _ProfileButtonState extends State<ProfileButton> {
                     signOutGoogle();
                     clearToken();
                     router.go(RouteName.login);
-                    showToast(
-                      context: context,
-                      msg: "Logout successfully!",
-                      color: Color.fromARGB(255, 233, 229, 229),
-                      icon: const Icon(Icons.logout),
-                      top: 650,
-                      right: 650,
-                    );
+                    toastification.show(
+                        pauseOnHover: false,
+                        progressBarTheme: const ProgressIndicatorThemeData(
+                            color: Colors.green),
+                        icon: const Icon(
+                          Icons.check_circle,
+                          color: Colors.green,
+                        ),
+                        foregroundColor: Colors.black,
+                        context: context,
+                        type: ToastificationType.success,
+                        style: ToastificationStyle.minimal,
+                        title: const TextContent(
+                          contentText: "Đăng xuất thành công!",
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        autoCloseDuration: const Duration(seconds: 2),
+                        animationDuration: const Duration(milliseconds: 500),
+                        alignment: Alignment.topRight);
+                    // showToast(
+                    //   context: context,
+                    //   colorText: Colors.white,
+                    //   msg: "Đăng xuất thành công!",
+                    //   color: Pallete.successColor,
+                    //   icon: const Icon(
+                    //     Icons.logout,
+                    //     color: Colors.white,
+                    //   ),
+                    //   top: 650,
+                    //   right: 650,
+                    // );
                   },
                 ),
               ),

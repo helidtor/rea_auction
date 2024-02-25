@@ -4,6 +4,7 @@ import 'package:swp_project_web/widgets/bar/footer_web.dart';
 import 'package:swp_project_web/widgets/bar/top_bar.dart';
 import 'package:swp_project_web/widgets/button/gradient_button.dart';
 import 'package:swp_project_web/widgets/review_post.dart';
+import 'package:flutter_animate_on_scroll/flutter_animate_on_scroll.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,6 +16,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
+  ScrollController scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -36,6 +39,7 @@ class _HomePage extends State<HomePage> {
             ),
           ),
           SingleChildScrollView(
+            controller: ScrollController(),
             child: Stack(children: [
               Positioned(
                 right: 0,
@@ -88,7 +92,9 @@ class _HomePage extends State<HomePage> {
                             ),
                             SizedBox(height: screenHeight * 0.01),
                             const GradientButton(
-                                s: 'Khám phá', widthButton: 0.2,)
+                              s: 'Khám phá',
+                              widthButton: 0.2,
+                            )
                           ],
                         ),
                         const Spacer(),

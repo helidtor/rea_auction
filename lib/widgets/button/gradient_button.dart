@@ -1,29 +1,16 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-class GradientButton extends StatefulWidget {
+class GradientButton extends StatelessWidget {
   final String s;
   final double widthButton;
-  const GradientButton(
-      {super.key,
-      required this.s,
-      required this.widthButton,
-      Null Function()? onTap});
+  final VoidCallback? onPressed;
 
-  @override
-  State<GradientButton> createState() => _GradientButtonState();
-}
-
-class _GradientButtonState extends State<GradientButton> {
-  late String s;
-  late double widthButton;
-
-  @override
-  void initState() {
-    s = widget.s;
-    widthButton = widget.widthButton;
-    super.initState();
-  }
+  const GradientButton({
+    Key? key,
+    required this.s,
+    required this.widthButton,
+    this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +36,7 @@ class _GradientButtonState extends State<GradientButton> {
           width: screenWidth * widthButton,
           height: screenHeight * 0.07,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: onPressed,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.transparent,
               shadowColor: Colors.transparent,

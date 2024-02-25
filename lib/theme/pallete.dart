@@ -9,4 +9,5 @@ class Pallete {
   static const Color whiteColor = Colors.white;
   static const Color hintColor = Color.fromARGB(255, 122, 115, 115);
   static const Color pinkBold = Color.fromARGB(255, 196, 49, 71);
+  static const Color successColor = Color.fromARGB(255, 86, 230, 19);
 }

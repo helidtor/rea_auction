@@ -3,13 +3,13 @@ import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swp_project_web/constant/baseUrl.dart';
 import 'package:swp_project_web/constant/myToken.dart';
+import 'package:swp_project_web/models/response/post_model.dart';
 import 'package:swp_project_web/models/response/user_login_model.dart';
 import 'package:swp_project_web/models/response/user_profile_model.dart';
 import 'package:swp_project_web/router/router.dart';
 import 'package:swp_project_web/screens/home/home_page.dart';
-
-String baseUrl = 'https://reaauction.azurewebsites.net';
 
 class ApiProvider {
   static Future<Map<String, String>> getHeader() async {
@@ -64,7 +64,7 @@ class ApiProvider {
         var bodyConvert = jsonDecode(response.body);
         if (bodyConvert['isError'] == false) {
           userProfileModel = UserProfileModel.fromMap(bodyConvert['result']);
-          print(userProfileModel);
+          print("Thông tin model từ get profile: $userProfileModel");
           return userProfileModel;
           // return userProfileModel =
           //     UserProfileModel.fromMap(bodyConvert['result']);
@@ -161,5 +161,35 @@ class ApiProvider {
       return false;
     }
     return false;
+  }
+
+  // <<<< Get all post >>>>
+  static Future<List<PostModel>?> getAllPosts() async {
+    List<PostModel>? posts;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+
+    try {
+      var url = "$baseUrl/v1/auction/post/all";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response = await http.get(Uri.parse(url.toString()), headers: header);
+      print("TEST get all posts: ${response.body}");
+
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(response.body);
+        if (bodyConvert['isError'] == false) {
+          var postsJson = bodyConvert['result'] as List<dynamic>;
+          posts = postsJson
+              .map<PostModel>((postJson) => PostModel.fromMap(postJson))
+              .toList();
+          print("Thông tin get all posts: $posts");
+        }
+      }
+    } catch (e) {
+      print("Loi get all posts: $e");
+    }
+
+    return posts;
   }
 }

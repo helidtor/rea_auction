@@ -9,9 +9,9 @@ import 'package:swp_project_web/widgets/bar/footer_web.dart';
 import 'package:swp_project_web/widgets/bar/top_bar.dart';
 import 'package:swp_project_web/widgets/button/gradient_button.dart';
 import 'package:swp_project_web/widgets/input/field_profile.dart';
-import 'package:swp_project_web/widgets/input/input_field.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
-import 'package:swp_project_web/widgets/others/toast.dart';
+import 'package:swp_project_web/widgets/notification/toast.dart';
+import 'package:intl/intl.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -51,31 +51,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
             } else if (state is ProfileStateSuccess) {
               Navigator.pop(context);
               profile = state.userProfileModel;
-              print("Thông tin profile: $profile");
               isShow = true;
+            } else if (state is UpdateProfileSuccess) {
+              Navigator.pop(context);
+              router.go(RouteName.home);
+              showToast(
+                context: context,
+                msg: "Cập nhật thành công",
+                color: const Color.fromARGB(255, 32, 255, 76),
+                icon: const Icon(Icons.done, color: Colors.white),
+                colorText: Colors.white,
+                top: 650,
+                right: 650,
+              );
             } else if (state is ChangeAvatarSuccess) {
               Navigator.pop(context);
               showToast(
                 context: context,
                 msg: "Cập nhật thành công",
                 color: const Color.fromARGB(255, 32, 255, 76),
-                icon: const Icon(Icons.done),
+                icon: const Icon(Icons.done, color: Colors.white),
+                colorText: Colors.white,
               );
               _bloc.add(GetProfileEvent());
-            } else if (state is UpdateProfileSuccess) {
-              Navigator.pop(context);
-              showToast(
-                context: context,
-                msg: "Update successfully",
-                color: const Color.fromARGB(255, 32, 255, 76),
-                icon: const Icon(Icons.done),
-              );
             } else if (state is ProfileStateFailure) {
               showToast(
                 context: context,
                 msg: state.error,
                 color: Colors.orange,
-                icon: const Icon(Icons.warning),
+                icon: const Icon(Icons.warning, color: Colors.white),
+                colorText: Colors.white,
               );
               Navigator.pop(context);
             }
@@ -133,7 +138,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               content:
                                                   profile.firstName ?? "Họ",
                                               onChangeText: (value) {
-                                                inforUpdate.firstName = value;
+                                                setState(() {
+                                                  inforUpdate.firstName = value;
+                                                });
                                               },
                                             ),
                                             const SizedBox(width: 20),
@@ -142,9 +149,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               controller: _emailController,
                                               widthInput: 0.3,
                                               readOnly: false,
-                                              content: profile.lastName ?? "",
+                                              content:
+                                                  profile.lastName ?? "...",
                                               onChangeText: (value) {
-                                                inforUpdate.lastName = value;
+                                                setState(() {
+                                                  inforUpdate.lastName = value;
+                                                });
                                               },
                                             ),
                                           ],
@@ -159,7 +169,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               controller: _emailController,
                                               widthInput: 0.3,
                                               readOnly: true,
-                                              content: profile.username ?? "",
+                                              content:
+                                                  profile.username ?? "...",
                                             ),
                                             const SizedBox(width: 20),
                                             FieldProfile(
@@ -167,9 +178,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               controller: _emailController,
                                               widthInput: 0.3,
                                               readOnly: false,
-                                              content: profile.identifyId ?? "",
+                                              content:
+                                                  profile.identifyId ?? "...",
                                               onChangeText: (value) {
-                                                inforUpdate.identifyId = value;
+                                                setState(() {
+                                                  inforUpdate.identifyId =
+                                                      value;
+                                                });
                                               },
                                             ),
                                           ],
@@ -184,7 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               controller: _emailController,
                                               widthInput: 0.3,
                                               readOnly: true,
-                                              content: profile.email ?? "",
+                                              content: profile.email ?? "...",
                                             ),
                                             const SizedBox(width: 20),
                                             FieldProfile(
@@ -193,9 +208,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               widthInput: 0.3,
                                               readOnly: false,
                                               content:
-                                                  profile.phoneNumber ?? "",
+                                                  profile.phoneNumber ?? "...",
                                               onChangeText: (value) {
-                                                inforUpdate.phoneNumber = value;
+                                                setState(() {
+                                                  inforUpdate.phoneNumber =
+                                                      value;
+                                                });
                                               },
                                             ),
                                           ],
@@ -210,8 +228,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               controller: _emailController,
                                               widthInput: 0.3,
                                               readOnly: false,
-                                              content:
-                                                  profile.dateOfBirth ?? "",
+                                              content: DateFormat("dd-MM-yyyy")
+                                                      .format(DateTime.parse(
+                                                          profile
+                                                              .dateOfBirth!)) ??
+                                                  "...",
                                             ),
                                             const SizedBox(width: 20),
                                             FieldProfile(
@@ -219,9 +240,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               controller: _emailController,
                                               widthInput: 0.3,
                                               readOnly: false,
-                                              content: profile.address ?? "",
+                                              content: profile.address ?? "...",
                                               onChangeText: (value) {
-                                                inforUpdate.address = value;
+                                                setState(() {
+                                                  inforUpdate.address = value;
+                                                });
                                               },
                                             ),
                                           ],
@@ -231,23 +254,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            InkWell(
-                                              onTap: () {
-                                                print(
-                                                    "Thông tin thay đổi update profile: $inforUpdate");
+                                            GradientButton(
+                                              s: 'Cập nhật',
+                                              widthButton: 0.2,
+                                              onPressed: () {
                                                 _bloc.add(UpdateProfileEvent(
                                                     userProfileModel:
                                                         inforUpdate));
                                               },
-                                              child: const GradientButton(
-                                                s: 'Cập nhật',
-                                                widthButton: 0.2,
-                                              ),
                                             ),
                                             const SizedBox(width: 20),
-                                            const GradientButton(
+                                            GradientButton(
                                               s: 'Đổi mật khẩu',
                                               widthButton: 0.2,
+                                              onPressed: () {
+                                                // _bloc.add(UpdateProfileEvent(
+                                                //     userProfileModel:
+                                                //         inforUpdate));
+                                              },
                                             ),
                                           ],
                                         ),

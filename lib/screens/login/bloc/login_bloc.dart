@@ -45,7 +45,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             // await ApiProvider.postToken();
             emit(LoginSuccessState(userProfileModel: userLogin!));
           } else {
-            emit(LoginFailure(
+            emit(const LoginFailure(
                 error: "Tài khoản hoặc mật khẩu không chính xác!"));
           }
         }

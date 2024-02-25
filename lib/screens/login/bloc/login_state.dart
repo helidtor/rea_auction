@@ -17,14 +17,14 @@ class LoginFirstState extends LoginState {}
 
 class LoginSecondState extends LoginState {
   final UserProfileModel userProfileModel;
-  LoginSecondState({required this.userProfileModel});
+  const LoginSecondState({required this.userProfileModel});
   @override
   List<Object> get props => [userProfileModel];
 }
 
 class LoginSuccessState extends LoginState {
   final UserProfileModel userProfileModel;
-  LoginSuccessState({required this.userProfileModel});
+  const LoginSuccessState({required this.userProfileModel});
   @override
   List<Object> get props => [UserProfileModel];
 }
@@ -32,7 +32,7 @@ class LoginSuccessState extends LoginState {
 class LoginFailure extends LoginState {
   final String error;
 
-  LoginFailure({required this.error});
+  const LoginFailure({required this.error});
 
   @override
   List<Object> get props => [error];
