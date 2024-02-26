@@ -19,7 +19,6 @@ class RouteName {
   static const publicRoutes = [
     login,
     signup,
-    home,
   ];
 }
 

@@ -102,12 +102,6 @@ class _PreviewPostState extends State<PreviewPost> {
                     ? Image.network(postModel.propertyImages!.first).image
                     : const AssetImage("assets/images/error_load_image.jpg"),
               ),
-              // image: DecorationImage(
-              //   fit: BoxFit.cover,
-              //   image: Image.network(
-              //           "https://firebasestorage.googleapis.com/v0/b/swp-project-cef68.appspot.com/o/z5158654617129_df27bb81194b5280dbcb0169e3e80261.jpg?alt=media&token=58b40445-a05b-4c29-b1a6-423a723003e0")
-              //       .image,
-              // ),
             ),
           ),
           const SizedBox(

@@ -73,7 +73,7 @@ class _HomePage extends State<HomePage> {
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
-                  autoCloseDuration: const Duration(seconds: 3),
+                  autoCloseDuration: const Duration(milliseconds: 1500),
                   animationDuration: const Duration(milliseconds: 500),
                   alignment: Alignment.topRight);
             }

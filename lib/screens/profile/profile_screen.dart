@@ -75,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
-                  autoCloseDuration: const Duration(seconds: 3),
+                  autoCloseDuration: const Duration(milliseconds: 1500),
                   animationDuration: const Duration(milliseconds: 500),
                   alignment: Alignment.topRight);
             } else if (state is ChangeAvatarSuccess) {
@@ -130,6 +130,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
+                                        const SizedBox(height: 30),
+                                        Container(
+                                          // ảnh ava
+                                          width: 200,
+                                          height: 200,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              width: 5,
+                                              color: const Color.fromARGB(
+                                                  252, 0, 0, 0),
+                                            ),
+                                            color: const Color.fromARGB(
+                                                253, 255, 255, 255),
+                                            borderRadius:
+                                                BorderRadius.circular(500),
+                                            image: DecorationImage(
+                                              fit: BoxFit.fill,
+                                              image: (inforUpdate.avatarUrl !=
+                                                      null)
+                                                  ? Image.network(inforUpdate
+                                                          .avatarUrl!)
+                                                      .image
+                                                  : const AssetImage(
+                                                      "assets/images/ava_default.png"),
+                                            ),
+                                          ),
+                                        ),
                                         const SizedBox(height: 20),
                                         const Text(
                                           'Thông tin tài khoản',

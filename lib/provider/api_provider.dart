@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swp_project_web/constant/baseUrl.dart';
 import 'package:swp_project_web/constant/myToken.dart';
+import 'package:swp_project_web/models/response/form_create.dart';
 import 'package:swp_project_web/models/response/post_model.dart';
 import 'package:swp_project_web/models/response/user_login_model.dart';
 import 'package:swp_project_web/models/response/user_profile_model.dart';
@@ -196,5 +197,33 @@ class ApiProvider {
     }
 
     return posts;
+  }
+
+  static Future<bool> createForm(FormModel formCreate) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+    try {
+      var url = "$baseUrl/v1/auction/post/member/new";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var body = json.encode(formCreate.toMap());
+      var response = await http.post(Uri.parse(url.toString()),
+          headers: header, body: body);
+      print(response.body);
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(response.body);
+        if (bodyConvert['isError'] == false) {
+          print("Gửi đơn thành công");
+          return true;
+        } else {
+          print("Lỗi gửi đơn: ${response.body}");
+          return false;
+        }
+      }
+    } catch (e) {
+      print("Lỗi gửi đơn: $e");
+      return false;
+    }
+    return false;
   }
 }

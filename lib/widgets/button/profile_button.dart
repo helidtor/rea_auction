@@ -79,6 +79,15 @@ class _ProfileButtonState extends State<ProfileButton> {
             itemBuilder: (BuildContext context) => <PopupMenuEntry>[
               PopupMenuItem(
                 child: ListTile(
+                  leading: const Icon(Icons.home),
+                  title: const Text('Trang chủ'),
+                  onTap: () {
+                    router.go(RouteName.home);
+                  },
+                ),
+              ),
+              PopupMenuItem(
+                child: ListTile(
                   leading: const Icon(Icons.person),
                   title: const Text('Tài khoản'),
                   onTap: () {
@@ -120,7 +129,7 @@ class _ProfileButtonState extends State<ProfileButton> {
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
-                        autoCloseDuration: const Duration(seconds: 3),
+                        autoCloseDuration: const Duration(milliseconds: 1500),
                         animationDuration: const Duration(milliseconds: 500),
                         alignment: Alignment.topRight);
                     // showToast(
