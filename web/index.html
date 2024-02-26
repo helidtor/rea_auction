@@ -81,6 +81,25 @@
       });
     });
   </script>
+  <script>
+    let useHtml = true;
+
+    window.addEventListener('load', function (ev) {
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: function (engineInitializer) {
+          let config = {
+            renderer: useHtml ? "html" : "canvaskit",
+          };
+          engineInitializer.initializeEngine(config).then(function (appRunner) {
+            appRunner.runApp();
+          });
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>

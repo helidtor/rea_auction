@@ -94,7 +94,7 @@ class _LoginScreen extends State<LoginScreen> {
                           "Chào mừng ${state.userProfileModel.firstName} ${state.userProfileModel.lastName}",
                       color: Colors.black,
                     ),
-                    autoCloseDuration: const Duration(seconds: 2),
+                    autoCloseDuration: const Duration(seconds: 3),
                     animationDuration: const Duration(milliseconds: 500),
                     alignment: Alignment.topRight);
                 // showToast(
@@ -131,7 +131,7 @@ class _LoginScreen extends State<LoginScreen> {
                       contentText: "Không có thẩm quyền",
                       color: Colors.black,
                     ),
-                    autoCloseDuration: const Duration(seconds: 2),
+                    autoCloseDuration: const Duration(seconds: 3),
                     animationDuration: const Duration(milliseconds: 500),
                     alignment: Alignment.topRight);
               }
@@ -158,7 +158,7 @@ class _LoginScreen extends State<LoginScreen> {
                     contentText: "Tài khoản hoặc mật khẩu không chính xác",
                     color: Colors.black,
                   ),
-                  autoCloseDuration: const Duration(seconds: 2),
+                  autoCloseDuration: const Duration(seconds: 3),
                   animationDuration: const Duration(milliseconds: 500),
                   alignment: Alignment.topRight);
               Navigator.pop(context);

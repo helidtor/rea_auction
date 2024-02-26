@@ -40,7 +40,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             prefs.setString("password", event.password);
 
             var userLogin = await ApiProvider.getProfile();
-            var getPost = await ApiProvider.getAllPosts();
             // await AuthService()
             //     .signInWithEmailAndPassword(user.email ?? "", event.password);
             // await ApiProvider.postToken();

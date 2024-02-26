@@ -51,6 +51,7 @@ dependencies:
   flutter_animate_on_scroll: ^0.0.2
   motion_toast: ^2.8.0
   toastification: ^1.2.1
+  animation_list: ^3.0.0
 
 dev_dependencies:
   flutter_test:

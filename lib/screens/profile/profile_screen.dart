@@ -75,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
-                  autoCloseDuration: const Duration(seconds: 2),
+                  autoCloseDuration: const Duration(seconds: 3),
                   animationDuration: const Duration(milliseconds: 500),
                   alignment: Alignment.topRight);
             } else if (state is ChangeAvatarSuccess) {

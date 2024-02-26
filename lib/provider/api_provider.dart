@@ -169,6 +169,11 @@ class ApiProvider {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(myToken);
 
+    // List<String?> l;
+    // List<String> a = ["a", "b", "c"];
+    // l = a;
+    // print(a);
+
     try {
       var url = "$baseUrl/v1/auction/post/all";
       Map<String, String> header = await getHeader();
@@ -179,7 +184,7 @@ class ApiProvider {
       if (response.statusCode == 200) {
         var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
         if (bodyConvert['isError'] == false) {
-          var postsJson = bodyConvert['result'] as List<dynamic>;
+          var postsJson = bodyConvert['result'];
           posts = postsJson
               .map<PostModel>((postJson) => PostModel.fromMap(postJson))
               .toList();

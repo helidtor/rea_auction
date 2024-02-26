@@ -1,15 +1,32 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:swp_project_web/firebase/auth.dart';
+
+import 'package:swp_project_web/models/response/post_model.dart';
 import 'package:swp_project_web/theme/pallete.dart';
-import 'package:swp_project_web/widgets/button/gradient_button.dart';
 
 class PreviewPost extends StatefulWidget {
-  const PreviewPost({super.key});
+  PostModel postModel;
+  PreviewPost({
+    Key? key,
+    required this.postModel,
+  }) : super(key: key);
 
   @override
   State<PreviewPost> createState() => _PreviewPostState();
 }
 
 class _PreviewPostState extends State<PreviewPost> {
+  late PostModel postModel;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    postModel = widget.postModel;
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -39,21 +56,30 @@ class _PreviewPostState extends State<PreviewPost> {
             alignment: Alignment.center,
             child: Text(
               'Thời gian đấu giá',
-              style: TextStyle(fontSize: 18, color: Pallete.hintColor),
+              style: TextStyle(
+                  fontSize: 18,
+                  color: Pallete.gradient3,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(
             height: 5,
           ),
-          const Align(
-            alignment: Alignment.center,
-            child: Text(
-              '01/02/2024 14:00:00',
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                (postModel.createdAt != null)
+                    ? DateFormat("dd-MM-yyyy hh:mm:ss")
+                        .format(DateTime.parse(postModel.createdAt!))
+                    : "",
+                style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              const Text(""),
+            ],
           ),
           const SizedBox(
             height: 5,
@@ -69,32 +95,40 @@ class _PreviewPostState extends State<PreviewPost> {
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20)),
-              image: const DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage("assets/images/image_template.png"),
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: (postModel.propertyImages != null &&
+                        postModel.propertyImages?.first != "string")
+                    ? Image.network(postModel.propertyImages!.first).image
+                    : const AssetImage("assets/images/error_load_image.jpg"),
               ),
+              // image: DecorationImage(
+              //   fit: BoxFit.cover,
+              //   image: Image.network(
+              //           "https://firebasestorage.googleapis.com/v0/b/swp-project-cef68.appspot.com/o/z5158654617129_df27bb81194b5280dbcb0169e3e80261.jpg?alt=media&token=58b40445-a05b-4c29-b1a6-423a723003e0")
+              //       .image,
+              // ),
             ),
           ),
           const SizedBox(
             height: 10,
           ),
-          const Text(
-            'Nhà hai mặt tiền, trung tâm mặt tiền Quận 1. 3 phòng ngủ, 1 phòng khách, 3 tầng. Liên hệ ngay: 0348456125',
-            style: TextStyle(
+          Text(
+            postModel.content!,
+            style: const TextStyle(
                 fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(
-            height: 15,
-          ),
+          const Spacer(),
           RichText(
-            text: const TextSpan(
+            text: TextSpan(
               children: [
-                TextSpan(
-                    text: 'Giá khởi điểm:',
+                const TextSpan(
+                    text: 'Khởi điểm: ',
                     style: TextStyle(fontSize: 18, color: Pallete.hintColor)),
                 TextSpan(
-                  text: ' 1.000.000.000',
-                  style: TextStyle(
+                  text: NumberFormat.currency(locale: 'vi')
+                      .format(postModel.propertyRevervePrice),
+                  style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 17,
                       color: Colors.black),
@@ -103,7 +137,7 @@ class _PreviewPostState extends State<PreviewPost> {
             ),
           ),
           const SizedBox(
-            height: 15,
+            height: 30,
           ),
           Row(
             children: [
@@ -130,7 +164,10 @@ class _PreviewPostState extends State<PreviewPost> {
                 ),
               ),
             ],
-          )
+          ),
+          const SizedBox(
+            height: 50,
+          ),
         ]),
       ),
     );

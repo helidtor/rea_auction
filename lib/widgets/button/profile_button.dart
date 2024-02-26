@@ -120,7 +120,7 @@ class _ProfileButtonState extends State<ProfileButton> {
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
-                        autoCloseDuration: const Duration(seconds: 2),
+                        autoCloseDuration: const Duration(seconds: 3),
                         animationDuration: const Duration(milliseconds: 500),
                         alignment: Alignment.topRight);
                     // showToast(
