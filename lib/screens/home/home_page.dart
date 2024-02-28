@@ -1,4 +1,3 @@
-import 'package:animation_list/animation_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swp_project_web/models/response/post_model.dart';
@@ -13,7 +12,6 @@ import 'package:swp_project_web/widgets/button/gradient_button.dart';
 import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
 import 'package:swp_project_web/widgets/review_post.dart';
-import 'package:flutter_animate_on_scroll/flutter_animate_on_scroll.dart';
 import 'package:toastification/toastification.dart';
 
 class HomePage extends StatefulWidget {
@@ -91,7 +89,6 @@ class _HomePage extends State<HomePage> {
                   ),
                 ),
                 SingleChildScrollView(
-                  controller: ScrollController(),
                   child: Stack(children: [
                     Positioned(
                       right: 0,
@@ -143,7 +140,11 @@ class _HomePage extends State<HomePage> {
                                     ),
                                   ),
                                   SizedBox(height: screenHeight * 0.01),
-                                  const GradientButton(
+                                  GradientButton(
+                                    onPressed: () {
+                                      print(
+                                          "image post 2: ${listPost.first.propertyImages}");
+                                    },
                                     s: 'Khám phá',
                                     widthButton: 0.2,
                                   )
@@ -192,15 +193,19 @@ class _HomePage extends State<HomePage> {
                                   height: 100,
                                 ),
                                 //------------------------LIST-------------------------------
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: List.generate(
-                                    listPost.length,
-                                    (index) => Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 20.0),
-                                      child: PreviewPost(
-                                          postModel: listPost[index]),
+                                SizedBox(
+                                  width: screenWidth * 0.85,
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: List.generate(
+                                        listPost.length,
+                                        (index) => Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child: PreviewPost(
+                                              postModel: listPost[index]),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),

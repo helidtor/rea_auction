@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swp_project_web/models/response/form_create.dart';
+import 'package:swp_project_web/router/router.dart';
 import 'package:swp_project_web/screens/create_form/bloc/form_bloc.dart';
 import 'package:swp_project_web/screens/create_form/bloc/form_event.dart';
 import 'package:swp_project_web/screens/create_form/bloc/form_state.dart';
@@ -32,6 +33,7 @@ class _CreateFormState extends State<CreateForm> {
   final TextEditingController _wardController = TextEditingController();
   final TextEditingController _streetController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
+  final TextEditingController _imgController = TextEditingController();
   FormModel? formCreate = FormModel();
   @override
   Widget build(BuildContext context) {
@@ -50,7 +52,7 @@ class _CreateFormState extends State<CreateForm> {
             onLoading(context);
             return;
           } else if (state is FormStateSuccess) {
-            context.pop();
+            router.go(RouteName.home);
             toastification.show(
                 pauseOnHover: false,
                 progressBarTheme: const ProgressIndicatorThemeData(
@@ -158,6 +160,17 @@ class _CreateFormState extends State<CreateForm> {
                           widthInput: 0.61,
                         ),
                         const SizedBox(height: 20),
+                        InputField(
+                          onChangeText: (value) {
+                            setState(() {
+                              formCreate?.propertyImages?.add(value);
+                            });
+                          },
+                          content: 'Hình ảnh',
+                          controller: _imgController,
+                          widthInput: 0.61,
+                        ),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   ),
@@ -255,7 +268,8 @@ class _CreateFormState extends State<CreateForm> {
                             InputField(
                               onChangeText: (value) {
                                 setState(() {
-                                  formCreate?.propertyArea = value;
+                                  formCreate?.propertyArea =
+                                      double.parse(value);
                                 });
                               },
                               content: "Diện tích",
@@ -266,7 +280,8 @@ class _CreateFormState extends State<CreateForm> {
                             InputField(
                                 onChangeText: (value) {
                                   setState(() {
-                                    formCreate?.propertyRevervePrice = value;
+                                    formCreate?.propertyRevervePrice =
+                                        double.parse(value);
                                   });
                                 },
                                 content: "Giá khởi điểm",
@@ -279,7 +294,7 @@ class _CreateFormState extends State<CreateForm> {
                           s: 'Gửi đơn',
                           widthButton: 0.611,
                           onPressed: () {
-                            print(formCreate);
+                            print("Thông tin điền vào form: $formCreate");
                             _bloc.add(CreateFormEvent(formModel: formCreate!));
                           },
                         ),

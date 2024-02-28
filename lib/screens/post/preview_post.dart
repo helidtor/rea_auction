@@ -97,10 +97,9 @@ class _PreviewPostState extends State<PreviewPost> {
                   bottomRight: Radius.circular(20)),
               image: DecorationImage(
                 fit: BoxFit.fill,
-                image: (postModel.propertyImages != null &&
-                        postModel.propertyImages?.first != "string")
-                    ? Image.network(postModel.propertyImages!.first).image
-                    : const AssetImage("assets/images/error_load_image.jpg"),
+                image: (postModel.propertyImages!.isEmpty)
+                    ? const AssetImage("assets/images/error_load_image.jpg")
+                    : Image.network(postModel.propertyImages!.first).image,
               ),
             ),
           ),
