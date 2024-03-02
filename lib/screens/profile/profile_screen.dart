@@ -147,10 +147,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 BorderRadius.circular(500),
                                             image: DecorationImage(
                                               fit: BoxFit.fill,
-                                              image: (inforUpdate.avatarUrl !=
-                                                      null)
-                                                  ? Image.network(inforUpdate
-                                                          .avatarUrl!)
+                                              image: (profile.avatarUrl != null)
+                                                  ? Image.network(
+                                                          profile.avatarUrl!)
                                                       .image
                                                   : const AssetImage(
                                                       "assets/images/ava_default.png"),

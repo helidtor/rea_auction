@@ -108,6 +108,34 @@ class _LoginScreen extends State<LoginScreen> {
                 //   top: 100,
                 //   right: 650,
                 // );
+              } else if (state.userProfileModel.role == 2) {
+                router.go(RouteName.manage);
+                toastification.show(
+                    pauseOnHover: false,
+                    progressBarTheme: const ProgressIndicatorThemeData(
+                      color: Colors.green,
+                    ),
+                    icon: const Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                    ),
+                    foregroundColor: Colors.black,
+                    context: context,
+                    type: ToastificationType.success,
+                    style: ToastificationStyle.minimal,
+                    title: const TextContent(
+                      contentText: "Đăng nhập thành công!",
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    description: TextContent(
+                      contentText:
+                          "Chào mừng ${state.userProfileModel.firstName} ${state.userProfileModel.lastName}",
+                      color: Colors.black,
+                    ),
+                    autoCloseDuration: const Duration(milliseconds: 1500),
+                    animationDuration: const Duration(milliseconds: 500),
+                    alignment: Alignment.topRight);
               } else {
                 toastification.show(
                     pauseOnHover: false,

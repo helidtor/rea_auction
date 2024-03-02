@@ -6,6 +6,7 @@ import 'package:swp_project_web/constant/myToken.dart';
 import 'package:swp_project_web/screens/create_form/create_form.dart';
 import 'package:swp_project_web/screens/home/home_page.dart';
 import 'package:swp_project_web/screens/login/login_screen.dart';
+import 'package:swp_project_web/screens/manage/manage_screen.dart';
 import 'package:swp_project_web/screens/profile/profile_screen.dart';
 import 'package:swp_project_web/screens/signup/sign_up_screen.dart';
 
@@ -15,6 +16,7 @@ class RouteName {
   static const String signup = '/signup';
   static const String profile = '/profile';
   static const String createForm = '/create_form';
+  static const String manage = '/manage';
 
   static const publicRoutes = [
     login,
@@ -62,6 +64,10 @@ final router = GoRouter(
     GoRoute(
       path: RouteName.createForm,
       builder: (context, state) => const CreateForm(),
+    ),
+    GoRoute(
+      path: RouteName.manage,
+      builder: (context, state) => const ManageScreen(),
     ),
   ],
 );
