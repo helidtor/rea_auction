@@ -1,7 +1,9 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 import 'package:swp_project_web/models/response/form_create.dart';
+import 'package:swp_project_web/provider/api_provider.dart';
 import 'package:swp_project_web/router/router.dart';
 import 'package:swp_project_web/screens/create_form/bloc/form_bloc.dart';
 import 'package:swp_project_web/screens/create_form/bloc/form_event.dart';
@@ -14,6 +16,7 @@ import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/notification/toast.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
 import 'package:toastification/toastification.dart';
+import 'dart:typed_data';
 
 class CreateForm extends StatefulWidget {
   const CreateForm({Key? key}) : super(key: key);
@@ -23,7 +26,11 @@ class CreateForm extends StatefulWidget {
 }
 
 class _CreateFormState extends State<CreateForm> {
+  bool imageAvailable = false;
+  late String imageName;
+  late Uint8List imageFile;
   final _bloc = FormBloc();
+
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _namePropertyController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
@@ -33,8 +40,8 @@ class _CreateFormState extends State<CreateForm> {
   final TextEditingController _wardController = TextEditingController();
   final TextEditingController _streetController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
-  final TextEditingController _imgController = TextEditingController();
-  FormModel? formCreate = FormModel();
+  final TextEditingController _typePropertyController = TextEditingController();
+  FormModel formCreate = FormModel();
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -129,7 +136,7 @@ class _CreateFormState extends State<CreateForm> {
                             InputField(
                               onChangeText: (value) {
                                 setState(() {
-                                  formCreate?.title = value;
+                                  formCreate.title = value;
                                 });
                               },
                               content: 'Tiêu đề',
@@ -140,7 +147,7 @@ class _CreateFormState extends State<CreateForm> {
                             InputField(
                                 onChangeText: (value) {
                                   setState(() {
-                                    formCreate?.propertyName = value;
+                                    formCreate.propertyName = value;
                                   });
                                 },
                                 content: 'Tên tài sản',
@@ -152,7 +159,7 @@ class _CreateFormState extends State<CreateForm> {
                         InputField(
                           onChangeText: (value) {
                             setState(() {
-                              formCreate?.content = value;
+                              formCreate.content = value;
                             });
                           },
                           content: 'Nội dung',
@@ -161,15 +168,76 @@ class _CreateFormState extends State<CreateForm> {
                         ),
                         const SizedBox(height: 20),
                         InputField(
-                          onChangeText: (value) {
+                            onChangeText: (value) {
+                              setState(() {
+                                formCreate.propertyTypeId = int.parse(value);
+                              });
+                            },
+                            content: 'Loại tài sản',
+                            controller: _typePropertyController,
+                            widthInput: 0.61),
+                        const SizedBox(height: 40),
+                        //Chọn hình ảnh/////////////////////////////////////////////////////
+                        GestureDetector(
+                          onTap: () async {
+                            final image =
+                                await ImagePickerWeb.getImageAsBytes();
+                            final fileName = await ImagePickerWeb.getImageInfo;
                             setState(() {
-                              formCreate?.propertyImages?.add(value);
+                              imageFile = image!;
+                              imageAvailable = true;
+                              imageName = fileName!.fileName!;
                             });
                           },
-                          content: 'Hình ảnh',
-                          controller: _imgController,
-                          widthInput: 0.61,
+                          child: Container(
+                            height: 40,
+                            width: screenWidth * 0.61,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20)),
+                              border: Border.all(
+                                  width: 1,
+                                  color:
+                                      const Color.fromARGB(255, 168, 167, 167)),
+                            ),
+                            child: const Icon(
+                              Icons.upload,
+                              color: Color.fromARGB(255, 168, 167, 167),
+                            ),
+                          ),
                         ),
+                        imageAvailable
+                            ? Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 50,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(15),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(20)),
+                                          border: Border.all(
+                                              width: 1,
+                                              color: const Color.fromARGB(
+                                                  255, 168, 167, 167)),
+                                        ),
+                                        height: 100,
+                                        width: 100,
+                                        child: imageAvailable
+                                            ? Image.memory(
+                                                imageFile,
+                                              )
+                                            : const SizedBox(),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox(),
                         const SizedBox(height: 20),
                       ],
                     ),
@@ -216,7 +284,7 @@ class _CreateFormState extends State<CreateForm> {
                             InputField(
                               onChangeText: (value) {
                                 setState(() {
-                                  formCreate?.propertyStreet = value;
+                                  formCreate.propertyStreet = value;
                                 });
                               },
                               content: "Đường",
@@ -227,7 +295,7 @@ class _CreateFormState extends State<CreateForm> {
                             InputField(
                                 onChangeText: (value) {
                                   setState(() {
-                                    formCreate?.propertyWard = value;
+                                    formCreate.propertyWard = value;
                                   });
                                 },
                                 content: "Phường/Xã",
@@ -242,7 +310,7 @@ class _CreateFormState extends State<CreateForm> {
                             InputField(
                               onChangeText: (value) {
                                 setState(() {
-                                  formCreate?.propertyDistrict = value;
+                                  formCreate.propertyDistrict = value;
                                 });
                               },
                               content: "Quận/Huyện",
@@ -253,7 +321,7 @@ class _CreateFormState extends State<CreateForm> {
                             InputField(
                                 onChangeText: (value) {
                                   setState(() {
-                                    formCreate?.propertyCity = value;
+                                    formCreate.propertyCity = value;
                                   });
                                 },
                                 content: "Tỉnh/Thành",
@@ -268,8 +336,7 @@ class _CreateFormState extends State<CreateForm> {
                             InputField(
                               onChangeText: (value) {
                                 setState(() {
-                                  formCreate?.propertyArea =
-                                      double.parse(value);
+                                  formCreate.propertyArea = double.parse(value);
                                 });
                               },
                               content: "Diện tích",
@@ -280,7 +347,7 @@ class _CreateFormState extends State<CreateForm> {
                             InputField(
                                 onChangeText: (value) {
                                   setState(() {
-                                    formCreate?.propertyRevervePrice =
+                                    formCreate.propertyRevervePrice =
                                         double.parse(value);
                                   });
                                 },
@@ -293,9 +360,17 @@ class _CreateFormState extends State<CreateForm> {
                         GradientButton(
                           s: 'Gửi đơn',
                           widthButton: 0.611,
-                          onPressed: () {
+                          onPressed: () async {
+                            var linkUrl = await ApiProvider.uploadImage(
+                                imageFile, imageName);
+                            if (linkUrl != null) {
+                              if (formCreate.propertyImages == null) {
+                                formCreate.propertyImages = [];
+                                formCreate.propertyImages!.add(linkUrl);
+                              }
+                            }
                             print("Thông tin điền vào form: $formCreate");
-                            _bloc.add(CreateFormEvent(formModel: formCreate!));
+                            _bloc.add(CreateFormEvent(formModel: formCreate));
                           },
                         ),
                         const SizedBox(height: 40),

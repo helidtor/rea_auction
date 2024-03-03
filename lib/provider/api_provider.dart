@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swp_project_web/constant/baseUrl.dart';
@@ -7,6 +8,7 @@ import 'package:swp_project_web/models/response/form_create.dart';
 import 'package:swp_project_web/models/response/post_model.dart';
 import 'package:swp_project_web/models/response/user_login_model.dart';
 import 'package:swp_project_web/models/response/user_profile_model.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ApiProvider {
   static Future<Map<String, String>> getHeader() async {
@@ -46,6 +48,45 @@ class ApiProvider {
     return userLoginModel;
   }
 
+  static Future<String?> uploadImage(Uint8List image, String imageName) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+    final url = Uri.parse('$baseUrl/v1/auction/storage/Upload');
+    final headers = {
+      'accept': '*/*',
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'multipart/form-data',
+    };
+
+    final request = http.MultipartRequest('POST', url)
+      ..headers.addAll(headers)
+      ..files.add(
+        http.MultipartFile.fromBytes(
+          'file',
+          image,
+          filename: imageName, // Tên tệp tinh chỉnh
+          contentType: MediaType('image', 'jpeg'), // Định dạng của hình ảnh
+        ),
+      );
+
+    try {
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        print('Upload thành công: ${jsonResponse['result']}');
+        return jsonResponse['result'];
+      } else {
+        print('Lỗi upload: ${response.toString()}');
+        return null;
+      }
+    } catch (e) {
+      print('Upload lỗi: $e');
+      return null;
+    }
+  }
+
   // <<<< Get profile >>>>
   static Future<UserProfileModel?> getProfile() async {
     UserProfileModel? userProfileModel;
@@ -56,7 +97,7 @@ class ApiProvider {
       Map<String, String> header = await getHeader();
       header.addAll({'Authorization': 'Bearer $token'});
       var response = await http.get(Uri.parse(url.toString()), headers: header);
-      print("TEST get profile: ${response.body}");
+      // print("TEST get profile: ${response.body}");
       if (response.statusCode == 200) {
         var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
         if (bodyConvert['isError'] == false) {
@@ -171,7 +212,7 @@ class ApiProvider {
       Map<String, String> header = await getHeader();
       header.addAll({'Authorization': 'Bearer $token'});
       var response = await http.get(Uri.parse(url.toString()), headers: header);
-      print("TEST get all posts: ${response.body}");
+      // print("TEST get all posts: ${response.body}");
       if (response.statusCode == 200) {
         var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
         if (bodyConvert['isError'] == false) {

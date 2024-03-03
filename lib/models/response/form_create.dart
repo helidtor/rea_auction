@@ -3,6 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
+// ignore: unused_import
+import 'package:swp_project_web/models/response/property_type.dart';
+
 class FormModel {
   String? title;
   String? content;
@@ -14,6 +17,7 @@ class FormModel {
   double? propertyArea;
   double? propertyRevervePrice;
   List<String>? propertyImages;
+  int? propertyTypeId;
   FormModel({
     this.title,
     this.content,
@@ -25,6 +29,7 @@ class FormModel {
     this.propertyArea,
     this.propertyRevervePrice,
     this.propertyImages,
+    this.propertyTypeId,
   });
 
   FormModel copyWith({
@@ -38,6 +43,7 @@ class FormModel {
     double? propertyArea,
     double? propertyRevervePrice,
     List<String>? propertyImages,
+    int? propertyTypeId,
   }) {
     return FormModel(
       title: title ?? this.title,
@@ -50,6 +56,7 @@ class FormModel {
       propertyArea: propertyArea ?? this.propertyArea,
       propertyRevervePrice: propertyRevervePrice ?? this.propertyRevervePrice,
       propertyImages: propertyImages ?? this.propertyImages,
+      propertyTypeId: propertyTypeId ?? this.propertyTypeId,
     );
   }
 
@@ -65,6 +72,7 @@ class FormModel {
       'propertyArea': propertyArea,
       'propertyRevervePrice': propertyRevervePrice,
       'propertyImages': propertyImages,
+      'propertyTypeId': propertyTypeId,
     };
   }
 
@@ -92,6 +100,8 @@ class FormModel {
       propertyImages: map['propertyImages'] != null
           ? List<String>.from((map['propertyImages'] as List<String>))
           : null,
+      propertyTypeId:
+          map['propertyTypeId'] != null ? map['propertyTypeId'] as int : null,
     );
   }
 
@@ -102,7 +112,7 @@ class FormModel {
 
   @override
   String toString() {
-    return 'FormModel(title: $title, content: $content, propertyName: $propertyName, propertyStreet: $propertyStreet, propertyWard: $propertyWard, propertyDistrict: $propertyDistrict, propertyCity: $propertyCity, propertyArea: $propertyArea, propertyRevervePrice: $propertyRevervePrice, propertyImages: $propertyImages)';
+    return 'FormModel(title: $title, content: $content, propertyName: $propertyName, propertyStreet: $propertyStreet, propertyWard: $propertyWard, propertyDistrict: $propertyDistrict, propertyCity: $propertyCity, propertyArea: $propertyArea, propertyRevervePrice: $propertyRevervePrice, propertyImages: $propertyImages, propertyTypeId: $propertyTypeId)';
   }
 
   @override
@@ -118,7 +128,8 @@ class FormModel {
         other.propertyCity == propertyCity &&
         other.propertyArea == propertyArea &&
         other.propertyRevervePrice == propertyRevervePrice &&
-        listEquals(other.propertyImages, propertyImages);
+        listEquals(other.propertyImages, propertyImages) &&
+        other.propertyTypeId == propertyTypeId;
   }
 
   @override
@@ -132,6 +143,7 @@ class FormModel {
         propertyCity.hashCode ^
         propertyArea.hashCode ^
         propertyRevervePrice.hashCode ^
-        propertyImages.hashCode;
+        propertyImages.hashCode ^
+        propertyTypeId.hashCode;
   }
 }
