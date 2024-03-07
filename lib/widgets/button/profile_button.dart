@@ -132,18 +132,6 @@ class _ProfileButtonState extends State<ProfileButton> {
                         autoCloseDuration: const Duration(milliseconds: 1500),
                         animationDuration: const Duration(milliseconds: 500),
                         alignment: Alignment.topRight);
-                    // showToast(
-                    //   context: context,
-                    //   colorText: Colors.white,
-                    //   msg: "Đăng xuất thành công!",
-                    //   color: Pallete.successColor,
-                    //   icon: const Icon(
-                    //     Icons.logout,
-                    //     color: Colors.white,
-                    //   ),
-                    //   top: 650,
-                    //   right: 650,
-                    // );
                   },
                 ),
               ),

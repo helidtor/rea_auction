@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:swp_project_web/models/response/post_model.dart';
-import 'package:swp_project_web/screens/post/bloc/post_bloc.dart';
-import 'package:swp_project_web/screens/post/bloc/post_event.dart';
-import 'package:swp_project_web/screens/post/bloc/post_state.dart';
-import 'package:swp_project_web/screens/post/preview_post.dart';
+import 'package:swp_project_web/models/response/form_model.dart';
+import 'package:swp_project_web/screens/manage/manage_form/bloc/form_bloc.dart';
+import 'package:swp_project_web/screens/manage/manage_form/bloc/form_event.dart';
+import 'package:swp_project_web/screens/manage/manage_form/bloc/form_state.dart';
+import 'package:swp_project_web/screens/auction/preview_auction.dart';
 import 'package:swp_project_web/theme/pallete.dart';
 import 'package:swp_project_web/widgets/bar/footer_web.dart';
 import 'package:swp_project_web/widgets/bar/top_bar.dart';
@@ -24,9 +24,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  List<PostModel> listPost = [];
+  List<FormsModel> listPost = [];
   ScrollController scrollController = ScrollController();
-  final _bloc = PostBloc();
+  final _bloc = FormBloc();
 
   @override
   void initState() {
@@ -43,16 +43,16 @@ class _HomePage extends State<HomePage> {
         screenHeight: screenHeight,
         screenWidth: screenWidth,
       ),
-      body: BlocConsumer<PostBloc, PostState>(
+      body: BlocConsumer<FormBloc, FormStates>(
           bloc: _bloc,
           listener: (context, state) async {
-            if (state is PostLoading) {
+            if (state is FormLoading) {
               onLoading(context);
               return;
-            } else if (state is PostSuccess) {
+            } else if (state is FormSuccess) {
               Navigator.pop(context);
               listPost = state.list;
-            } else if (state is PostError) {
+            } else if (state is FormError) {
               toastification.show(
                   pauseOnHover: false,
                   progressBarTheme: const ProgressIndicatorThemeData(
@@ -202,7 +202,7 @@ class _HomePage extends State<HomePage> {
                                         listPost.length,
                                         (index) => Padding(
                                           padding: const EdgeInsets.all(10),
-                                          child: PreviewPost(
+                                          child: PreviewAuction(
                                               postModel: listPost[index]),
                                         ),
                                       ),

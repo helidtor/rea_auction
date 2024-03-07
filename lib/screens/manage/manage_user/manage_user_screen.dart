@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:swp_project_web/models/response/form_model.dart';
-import 'package:swp_project_web/screens/manage/manage_form/bloc/form_bloc.dart';
-import 'package:swp_project_web/screens/manage/manage_form/bloc/form_event.dart';
-import 'package:swp_project_web/screens/manage/manage_form/bloc/form_state.dart';
-import 'package:swp_project_web/screens/manage/manage_form/detail_form.dart';
+import 'package:swp_project_web/models/response/user_profile_model.dart';
+import 'package:swp_project_web/screens/manage/manage_user/bloc/list_user_bloc.dart';
+import 'package:swp_project_web/screens/manage/manage_user/bloc/list_user_event.dart';
+import 'package:swp_project_web/screens/manage/manage_user/bloc/list_user_state.dart';
 import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
 import 'package:toastification/toastification.dart';
 
-class ManageFormScreen extends StatefulWidget {
-  const ManageFormScreen({Key? key}) : super(key: key);
+class ManageUserScreen extends StatefulWidget {
+  const ManageUserScreen({Key? key}) : super(key: key);
 
   @override
-  State<ManageFormScreen> createState() => _ManageFormScreenState();
+  State<ManageUserScreen> createState() => _ManageUserScreenState();
 }
 
-class _ManageFormScreenState extends State<ManageFormScreen> {
-  final bool reloadWidget = false;
-  List<FormsModel> listPost = [];
-  final _bloc = FormBloc();
+class _ManageUserScreenState extends State<ManageUserScreen> {
+  List<UserProfileModel> listUser = [];
+  final _bloc = UserListBloc();
 
   @override
   void initState() {
     super.initState();
-    _bloc.add(GetAllListPost());
+    _bloc.add(GetAllListUser());
   }
 
   @override
@@ -34,53 +32,68 @@ class _ManageFormScreenState extends State<ManageFormScreen> {
         label: const Text('ID'),
         onSort: (columnIndex, ascending) {
           setState(() {
-            listPost.sort((a, b) => a.id!.compareTo(b.id as num));
+            listUser.sort((a, b) => a.id!.compareTo(b.id as num));
             if (!ascending) {
-              listPost = listPost.reversed.toList();
+              listUser = listUser.reversed.toList();
             }
           });
         },
       ),
       const DataColumn(
-        label: Text('Ảnh bìa'),
+        label: Text('Ảnh đại diện'),
       ),
       DataColumn(
-        label: const Text('Tiêu đề'),
+        label: const Text('Họ'),
         onSort: (columnIndex, ascending) {
           setState(() {
-            listPost.sort((a, b) => a.title!.compareTo(b.title as String));
+            listUser
+                .sort((a, b) => a.firstName!.compareTo(b.firstName as String));
             if (!ascending) {
-              listPost = listPost.reversed.toList();
+              listUser = listUser.reversed.toList();
             }
           });
         },
       ),
       DataColumn(
-        label: const Text('Trạng thái'),
+        label: const Text('Tên'),
         onSort: (columnIndex, ascending) {
           setState(() {
-            listPost
-                .sort((a, b) => a.postStatus!.compareTo(b.postStatus as num));
+            listUser
+                .sort((a, b) => a.lastName!.compareTo(b.lastName as String));
             if (!ascending) {
-              listPost = listPost.reversed.toList();
+              listUser = listUser.reversed.toList();
             }
           });
         },
+      ),
+      DataColumn(
+        label: const Text('Email'),
+        onSort: (columnIndex, ascending) {
+          setState(() {
+            listUser.sort((a, b) => a.email!.compareTo(b.email as String));
+            if (!ascending) {
+              listUser = listUser.reversed.toList();
+            }
+          });
+        },
+      ),
+      const DataColumn(
+        label: Text('Trạng thái'),
       ),
       const DataColumn(
         label: Text('Xem chi tiết'),
       ),
     ];
-    return BlocConsumer<FormBloc, FormStates>(
+    return BlocConsumer<UserListBloc, UserListState>(
       bloc: _bloc,
       listener: (context, state) async {
-        if (state is FormLoading) {
+        if (state is UserListLoading) {
           onLoading(context);
           return;
-        } else if (state is FormSuccess) {
+        } else if (state is UserListSuccess) {
           Navigator.pop(context);
-          listPost = state.list;
-        } else if (state is FormError) {
+          listUser = state.list;
+        } else if (state is UserListError) {
           toastification.show(
             pauseOnHover: false,
             progressBarTheme: const ProgressIndicatorThemeData(
@@ -103,9 +116,6 @@ class _ManageFormScreenState extends State<ManageFormScreen> {
             animationDuration: const Duration(milliseconds: 500),
             alignment: Alignment.topRight,
           );
-        } else if (state is FormSuccess) {
-          Navigator.pop(context);
-          listPost = state.list;
         }
       },
       builder: (context, state) {
@@ -114,14 +124,14 @@ class _ManageFormScreenState extends State<ManageFormScreen> {
           //------------------------LIST-------------------------------
           child: PaginatedDataTable(
             horizontalMargin: 100,
-            header: const Text('Danh sách đơn tạo đấu giá',
+            header: const Text('Danh sách user',
                 style: TextStyle(fontWeight: FontWeight.bold)),
             columns: _columns,
             // ignore: deprecated_member_use
-            dataRowHeight: 120,
-            source: _DataSource(listPost, context),
-            rowsPerPage: 4,
-            availableRowsPerPage: const [4, 8],
+            dataRowHeight: 70,
+            source: _DataSource(listUser),
+            rowsPerPage: 7,
+            availableRowsPerPage: const [7, 10],
           ),
         );
       },
@@ -130,20 +140,19 @@ class _ManageFormScreenState extends State<ManageFormScreen> {
 }
 
 class _DataSource extends DataTableSource {
-  final List<FormsModel> listPost;
-  final BuildContext context;
+  final List<UserProfileModel> listUser;
 
-  _DataSource(this.listPost, this.context);
+  _DataSource(this.listUser);
 
   @override
   DataRow getRow(int index) {
-    final post = listPost[index];
+    final user = listUser[index];
     return DataRow(cells: [
-      DataCell(Text(post.id.toString())),
+      DataCell(Text(user.id.toString())),
       DataCell(
         Container(
-          width: 100,
-          height: 100,
+          width: 50,
+          height: 50,
           decoration: BoxDecoration(
             border: Border.all(
               color: const Color.fromARGB(253, 255, 255, 255),
@@ -152,39 +161,35 @@ class _DataSource extends DataTableSource {
             borderRadius: const BorderRadius.all(Radius.circular(5)),
             image: DecorationImage(
               fit: BoxFit.fill,
-              image: (post.propertyImages!.isEmpty)
+              image: (user.avatarUrl == null)
                   ? const AssetImage("assets/images/error_load_image.jpg")
-                  : Image.network(post.propertyImages!.first).image,
+                  : Image.network(user.avatarUrl!).image,
             ),
           ),
         ),
       ),
-      DataCell(Text(post.title.toString())),
+      DataCell(Text(user.firstName.toString())),
+      DataCell(Text(user.lastName.toString())),
+      DataCell(Text(user.email.toString())),
       DataCell(Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: displayColor(post.postStatus),
+          color: displayColor(user.isActive),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
-          convertStatus(post.postStatus),
+          convertStatus(user.isActive),
           style:
               const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         ),
       )),
       DataCell(IconButton(
-        onPressed: () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => DetailForm(
-                formModel: post,
-              ),
-            ),
-          );
-        },
-        icon: const Icon(Icons.remove_red_eye_outlined),
+        onPressed: () {},
+        icon: Icon(
+          Icons.remove_red_eye_outlined,
+          color: Colors.black.withOpacity(0.5),
+        ),
         iconSize: 20,
-        color: Colors.black.withOpacity(0.5),
       )),
     ]);
   }
@@ -193,35 +198,27 @@ class _DataSource extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => listPost.length;
+  int get rowCount => listUser.length;
 
   @override
   int get selectedRowCount => 0;
 
-  String convertStatus(int? postStatus) {
-    switch (postStatus) {
-      case 1:
-        return 'Đợi duyệt';
-      case 2:
-        return 'Từ chối';
-      case 3:
-        return 'Đã duyệt';
-      case 4:
-        return 'Hoàn tất';
+  String convertStatus(bool? isActive) {
+    switch (isActive) {
+      case true:
+        return 'Hoạt động';
+      case false:
+        return 'Vô hiệu hóa';
       default:
         return '';
     }
   }
 
-  Color displayColor(int? postStatus) {
-    switch (postStatus) {
-      case 1:
-        return const Color.fromARGB(255, 233, 155, 53);
-      case 2:
-        return const Color.fromARGB(255, 201, 38, 38);
-      case 3:
+  Color displayColor(bool? isActive) {
+    switch (isActive) {
+      case true:
         return const Color.fromARGB(255, 72, 176, 76);
-      case 4:
+      case false:
         return const Color.fromARGB(255, 118, 128, 133);
       default:
         return Colors.white;

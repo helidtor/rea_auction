@@ -1,32 +1,32 @@
 import 'package:equatable/equatable.dart';
 
-abstract class FormStates extends Equatable {
-  const FormStates();
+abstract class FormStatess extends Equatable {
+  const FormStatess();
 
   @override
   List<Object> get props => [];
 }
 
-class FormStateInitial extends FormStates {}
+class FormStatesInitial extends FormStatess {}
 
-class FormStateLoading extends FormStates {}
+class FormStatesLoading extends FormStatess {}
 
-class FormStateFailure extends FormStates {
+class FormStatesFailure extends FormStatess {
   final String error;
 
-  const FormStateFailure({required this.error});
+  const FormStatesFailure({required this.error});
 
   @override
   List<Object> get props => [error];
 }
 
-class FormStateSuccess extends FormStates {
+class FormStatesSuccess extends FormStatess {
   final String success;
 
-  const FormStateSuccess({required this.success});
+  const FormStatesSuccess({required this.success});
 
   @override
   List<Object> get props => [success];
 }
 
-class CreateFormSuccess extends FormStates {}
+class CreateFormSuccess extends FormStatess {}

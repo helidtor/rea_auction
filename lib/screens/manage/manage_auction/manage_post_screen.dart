@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:swp_project_web/models/response/form_model.dart';
-import 'package:swp_project_web/screens/manage/manage_form/bloc/form_bloc.dart';
-import 'package:swp_project_web/screens/manage/manage_form/bloc/form_event.dart';
-import 'package:swp_project_web/screens/manage/manage_form/bloc/form_state.dart';
-import 'package:swp_project_web/screens/manage/manage_form/detail_form.dart';
+import 'package:intl/intl.dart';
+import 'package:swp_project_web/models/response/auction_model.dart';
+import 'package:swp_project_web/screens/manage/manage_auction/bloc/auction_bloc.dart';
+import 'package:swp_project_web/screens/manage/manage_auction/bloc/auction_event.dart';
+import 'package:swp_project_web/screens/manage/manage_auction/bloc/auction_state.dart';
 import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
 import 'package:toastification/toastification.dart';
 
-class ManageFormScreen extends StatefulWidget {
-  const ManageFormScreen({Key? key}) : super(key: key);
+class ManagePostScreen extends StatefulWidget {
+  const ManagePostScreen({Key? key}) : super(key: key);
 
   @override
-  State<ManageFormScreen> createState() => _ManageFormScreenState();
+  State<ManagePostScreen> createState() => _ManagePostScreenState();
 }
 
-class _ManageFormScreenState extends State<ManageFormScreen> {
-  final bool reloadWidget = false;
-  List<FormsModel> listPost = [];
-  final _bloc = FormBloc();
+class _ManagePostScreenState extends State<ManagePostScreen> {
+  List<AuctionModel> listAuction = [];
+  final _bloc = AuctionBloc();
 
   @override
   void initState() {
     super.initState();
-    _bloc.add(GetAllListPost());
+    _bloc.add(GetAllListAuction());
   }
 
   @override
@@ -34,9 +33,9 @@ class _ManageFormScreenState extends State<ManageFormScreen> {
         label: const Text('ID'),
         onSort: (columnIndex, ascending) {
           setState(() {
-            listPost.sort((a, b) => a.id!.compareTo(b.id as num));
+            listAuction.sort((a, b) => a.id!.compareTo(b.id as num));
             if (!ascending) {
-              listPost = listPost.reversed.toList();
+              listAuction = listAuction.reversed.toList();
             }
           });
         },
@@ -45,12 +44,36 @@ class _ManageFormScreenState extends State<ManageFormScreen> {
         label: Text('Ảnh bìa'),
       ),
       DataColumn(
-        label: const Text('Tiêu đề'),
+        label: const Text('Tên'),
         onSort: (columnIndex, ascending) {
           setState(() {
-            listPost.sort((a, b) => a.title!.compareTo(b.title as String));
+            listAuction.sort((a, b) => a.name!.compareTo(b.name as String));
             if (!ascending) {
-              listPost = listPost.reversed.toList();
+              listAuction = listAuction.reversed.toList();
+            }
+          });
+        },
+      ),
+      DataColumn(
+        label: const Text('Thời gian bắt đầu'),
+        onSort: (columnIndex, ascending) {
+          setState(() {
+            listAuction
+                .sort((a, b) => a.openTime!.compareTo(b.openTime as String));
+            if (!ascending) {
+              listAuction = listAuction.reversed.toList();
+            }
+          });
+        },
+      ),
+      DataColumn(
+        label: const Text('Giá khởi điểm'),
+        onSort: (columnIndex, ascending) {
+          setState(() {
+            listAuction.sort(
+                (a, b) => a.revervePrice!.compareTo(b.revervePrice as num));
+            if (!ascending) {
+              listAuction = listAuction.reversed.toList();
             }
           });
         },
@@ -59,10 +82,10 @@ class _ManageFormScreenState extends State<ManageFormScreen> {
         label: const Text('Trạng thái'),
         onSort: (columnIndex, ascending) {
           setState(() {
-            listPost
-                .sort((a, b) => a.postStatus!.compareTo(b.postStatus as num));
+            listAuction.sort(
+                (a, b) => a.auctionStatus!.compareTo(b.auctionStatus as num));
             if (!ascending) {
-              listPost = listPost.reversed.toList();
+              listAuction = listAuction.reversed.toList();
             }
           });
         },
@@ -71,16 +94,16 @@ class _ManageFormScreenState extends State<ManageFormScreen> {
         label: Text('Xem chi tiết'),
       ),
     ];
-    return BlocConsumer<FormBloc, FormStates>(
+    return BlocConsumer<AuctionBloc, AuctionState>(
       bloc: _bloc,
       listener: (context, state) async {
-        if (state is FormLoading) {
+        if (state is AuctionLoading) {
           onLoading(context);
           return;
-        } else if (state is FormSuccess) {
+        } else if (state is AuctionSuccess) {
           Navigator.pop(context);
-          listPost = state.list;
-        } else if (state is FormError) {
+          listAuction = state.list;
+        } else if (state is AuctionError) {
           toastification.show(
             pauseOnHover: false,
             progressBarTheme: const ProgressIndicatorThemeData(
@@ -103,9 +126,6 @@ class _ManageFormScreenState extends State<ManageFormScreen> {
             animationDuration: const Duration(milliseconds: 500),
             alignment: Alignment.topRight,
           );
-        } else if (state is FormSuccess) {
-          Navigator.pop(context);
-          listPost = state.list;
         }
       },
       builder: (context, state) {
@@ -114,12 +134,12 @@ class _ManageFormScreenState extends State<ManageFormScreen> {
           //------------------------LIST-------------------------------
           child: PaginatedDataTable(
             horizontalMargin: 100,
-            header: const Text('Danh sách đơn tạo đấu giá',
+            header: const Text('Danh sách cuộc đấu giá',
                 style: TextStyle(fontWeight: FontWeight.bold)),
             columns: _columns,
             // ignore: deprecated_member_use
             dataRowHeight: 120,
-            source: _DataSource(listPost, context),
+            source: _DataSource(listAuction),
             rowsPerPage: 4,
             availableRowsPerPage: const [4, 8],
           ),
@@ -130,16 +150,15 @@ class _ManageFormScreenState extends State<ManageFormScreen> {
 }
 
 class _DataSource extends DataTableSource {
-  final List<FormsModel> listPost;
-  final BuildContext context;
+  final List<AuctionModel> listAuction;
 
-  _DataSource(this.listPost, this.context);
+  _DataSource(this.listAuction);
 
   @override
   DataRow getRow(int index) {
-    final post = listPost[index];
+    final auction = listAuction[index];
     return DataRow(cells: [
-      DataCell(Text(post.id.toString())),
+      DataCell(Text(auction.id.toString())),
       DataCell(
         Container(
           width: 100,
@@ -152,36 +171,31 @@ class _DataSource extends DataTableSource {
             borderRadius: const BorderRadius.all(Radius.circular(5)),
             image: DecorationImage(
               fit: BoxFit.fill,
-              image: (post.propertyImages!.isEmpty)
+              image: (auction.auctionImages!.first.isEmpty)
                   ? const AssetImage("assets/images/error_load_image.jpg")
-                  : Image.network(post.propertyImages!.first).image,
+                  : Image.network(auction.auctionImages!.first).image,
             ),
           ),
         ),
       ),
-      DataCell(Text(post.title.toString())),
+      DataCell(Text(auction.name.toString())),
+      DataCell(Text(DateFormat("dd-MM-yyyy hh:mm:ss")
+          .format(DateTime.parse(auction.openTime.toString())))),
+      DataCell(Text('${auction.revervePrice.toString()} triệu')),
       DataCell(Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: displayColor(post.postStatus),
+          color: displayColor(auction.auctionStatus),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
-          convertStatus(post.postStatus),
+          convertStatus(auction.auctionStatus),
           style:
               const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         ),
       )),
       DataCell(IconButton(
-        onPressed: () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => DetailForm(
-                formModel: post,
-              ),
-            ),
-          );
-        },
+        onPressed: () {},
         icon: const Icon(Icons.remove_red_eye_outlined),
         iconSize: 20,
         color: Colors.black.withOpacity(0.5),
@@ -193,21 +207,19 @@ class _DataSource extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => listPost.length;
+  int get rowCount => listAuction.length;
 
   @override
   int get selectedRowCount => 0;
 
   String convertStatus(int? postStatus) {
     switch (postStatus) {
+      case 0:
+        return 'Sắp diễn ra';
       case 1:
-        return 'Đợi duyệt';
+        return 'Đang diễn ra';
       case 2:
-        return 'Từ chối';
-      case 3:
-        return 'Đã duyệt';
-      case 4:
-        return 'Hoàn tất';
+        return 'Đã kết thúc';
       default:
         return '';
     }
@@ -215,13 +227,11 @@ class _DataSource extends DataTableSource {
 
   Color displayColor(int? postStatus) {
     switch (postStatus) {
+      case 0:
+        return const Color.fromARGB(255, 53, 110, 233);
       case 1:
-        return const Color.fromARGB(255, 233, 155, 53);
-      case 2:
-        return const Color.fromARGB(255, 201, 38, 38);
-      case 3:
         return const Color.fromARGB(255, 72, 176, 76);
-      case 4:
+      case 2:
         return const Color.fromARGB(255, 118, 128, 133);
       default:
         return Colors.white;

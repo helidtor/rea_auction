@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:swp_project_web/theme/pallete.dart';
 
 class FieldProfile extends StatefulWidget {
   final String content;
@@ -37,20 +36,19 @@ class _FieldProfileState extends State<FieldProfile> {
           ConstrainedBox(
             constraints: BoxConstraints(
               maxWidth: screenWidth * widget.widthInput,
-              maxHeight: 45,
+              maxHeight: 65,
             ),
             child: TextFormField(
               initialValue: widget.content,
               readOnly: widget.readOnly,
               style: const TextStyle(
-                  color: Color.fromARGB(255, 0, 0, 0), fontSize: 15),
+                  color: Color.fromARGB(255, 0, 0, 0), fontSize: 18),
               decoration: InputDecoration(
                 //tiêu đề////////////////
                 labelText: widget.label,
-                labelStyle: TextStyle(
-                    color: const Color.fromARGB(255, 219, 84, 104)
-                        .withOpacity(0.7),
-                    fontSize: 18),
+                labelStyle: const TextStyle(
+                    color: Color.fromARGB(208, 110, 77, 202), fontSize: 20),
+                contentPadding: const EdgeInsets.all(22),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
                     color: Color.fromRGBO(168, 167, 167, 0.344),
@@ -60,7 +58,7 @@ class _FieldProfileState extends State<FieldProfile> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
-                    color: Pallete.gradient3,
+                    color: Colors.black,
                     width: 3,
                   ),
                   borderRadius: BorderRadius.circular(30),
@@ -70,9 +68,8 @@ class _FieldProfileState extends State<FieldProfile> {
                     const TextStyle(color: Color.fromARGB(255, 28, 27, 27)),
                 prefixIcon: widget.icon != null
                     ? Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: Icon(widget.icon,
-                            color: Pallete.gradient3, size: 30),
+                        padding: const EdgeInsets.only(left: 20, right: 10),
+                        child: Icon(widget.icon, color: Colors.black, size: 30),
                       )
                     : null,
               ),

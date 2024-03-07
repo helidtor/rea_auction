@@ -4,22 +4,22 @@ import 'package:intl/intl.dart';
 // ignore: unused_import
 import 'package:swp_project_web/firebase/auth.dart';
 
-import 'package:swp_project_web/models/response/post_model.dart';
+import 'package:swp_project_web/models/response/form_model.dart';
 import 'package:swp_project_web/theme/pallete.dart';
 
-class PreviewPost extends StatefulWidget {
-  PostModel postModel;
-  PreviewPost({
+class PreviewAuction extends StatefulWidget {
+  FormsModel postModel;
+  PreviewAuction({
     Key? key,
     required this.postModel,
   }) : super(key: key);
 
   @override
-  State<PreviewPost> createState() => _PreviewPostState();
+  State<PreviewAuction> createState() => _PreviewAuction();
 }
 
-class _PreviewPostState extends State<PreviewPost> {
-  late PostModel postModel;
+class _PreviewAuction extends State<PreviewAuction> {
+  late FormsModel postModel;
 
   @override
   void initState() {

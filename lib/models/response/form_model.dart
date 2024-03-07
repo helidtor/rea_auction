@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:swp_project_web/models/response/property_type_model.dart';
 import 'package:swp_project_web/models/response/user_profile_model.dart';
 
-class PostModel {
+class FormsModel {
   int? id;
   String? createdAt;
   String? modifiedAt;
@@ -29,7 +29,7 @@ class PostModel {
   int? propertyTypeId;
   PropertyTypeModel? propertyType;
   List<String>? propertyImages;
-  PostModel({
+  FormsModel({
     this.id,
     this.createdAt,
     this.modifiedAt,
@@ -54,7 +54,7 @@ class PostModel {
     this.propertyImages,
   });
 
-  PostModel copyWith({
+  FormsModel copyWith({
     int? id,
     String? createdAt,
     String? modifiedAt,
@@ -78,7 +78,7 @@ class PostModel {
     PropertyTypeModel? propertyType,
     List<String>? propertyImages,
   }) {
-    return PostModel(
+    return FormsModel(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
       modifiedAt: modifiedAt ?? this.modifiedAt,
@@ -131,8 +131,8 @@ class PostModel {
     };
   }
 
-  factory PostModel.fromMap(Map<String, dynamic> map) {
-    return PostModel(
+  factory FormsModel.fromMap(Map<String, dynamic> map) {
+    return FormsModel(
       id: map['id'] != null ? map['id'] as int : null,
       createdAt: map['createdAt'] != null ? map['createdAt'] as String : null,
       modifiedAt:
@@ -181,16 +181,16 @@ class PostModel {
 
   String toJson() => json.encode(toMap());
 
-  factory PostModel.fromJson(String source) =>
-      PostModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory FormsModel.fromJson(String source) =>
+      FormsModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'PostModel(id: $id, createdAt: $createdAt, modifiedAt: $modifiedAt, deletedAt: $deletedAt, title: $title, content: $content, reason: $reason, postStatus: $postStatus, propertyName: $propertyName, propertyStreet: $propertyStreet, propertyWard: $propertyWard, propertyDistrict: $propertyDistrict, propertyCity: $propertyCity, propertyArea: $propertyArea, propertyRevervePrice: $propertyRevervePrice, authorId: $authorId, author: $author, approverId: $approverId, approver: $approver, propertyTypeId: $propertyTypeId, propertyType: $propertyType, propertyImages: $propertyImages)';
+    return 'FormsModel(id: $id, createdAt: $createdAt, modifiedAt: $modifiedAt, deletedAt: $deletedAt, title: $title, content: $content, reason: $reason, postStatus: $postStatus, propertyName: $propertyName, propertyStreet: $propertyStreet, propertyWard: $propertyWard, propertyDistrict: $propertyDistrict, propertyCity: $propertyCity, propertyArea: $propertyArea, propertyRevervePrice: $propertyRevervePrice, authorId: $authorId, author: $author, approverId: $approverId, approver: $approver, propertyTypeId: $propertyTypeId, propertyType: $propertyType, propertyImages: $propertyImages)';
   }
 
   @override
-  bool operator ==(covariant PostModel other) {
+  bool operator ==(covariant FormsModel other) {
     if (identical(this, other)) return true;
 
     return other.id == id &&

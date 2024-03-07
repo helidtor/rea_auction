@@ -10,4 +10,6 @@ class Pallete {
   static const Color hintColor = Color.fromARGB(255, 122, 115, 115);
   static const Color pinkBold = Color.fromARGB(255, 196, 49, 71);
   static const Color successColor = Color.fromARGB(255, 86, 230, 19);
+  static const Color mainBackground = Color.fromARGB(255, 243, 215, 219);
+  static const Color sideBarColor = Color.fromARGB(255, 227, 77, 99);
 }

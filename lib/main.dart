@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Rea Auction',
       theme: ThemeData.light().copyWith(
-        scaffoldBackgroundColor: const Color.fromARGB(255, 243, 215, 219),
+        scaffoldBackgroundColor: Pallete.mainBackground,
       ),
       routerConfig: router,
     );

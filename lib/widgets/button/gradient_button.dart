@@ -4,12 +4,14 @@ class GradientButton extends StatelessWidget {
   final String s;
   final double widthButton;
   final VoidCallback? onPressed;
+  final double? heightButton;
 
   const GradientButton({
     Key? key,
     required this.s,
     required this.widthButton,
     this.onPressed,
+    this.heightButton,
   }) : super(key: key);
 
   @override
@@ -34,7 +36,7 @@ class GradientButton extends StatelessWidget {
         fit: BoxFit.scaleDown,
         child: SizedBox(
           width: screenWidth * widthButton,
-          height: screenHeight * 0.07,
+          height: heightButton ?? screenHeight * 0.07,
           child: ElevatedButton(
             onPressed: onPressed,
             style: ElevatedButton.styleFrom(

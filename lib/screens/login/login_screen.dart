@@ -1,30 +1,19 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart';
-import 'package:stroke_text/stroke_text.dart';
 import 'package:swp_project_web/screens/login/bloc/login_bloc.dart';
 import 'package:swp_project_web/screens/login/bloc/login_event.dart';
 import 'package:swp_project_web/screens/login/bloc/login_state.dart';
 import 'package:swp_project_web/firebase/auth.dart';
-import 'package:swp_project_web/provider/api_provider.dart';
-import 'package:swp_project_web/repository/authentication_repository.dart';
 import 'package:swp_project_web/router/router.dart';
-import 'package:swp_project_web/screens/home/home_page.dart';
-import 'package:swp_project_web/screens/signup/sign_up_screen.dart';
 import 'package:swp_project_web/theme/pallete.dart';
 import 'package:swp_project_web/widgets/bar/top_bar.dart';
-import 'package:swp_project_web/widgets/button/gradient_button.dart';
 import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
 import 'package:swp_project_web/widgets/input/login_field.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:swp_project_web/widgets/input/login_field_password.dart';
-import 'package:swp_project_web/widgets/notification/toast.dart';
-import 'package:http/http.dart' as http;
 import 'package:toastification/toastification.dart';
 
 class LoginScreen extends StatefulWidget {

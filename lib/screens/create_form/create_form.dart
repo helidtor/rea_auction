@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
-import 'package:swp_project_web/models/response/form_create.dart';
+import 'package:swp_project_web/models/response/form_model.dart';
 import 'package:swp_project_web/provider/api_provider.dart';
 import 'package:swp_project_web/router/router.dart';
 import 'package:swp_project_web/screens/create_form/bloc/form_bloc.dart';
@@ -22,10 +22,10 @@ class CreateForm extends StatefulWidget {
   const CreateForm({Key? key}) : super(key: key);
 
   @override
-  State<CreateForm> createState() => _CreateFormState();
+  State<CreateForm> createState() => _CreateFormStates();
 }
 
-class _CreateFormState extends State<CreateForm> {
+class _CreateFormStates extends State<CreateForm> {
   bool imageAvailable = false;
   late String imageName;
   late Uint8List imageFile;
@@ -41,7 +41,7 @@ class _CreateFormState extends State<CreateForm> {
   final TextEditingController _streetController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
   final TextEditingController _typePropertyController = TextEditingController();
-  FormModel formCreate = FormModel();
+  FormsModel formCreate = FormsModel();
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -52,13 +52,13 @@ class _CreateFormState extends State<CreateForm> {
         screenHeight: screenHeight,
         screenWidth: screenWidth,
       ),
-      body: BlocConsumer<FormBloc, FormStates>(
+      body: BlocConsumer<FormBloc, FormStatess>(
         bloc: _bloc,
         listener: (context, state) async {
-          if (state is FormStateLoading) {
+          if (state is FormStatesLoading) {
             onLoading(context);
             return;
-          } else if (state is FormStateSuccess) {
+          } else if (state is FormStatesSuccess) {
             router.go(RouteName.home);
             toastification.show(
                 pauseOnHover: false,
@@ -81,7 +81,7 @@ class _CreateFormState extends State<CreateForm> {
                 autoCloseDuration: const Duration(milliseconds: 1500),
                 animationDuration: const Duration(milliseconds: 500),
                 alignment: Alignment.topRight);
-          } else if (state is FormStateFailure) {
+          } else if (state is FormStatesFailure) {
             showToast(
               context: context,
               msg: state.error,

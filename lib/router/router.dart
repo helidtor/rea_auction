@@ -6,7 +6,7 @@ import 'package:swp_project_web/constant/myToken.dart';
 import 'package:swp_project_web/screens/create_form/create_form.dart';
 import 'package:swp_project_web/screens/home/home_page.dart';
 import 'package:swp_project_web/screens/login/login_screen.dart';
-import 'package:swp_project_web/screens/manage/manage_screen.dart';
+import 'package:swp_project_web/screens/manage/navigator_manage.dart';
 import 'package:swp_project_web/screens/profile/profile_screen.dart';
 import 'package:swp_project_web/screens/signup/sign_up_screen.dart';
 
@@ -67,7 +67,7 @@ final router = GoRouter(
     ),
     GoRoute(
       path: RouteName.manage,
-      builder: (context, state) => const ManageScreen(),
+      builder: (context, state) => const NavigatorManage(),
     ),
   ],
 );
