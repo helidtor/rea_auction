@@ -27,10 +27,7 @@ class ApiProvider {
     final url = Uri.parse('$baseUrl/v1/auction/auth/login');
     Map<String, String> header = await getHeader();
     try {
-      final body = {
-        'username': username,
-        'password': password,
-      };
+      final body = {'username': username, 'password': password};
       var response = await http.post(Uri.parse(url.toString()),
           headers: header, body: jsonEncode(body));
       print("TEST login: ${response.body}");
@@ -103,7 +100,7 @@ class ApiProvider {
         var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
         if (bodyConvert['isError'] == false) {
           userProfileModel = UserProfileModel.fromMap(bodyConvert['result']);
-          print("Thông tin model từ get profile: $userProfileModel");
+          // print("Thông tin model từ get profile: $userProfileModel");
           return userProfileModel;
           // return userProfileModel =
           //     UserProfileModel.fromMap(bodyConvert['result']);
@@ -194,11 +191,11 @@ class ApiProvider {
           posts = postsJson
               .map<FormsModel>((postJson) => FormsModel.fromMap(postJson))
               .toList();
-          print("Thông tin get all posts: $posts");
+          // print("Thông tin get all form: $posts");
         }
       }
     } catch (e) {
-      print("Loi get all posts: $e");
+      print("Loi get all form: $e");
     }
 
     return posts;
@@ -282,7 +279,7 @@ class ApiProvider {
               .map<UserProfileModel>(
                   (postJson) => UserProfileModel.fromMap(postJson))
               .toList();
-          print("Thông tin get all users: $users");
+          // print("Thông tin get all users: $users");
         }
       }
     } catch (e) {
@@ -317,6 +314,35 @@ class ApiProvider {
     } catch (e) {
       print("Lỗi gửi đơn: $e");
       return false;
+    }
+    return false;
+  }
+
+  //Phê duyệt đơn
+  static Future<bool?> approveForm({required int idForm}) async {
+    var url = '$baseUrl/v1/auction/post/approve?postId=$idForm';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+    Map<String, String> header = await getHeader();
+    header.addAll({'Authorization': 'Bearer $token'});
+
+    try {
+      var response =
+          await http.patch(Uri.parse(url.toString()), headers: header);
+      print("TEST approve: ${response.body}");
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(response.body);
+        if (bodyConvert['isError'] == false) {
+          print('Phê duyệt thành công: ${bodyConvert['result']}');
+          return true;
+          // return userLoginModel = UserLoginModel.fromMap(bodyConvert['result']);
+        } else {
+          print('Phê duyệt lỗi: ${bodyConvert['result']}');
+          return false;
+        }
+      }
+    } catch (e) {
+      print("Loi phê duyệt: $e");
     }
     return false;
   }

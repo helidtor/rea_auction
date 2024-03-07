@@ -13,13 +13,6 @@ class FormInitial extends FormStates {}
 
 class FormLoading extends FormStates {}
 
-class FormReload extends FormStates {
-  final FormsModel formsModel;
-
-  FormReload({required this.formsModel});
-
-}
-
 class FormSuccess extends FormStates {
   final List<FormsModel> list;
   const FormSuccess({required this.list});
@@ -35,3 +28,5 @@ class FormError extends FormStates {
   @override
   List<Object> get props => [error];
 }
+
+class ApproveFormSuccess extends FormStates {}

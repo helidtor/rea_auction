@@ -174,7 +174,7 @@ class _DataSource extends DataTableSource {
       )),
       DataCell(IconButton(
         onPressed: () {
-          Navigator.of(context).pushReplacement(
+          Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => DetailForm(
                 formModel: post,

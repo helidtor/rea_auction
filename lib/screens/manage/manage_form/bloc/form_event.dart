@@ -8,3 +8,8 @@ abstract class FormEvent extends Equatable {
 }
 
 class GetAllListPost extends FormEvent {}
+
+class ApproveForm extends FormEvent {
+  final int id;
+  const ApproveForm({required this.id});
+}

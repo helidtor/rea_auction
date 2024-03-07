@@ -17,12 +17,19 @@ class FormBloc extends Bloc<FormEvent, FormStates> {
       if (event is GetAllListPost) {
         var listPost = await ApiProvider.getAllPosts();
         emit(FormSuccess(list: listPost!));
+      } else if (event is ApproveForm) {
+        var check = await ApiProvider.approveForm(idForm: event.id);
+        if (check == true) {
+          emit(ApproveFormSuccess());
+        } else {
+          emit(const FormError(error: "Lỗi phê duyệt"));
+        }
       } else {
-        emit(const FormError(error: "Lỗi bài đấu giá"));
+        emit(const FormError(error: "Lỗi đơn tạo đấu giá"));
       }
     } catch (e) {
       print("Loi: $e");
-      emit(const FormError(error: "Lỗi tải bài"));
+      emit(const FormError(error: "Lỗi tải đơn"));
     }
   }
 }
