@@ -24,6 +24,16 @@ class FormBloc extends Bloc<FormEvent, FormStates> {
         } else {
           emit(const FormError(error: "Lỗi phê duyệt"));
         }
+      } else if (event is DeclinedForm) {
+        var check = await ApiProvider.declineForm(
+          idForm: event.id,
+          reason: event.reason,
+        );
+        if (check == true) {
+          emit(DeclineFormSuccess());
+        } else {
+          emit(const FormError(error: "Lỗi từ chối"));
+        }
       } else {
         emit(const FormError(error: "Lỗi đơn tạo đấu giá"));
       }

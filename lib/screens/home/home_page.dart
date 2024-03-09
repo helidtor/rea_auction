@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:swp_project_web/models/response/form_model.dart';
-import 'package:swp_project_web/screens/manage/manage_form/bloc/form_bloc.dart';
-import 'package:swp_project_web/screens/manage/manage_form/bloc/form_event.dart';
-import 'package:swp_project_web/screens/manage/manage_form/bloc/form_state.dart';
+import 'package:swp_project_web/models/response/auction_model.dart';
+import 'package:swp_project_web/screens/auction/bloc/auction_bloc.dart';
+import 'package:swp_project_web/screens/auction/bloc/auction_state.dart';
+import 'package:swp_project_web/screens/manage/manage_auction/bloc/auction_event.dart';
 import 'package:swp_project_web/screens/auction/preview_auction.dart';
 import 'package:swp_project_web/theme/pallete.dart';
 import 'package:swp_project_web/widgets/bar/footer_web.dart';
@@ -24,14 +24,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  List<FormsModel> listPost = [];
+  List<AuctionModel> listAuction = [];
   ScrollController scrollController = ScrollController();
-  final _bloc = FormBloc();
+  final _bloc = AuctionPostBloc();
 
   @override
   void initState() {
     super.initState();
-    _bloc.add(GetAllListPost());
+    _bloc.add(GetAllListAuction());
   }
 
   @override
@@ -43,16 +43,16 @@ class _HomePage extends State<HomePage> {
         screenHeight: screenHeight,
         screenWidth: screenWidth,
       ),
-      body: BlocConsumer<FormBloc, FormStates>(
+      body: BlocConsumer<AuctionPostBloc, AuctionState>(
           bloc: _bloc,
           listener: (context, state) async {
-            if (state is FormLoading) {
+            if (state is AuctionLoading) {
               onLoading(context);
               return;
-            } else if (state is FormSuccess) {
+            } else if (state is AuctionSuccess) {
               Navigator.pop(context);
-              listPost = state.list;
-            } else if (state is FormError) {
+              listAuction = state.list;
+            } else if (state is AuctionError) {
               toastification.show(
                   pauseOnHover: false,
                   progressBarTheme: const ProgressIndicatorThemeData(
@@ -143,7 +143,7 @@ class _HomePage extends State<HomePage> {
                                   GradientButton(
                                     onPressed: () {
                                       print(
-                                          "image post 2: ${listPost.first.propertyImages}");
+                                          "image post 2: ${listAuction.first.auctionImages}");
                                     },
                                     s: 'Khám phá',
                                     widthButton: 0.2,
@@ -199,11 +199,11 @@ class _HomePage extends State<HomePage> {
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
                                       children: List.generate(
-                                        listPost.length,
+                                        listAuction.length,
                                         (index) => Padding(
                                           padding: const EdgeInsets.all(10),
                                           child: PreviewAuction(
-                                              postModel: listPost[index]),
+                                              auctionModel: listAuction[index]),
                                         ),
                                       ),
                                     ),

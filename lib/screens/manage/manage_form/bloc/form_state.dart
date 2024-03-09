@@ -30,3 +30,5 @@ class FormError extends FormStates {
 }
 
 class ApproveFormSuccess extends FormStates {}
+
+class DeclineFormSuccess extends FormStates {}

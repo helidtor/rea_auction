@@ -5,6 +5,7 @@ import 'package:swp_project_web/models/response/auction_model.dart';
 import 'package:swp_project_web/screens/manage/manage_auction/bloc/auction_bloc.dart';
 import 'package:swp_project_web/screens/manage/manage_auction/bloc/auction_event.dart';
 import 'package:swp_project_web/screens/manage/manage_auction/bloc/auction_state.dart';
+import 'package:swp_project_web/theme/pallete.dart';
 import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
 import 'package:toastification/toastification.dart';
@@ -134,8 +135,31 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
           //------------------------LIST-------------------------------
           child: PaginatedDataTable(
             horizontalMargin: 100,
-            header: const Text('Danh sách cuộc đấu giá',
-                style: TextStyle(fontWeight: FontWeight.bold)),
+            header: Row(
+              children: [
+                const Text('Danh sách cuộc đấu giá',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 15, right: 15),
+                  child: TextButton(
+                      style: const ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Pallete.sideBarColor)),
+                      onPressed: () {},
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Tạo đấu giá',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                          ),
+                        ),
+                      )),
+                ),
+              ],
+            ),
             columns: _columns,
             // ignore: deprecated_member_use
             dataRowHeight: 120,

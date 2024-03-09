@@ -85,6 +85,50 @@ class ApiProvider {
     }
   }
 
+//Up nhiều ảnh
+  static Future<List<String>?> uploadMultiImage(
+      List<Uint8List> images, List<String> imageNames) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+    final url = Uri.parse('$baseUrl/v1/auction/storage/upload/multiple-files');
+    final headers = {
+      'accept': '*/*',
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'multipart/form-data',
+    };
+
+    final request = http.MultipartRequest('POST', url)..headers.addAll(headers);
+
+    for (int i = 0; i < images.length; i++) {
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'files',
+          images[i],
+          filename: imageNames[i], // Tên tệp tinh chỉnh
+          contentType: MediaType('image', 'jpeg'), // Định dạng của hình ảnh
+        ),
+      );
+    }
+
+    try {
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        print('Upload thành công: ${jsonResponse['result']}');
+        // Trả về danh sách các đường dẫn của các tệp ảnh đã tải lên
+        return List<String>.from(jsonResponse['result']);
+      } else {
+        print('Lỗi upload: ${response.toString()}');
+        return null;
+      }
+    } catch (e) {
+      print('Upload lỗi: $e');
+      return null;
+    }
+  }
+
   // <<<< Get profile >>>>
   static Future<UserProfileModel?> getProfile() async {
     UserProfileModel? userProfileModel;
@@ -172,6 +216,35 @@ class ApiProvider {
     return false;
   }
 
+  // <<<< Get all auction >>>>
+  static Future<List<AuctionModel>?> getAllAuctions() async {
+    List<AuctionModel>? auction;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+
+    try {
+      var url = "$baseUrl/v1/auction/auction/all";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response = await http.get(Uri.parse(url.toString()), headers: header);
+      // print("TEST get all posts: ${response.body}");
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
+        if (bodyConvert['isError'] == false) {
+          var postsJson = bodyConvert['result'];
+          auction = postsJson
+              .map<AuctionModel>((postJson) => AuctionModel.fromMap(postJson))
+              .toList();
+          // print("Thông tin get all form: $posts");
+        }
+      }
+    } catch (e) {
+      print("Loi get all auction: $e");
+    }
+
+    return auction;
+  }
+
   // <<<< Get all post >>>>
   static Future<List<FormsModel>?> getAllPosts() async {
     List<FormsModel>? posts;
@@ -221,6 +294,8 @@ class ApiProvider {
               .map<PropertyModel>((postJson) => PropertyModel.fromMap(postJson))
               .toList();
           print("Thông tin get all property: $properties");
+        } else {
+          print("Không get được list tài sản");
         }
       }
     } catch (e) {
@@ -343,6 +418,38 @@ class ApiProvider {
       }
     } catch (e) {
       print("Loi phê duyệt: $e");
+    }
+    return false;
+  }
+
+  //Phê duyệt đơn
+  static Future<bool?> declineForm(
+      {required int idForm, required String reason}) async {
+    var url = '$baseUrl/v1/auction/post/reject?postId=$idForm';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+    Map<String, String> header = await getHeader();
+    header.addAll({'Authorization': 'Bearer $token'});
+
+    var body = {"reason": reason};
+
+    try {
+      var response = await http.patch(Uri.parse(url.toString()),
+          headers: header, body: json.encode(body));
+      print("TEST decline: ${response.body}");
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(response.body);
+        if (bodyConvert['isError'] == false) {
+          print('Từ chối thành công: ${bodyConvert['result']}');
+          return true;
+          // return userLoginModel = UserLoginModel.fromMap(bodyConvert['result']);
+        } else {
+          print('Từ chối lỗi: ${bodyConvert['result']}');
+          return false;
+        }
+      }
+    } catch (e) {
+      print("Loi từ chối: $e");
     }
     return false;
   }

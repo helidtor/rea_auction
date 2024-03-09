@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate_on_scroll/flutter_animate_on_scroll.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:swp_project_web/screens/manage/manage_form/manage_form_screen.dart';
-import 'package:swp_project_web/screens/manage/manage_auction/manage_post_screen.dart';
+import 'package:swp_project_web/screens/manage/manage_auction/manage_auction_screen.dart';
 import 'package:swp_project_web/screens/manage/manage_property/manage_property_screen.dart';
 import 'package:swp_project_web/screens/manage/manage_user/manage_user_screen.dart';
 import 'package:swp_project_web/screens/manage/settings/setting_screen.dart';
@@ -56,7 +56,7 @@ class _NavigatorManageState extends State<NavigatorManage> {
             theme: SidebarXTheme(
               itemTextPadding: const EdgeInsets.only(left: 30),
               iconTheme: const IconThemeData(
-                  color: Color.fromARGB(178, 255, 255, 255)),
+                  size: 20, color: Color.fromARGB(178, 255, 255, 255)),
               textStyle: const TextStyle(
                 color: Colors.white70,
               ),
@@ -71,7 +71,8 @@ class _NavigatorManageState extends State<NavigatorManage> {
                 fontWeight: FontWeight.w600,
               ),
               selectedItemTextPadding: const EdgeInsets.only(left: 30),
-              selectedIconTheme: const IconThemeData(color: Colors.white),
+              selectedIconTheme:
+                  const IconThemeData(color: Colors.white, size: 28),
               selectedItemDecoration: BoxDecoration(
                 color: const Color.fromARGB(255, 239, 107, 127),
                 borderRadius: BorderRadius.circular(20),

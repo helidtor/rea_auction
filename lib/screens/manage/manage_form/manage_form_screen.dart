@@ -5,6 +5,7 @@ import 'package:swp_project_web/screens/manage/manage_form/bloc/form_bloc.dart';
 import 'package:swp_project_web/screens/manage/manage_form/bloc/form_event.dart';
 import 'package:swp_project_web/screens/manage/manage_form/bloc/form_state.dart';
 import 'package:swp_project_web/screens/manage/manage_form/detail_form.dart';
+import 'package:swp_project_web/theme/pallete.dart';
 import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
 import 'package:toastification/toastification.dart';
@@ -29,6 +30,7 @@ class _ManageFormScreenState extends State<ManageFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //cột trong bảng
     final List<DataColumn> _columns = [
       DataColumn(
         label: const Text('ID'),
@@ -71,6 +73,8 @@ class _ManageFormScreenState extends State<ManageFormScreen> {
         label: Text('Xem chi tiết'),
       ),
     ];
+
+    //gọi bloc
     return BlocConsumer<FormBloc, FormStates>(
       bloc: _bloc,
       listener: (context, state) async {
@@ -138,6 +142,7 @@ class _DataSource extends DataTableSource {
   @override
   DataRow getRow(int index) {
     final post = listPost[index];
+    //dữ liệu từng cột
     return DataRow(cells: [
       DataCell(Text(post.id.toString())),
       DataCell(
@@ -159,7 +164,15 @@ class _DataSource extends DataTableSource {
           ),
         ),
       ),
-      DataCell(Text(post.title.toString())),
+      DataCell(
+        Container(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: Text(
+            post.title.toString(),
+            overflow: TextOverflow.visible,
+          ),
+        ),
+      ),
       DataCell(Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
@@ -172,20 +185,23 @@ class _DataSource extends DataTableSource {
               const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         ),
       )),
-      DataCell(IconButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => DetailForm(
-                formModel: post,
-              ),
-            ),
-          );
-        },
-        icon: const Icon(Icons.remove_red_eye_outlined),
-        iconSize: 20,
-        color: Colors.black.withOpacity(0.5),
-      )),
+      DataCell(
+        IconButton(
+          onPressed: () {
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) => DetailForm(
+            //       formModel: post,
+            //     ),
+            //   ),
+            // );
+            _showDetailDialog(context, post);
+          },
+          icon: const Icon(Icons.remove_red_eye_outlined),
+          iconSize: 20,
+          color: Colors.black.withOpacity(0.5),
+        ),
+      ),
     ]);
   }
 
@@ -203,7 +219,7 @@ class _DataSource extends DataTableSource {
       case 1:
         return 'Đợi duyệt';
       case 2:
-        return 'Từ chối';
+        return 'Đã từ chối';
       case 3:
         return 'Đã duyệt';
       case 4:
@@ -226,5 +242,56 @@ class _DataSource extends DataTableSource {
       default:
         return Colors.white;
     }
+  }
+
+  void _showDetailDialog(BuildContext context, FormsModel formModel) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Pallete.sideBarColor,
+          titlePadding: EdgeInsets.zero,
+          title: Padding(
+            padding: const EdgeInsets.only(left: 15, right: 10),
+            child: Row(
+              children: [
+                Text(
+                  'Thông tin chi tiết',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                      color: Colors.white.withOpacity(0.9)),
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: Icon(
+                    Icons.close,
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          contentPadding: EdgeInsets.all(8),
+          content: Container(
+            constraints: BoxConstraints(
+              minHeight: screenHeight * 0.6,
+              minWidth: screenWidth * 0.77,
+            ),
+            child: DetailForm(formModel: formModel),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: const BorderSide(
+                width: 1, color: Colors.grey), // Đường viền dưới mỏng
+          ),
+        );
+      },
+    );
   }
 }

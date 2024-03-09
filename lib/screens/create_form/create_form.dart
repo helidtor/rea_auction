@@ -182,11 +182,11 @@ class _CreateFormStates extends State<CreateForm> {
                           onTap: () async {
                             final image =
                                 await ImagePickerWeb.getImageAsBytes();
-                            final fileName = await ImagePickerWeb.getImageInfo;
+                            final fileName = DateTime.now().toString();
                             setState(() {
                               imageFile = image!;
                               imageAvailable = true;
-                              imageName = fileName!.fileName!;
+                              imageName = fileName;
                             });
                           },
                           child: Container(

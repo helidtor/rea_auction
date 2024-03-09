@@ -32,12 +32,12 @@ class _DetailFormState extends State<DetailForm> {
       formModel = widget.formModel!;
     }
     return Scaffold(
-      appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back))),
+      // appBar: AppBar(
+      //     leading: IconButton(
+      //         onPressed: () {
+      //           Navigator.pop(context);
+      //         },
+      //         icon: const Icon(Icons.arrow_back))),
       body: BlocConsumer<FormBloc, FormStates>(
         bloc: _bloc,
         listener: (context, state) async {
@@ -68,6 +68,30 @@ class _DetailFormState extends State<DetailForm> {
                 autoCloseDuration: const Duration(milliseconds: 1500),
                 animationDuration: const Duration(milliseconds: 500),
                 alignment: Alignment.topRight);
+          } else if (state is DeclineFormSuccess) {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            toastification.show(
+                pauseOnHover: false,
+                progressBarTheme: const ProgressIndicatorThemeData(
+                  color: Colors.green,
+                ),
+                icon: const Icon(
+                  Icons.check_circle,
+                  color: Colors.green,
+                ),
+                foregroundColor: Colors.black,
+                context: context,
+                type: ToastificationType.success,
+                style: ToastificationStyle.minimal,
+                title: const TextContent(
+                  contentText: "Từ chối thành công",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+                autoCloseDuration: const Duration(milliseconds: 1500),
+                animationDuration: const Duration(milliseconds: 500),
+                alignment: Alignment.topRight);
           } else if (state is FormError) {
             showToast(
               context: context,
@@ -80,11 +104,8 @@ class _DetailFormState extends State<DetailForm> {
           }
         },
         builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 20, left: 250),
+          return SingleChildScrollView(
             child: Container(
-              width: screenWidth * 0.75,
-              height: screenHeight * 0.8,
               decoration: BoxDecoration(
                   border: Border.all(
                     color: const Color.fromARGB(253, 255, 255, 255),
@@ -166,11 +187,14 @@ class _DetailFormState extends State<DetailForm> {
                                   ),
                                 ),
                                 const Spacer(),
-                                Text(
-                                  formModel.title ?? "",
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
+                                Flexible(
+                                  child: Text(
+                                    formModel.title ?? "",
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.visible,
                                   ),
                                 ),
                               ],
@@ -216,15 +240,19 @@ class _DetailFormState extends State<DetailForm> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
                                   ),
+                                  overflow: TextOverflow.visible,
                                 ),
                                 const Spacer(),
-                                Text(
-                                  formModel.propertyWard != null
-                                      ? '${formModel.propertyStreet}, ${formModel.propertyWard}, ${formModel.propertyDistrict}, ${formModel.propertyCity}'
-                                      : '',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
+                                Flexible(
+                                  child: Text(
+                                    formModel.propertyWard != null
+                                        ? '${formModel.propertyStreet}, ${formModel.propertyWard}, ${formModel.propertyDistrict}, ${formModel.propertyCity}'
+                                        : '',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.visible,
                                   ),
                                 ),
                               ],
@@ -340,13 +368,17 @@ class _DetailFormState extends State<DetailForm> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
                                   ),
+                                  overflow: TextOverflow.visible,
                                 ),
                                 const Spacer(),
-                                Text(
-                                  formModel.content ?? "",
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
+                                Flexible(
+                                  child: Text(
+                                    formModel.content ?? "",
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.visible,
                                   ),
                                 ),
                               ],
@@ -378,7 +410,11 @@ class _DetailFormState extends State<DetailForm> {
                                       ),
                                     )),
                                 TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _bloc.add(DeclinedForm(
+                                          id: formModel.id!,
+                                          reason: 'Đơn không hợp lệ'));
+                                    },
                                     child: Container(
                                       width: 120,
                                       height: 35,
