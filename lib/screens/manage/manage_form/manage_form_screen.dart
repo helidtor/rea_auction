@@ -277,7 +277,7 @@ class _DataSource extends DataTableSource {
               ],
             ),
           ),
-          contentPadding: EdgeInsets.all(8),
+          contentPadding: const EdgeInsets.all(8),
           content: Container(
             constraints: BoxConstraints(
               minHeight: screenHeight * 0.6,

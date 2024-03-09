@@ -29,6 +29,8 @@ class _CreateFormStates extends State<CreateForm> {
   bool imageAvailable = false;
   late String imageName;
   late Uint8List imageFile;
+  List<Uint8List> listImageFile = [];
+  List<String> ListImageName = [];
   final _bloc = FormBloc();
 
   final TextEditingController _titleController = TextEditingController();
@@ -185,8 +187,10 @@ class _CreateFormStates extends State<CreateForm> {
                             final fileName = DateTime.now().toString();
                             setState(() {
                               imageFile = image!;
+                              listImageFile.add(imageFile);
                               imageAvailable = true;
                               imageName = fileName;
+                              ListImageName.add(imageName);
                             });
                           },
                           child: Container(
@@ -361,12 +365,12 @@ class _CreateFormStates extends State<CreateForm> {
                           s: 'Gửi đơn',
                           widthButton: 0.611,
                           onPressed: () async {
-                            var linkUrl = await ApiProvider.uploadImage(
-                                imageFile, imageName);
-                            if (linkUrl != null) {
+                            var linkUrl = await ApiProvider.uploadMultiImage(
+                                listImageFile, ListImageName);
+                            if (linkUrl!.isNotEmpty) {
                               if (formCreate.propertyImages == null) {
                                 formCreate.propertyImages = [];
-                                formCreate.propertyImages!.add(linkUrl);
+                                formCreate.propertyImages = linkUrl;
                               }
                             }
                             print("Thông tin điền vào form: $formCreate");
