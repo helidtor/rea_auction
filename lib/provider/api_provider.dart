@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swp_project_web/constant/baseUrl.dart';
 import 'package:swp_project_web/constant/myToken.dart';
 import 'package:swp_project_web/models/response/auction_model.dart';
+import 'package:swp_project_web/models/response/form_auction.dart';
 import 'package:swp_project_web/models/response/form_model.dart';
 import 'package:swp_project_web/models/response/property_model.dart';
 import 'package:swp_project_web/models/response/user_login_model.dart';
@@ -424,7 +425,7 @@ class ApiProvider {
   }
 
 //Tạo đấu giá
-  static Future<bool> createAuction(AuctionModel auctionModel) async {
+  static Future<bool> createAuction(FormAuction auctionModel) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(myToken);
     try {

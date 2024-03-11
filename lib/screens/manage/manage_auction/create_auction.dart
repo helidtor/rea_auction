@@ -2,6 +2,7 @@ import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swp_project_web/models/response/auction_model.dart';
+import 'package:swp_project_web/models/response/form_auction.dart';
 import 'package:swp_project_web/models/response/property_model.dart';
 import 'package:swp_project_web/screens/manage/manage_auction/bloc/auction_bloc.dart';
 import 'package:swp_project_web/screens/manage/manage_auction/bloc/auction_event.dart';
@@ -27,7 +28,7 @@ class _CreateAuctionState extends State<CreateAuction> {
   List<String> noList = ["Không có tài sản"];
   int? idProperty;
   PropertyModel propertyModel = PropertyModel();
-  AuctionModel inforAuction = AuctionModel();
+  FormAuction inforAuction = FormAuction();
   bool isShow = false;
   List<String> listImage = [];
   String selectedImage = "";
@@ -94,6 +95,8 @@ class _CreateAuctionState extends State<CreateAuction> {
               selectedImage = listImage.first;
               inforAuction.auctionImages = propertyModel.images!;
               inforAuction.propertyId = propertyModel.id;
+              inforAuction.name = propertyModel.name;
+              inforAuction.revervePrice = propertyModel.revervePrice;
             }
             isShow = true;
           } else if (state is AuctionError) {
@@ -198,8 +201,10 @@ class _CreateAuctionState extends State<CreateAuction> {
                                 children: [
                                   TextButton(
                                       onPressed: () {
+                                        print(
+                                            "Thông tin tạo auction lúc nhập: $inforAuction");
                                         _bloc.add(CreateAuctionPost(
-                                            auctionModel: inforAuction));
+                                            formAuction: inforAuction));
                                       },
                                       child: Container(
                                         width: 120,

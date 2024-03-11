@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:swp_project_web/models/response/auction_model.dart';
+import 'package:swp_project_web/models/response/form_auction.dart';
 
 abstract class AuctionEvent extends Equatable {
   const AuctionEvent();
@@ -18,6 +19,6 @@ class GetPropertyById extends AuctionEvent {
 }
 
 class CreateAuctionPost extends AuctionEvent {
-  final AuctionModel auctionModel;
-  const CreateAuctionPost({required this.auctionModel});
+  final FormAuction formAuction;
+  const CreateAuctionPost({required this.formAuction});
 }

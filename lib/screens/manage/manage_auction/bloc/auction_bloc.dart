@@ -18,7 +18,7 @@ class AuctionBloc extends Bloc<AuctionEvent, AuctionState> {
         var listAuction = await ApiProvider.getAllPostAuction();
         emit(AuctionSuccess(list: listAuction!));
       } else if (event is CreateAuctionPost) {
-        var inforAuction = event.auctionModel;
+        var inforAuction = event.formAuction;
         var isCreate = await ApiProvider.createAuction(inforAuction);
         if (isCreate == true) {
           emit(CreateAuctionSuccess());
