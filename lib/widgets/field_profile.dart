@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class FieldProfile extends StatefulWidget {
   final String content;
   final bool readOnly;
-  final String label;
+  final String? label;
   final TextEditingController? controller;
   final double widthInput;
   final Function? onChangeText;
   final IconData? icon;
   const FieldProfile({
     Key? key,
-    required this.label,
+    this.label,
     this.controller,
     required this.widthInput,
     required this.readOnly,

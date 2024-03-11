@@ -6,7 +6,6 @@ import 'package:swp_project_web/screens/manage/manage_form/bloc/form_bloc.dart';
 import 'package:swp_project_web/screens/manage/manage_form/bloc/form_event.dart';
 
 import 'package:swp_project_web/screens/manage/manage_form/bloc/form_state.dart';
-import 'package:swp_project_web/theme/pallete.dart';
 import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/notification/toast.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
@@ -41,8 +40,6 @@ class _DetailFormState extends State<DetailForm> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    bool isApprove = false;
 
     return Scaffold(
       body: BlocConsumer<FormBloc, FormStates>(

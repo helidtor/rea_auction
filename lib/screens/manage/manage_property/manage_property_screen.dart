@@ -153,7 +153,7 @@ class _ManagePropertyScreenState extends State<ManagePropertyScreen> {
           padding: const EdgeInsets.all(15),
           //------------------------LIST-------------------------------
           child: PaginatedDataTable(
-            horizontalMargin: 100,
+            horizontalMargin: 20,
             header: const Text('Danh sách tài sản',
                 style: TextStyle(fontWeight: FontWeight.bold)),
             columns: _columns,

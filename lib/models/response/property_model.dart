@@ -16,6 +16,7 @@ class PropertyModel {
   double? area;
   double? revervePrice;
   int? postId;
+  bool? isAvailable;
   FormsModel? post;
   PropertyModel({
     this.id,
@@ -28,6 +29,7 @@ class PropertyModel {
     this.area,
     this.revervePrice,
     this.postId,
+    this.isAvailable,
     this.post,
   });
 
@@ -42,6 +44,7 @@ class PropertyModel {
     double? area,
     double? revervePrice,
     int? postId,
+    bool? isAvailable,
     FormsModel? post,
   }) {
     return PropertyModel(
@@ -55,6 +58,7 @@ class PropertyModel {
       area: area ?? this.area,
       revervePrice: revervePrice ?? this.revervePrice,
       postId: postId ?? this.postId,
+      isAvailable: isAvailable ?? this.isAvailable,
       post: post ?? this.post,
     );
   }
@@ -71,6 +75,7 @@ class PropertyModel {
       'area': area,
       'revervePrice': revervePrice,
       'postId': postId,
+      'isAvailable': isAvailable,
       'post': post?.toMap(),
     };
   }
@@ -88,6 +93,8 @@ class PropertyModel {
       revervePrice:
           map['revervePrice'] != null ? map['revervePrice'] as double : null,
       postId: map['postId'] != null ? map['postId'] as int : null,
+      isAvailable:
+          map['isAvailable'] != null ? map['isAvailable'] as bool : null,
       post: map['post'] != null
           ? FormsModel.fromMap(map['post'] as Map<String, dynamic>)
           : null,
@@ -101,7 +108,7 @@ class PropertyModel {
 
   @override
   String toString() {
-    return 'PropertyModel(id: $id, name: $name, images: $images, street: $street, ward: $ward, district: $district, city: $city, area: $area, revervePrice: $revervePrice, postId: $postId, post: $post)';
+    return 'PropertyModel(id: $id, name: $name, images: $images, street: $street, ward: $ward, district: $district, city: $city, area: $area, revervePrice: $revervePrice, postId: $postId, isAvailable: $isAvailable, post: $post)';
   }
 
   @override
@@ -118,6 +125,7 @@ class PropertyModel {
         other.area == area &&
         other.revervePrice == revervePrice &&
         other.postId == postId &&
+        other.isAvailable == isAvailable &&
         other.post == post;
   }
 
@@ -133,6 +141,7 @@ class PropertyModel {
         area.hashCode ^
         revervePrice.hashCode ^
         postId.hashCode ^
+        isAvailable.hashCode ^
         post.hashCode;
   }
 }

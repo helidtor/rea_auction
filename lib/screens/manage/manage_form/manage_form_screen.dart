@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swp_project_web/models/response/form_model.dart';
+import 'package:swp_project_web/router/router.dart';
 import 'package:swp_project_web/screens/manage/manage_form/bloc/form_bloc.dart';
 import 'package:swp_project_web/screens/manage/manage_form/bloc/form_event.dart';
 import 'package:swp_project_web/screens/manage/manage_form/bloc/form_state.dart';
 import 'package:swp_project_web/screens/manage/manage_form/detail_form.dart';
+import 'package:swp_project_web/screens/manage/navigator_manage.dart';
 import 'package:swp_project_web/theme/pallete.dart';
 import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
@@ -107,9 +109,6 @@ class _ManageFormScreenState extends State<ManageFormScreen> {
             animationDuration: const Duration(milliseconds: 500),
             alignment: Alignment.topRight,
           );
-        } else if (state is FormSuccess) {
-          Navigator.pop(context);
-          listPost = state.list;
         }
       },
       builder: (context, state) {

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:swp_project_web/models/response/auction_model.dart';
+import 'package:swp_project_web/screens/create_form/create_form.dart';
 import 'package:swp_project_web/screens/manage/manage_auction/bloc/auction_bloc.dart';
 import 'package:swp_project_web/screens/manage/manage_auction/bloc/auction_event.dart';
 import 'package:swp_project_web/screens/manage/manage_auction/bloc/auction_state.dart';
+import 'package:swp_project_web/screens/manage/manage_auction/create_auction.dart';
 import 'package:swp_project_web/theme/pallete.dart';
 import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
@@ -59,8 +61,8 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
         label: const Text('Thời gian bắt đầu'),
         onSort: (columnIndex, ascending) {
           setState(() {
-            listAuction
-                .sort((a, b) => a.openTime!.compareTo(b.openTime as String));
+            listAuction.sort((a, b) =>
+                a.biddingStartTime!.compareTo(b.biddingStartTime as String));
             if (!ascending) {
               listAuction = listAuction.reversed.toList();
             }
@@ -130,6 +132,48 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
         }
       },
       builder: (context, state) {
+        //show popup tạo auction
+        void showDetailDialog(BuildContext context) {
+          double screenWidth = MediaQuery.of(context).size.width;
+          double screenHeight = MediaQuery.of(context).size.height;
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                backgroundColor: Pallete.sideBarColor,
+                titlePadding: EdgeInsets.zero,
+                title: Padding(
+                  padding: const EdgeInsets.only(left: 15, top: 8, bottom: 8),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Tạo đấu giá',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20,
+                            color: Colors.white.withOpacity(0.9)),
+                      ),
+                    ],
+                  ),
+                ),
+                contentPadding: const EdgeInsets.only(
+                    left: 8, right: 8, bottom: 20, top: 8),
+                content: Container(
+                  constraints: BoxConstraints(
+                    minHeight: screenHeight * 0.7,
+                    minWidth: screenWidth * 0.8,
+                  ),
+                  child: const CreateAuction(),
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: const BorderSide(width: 1, color: Colors.grey),
+                ),
+              );
+            },
+          );
+        }
+
         return Padding(
           padding: const EdgeInsets.all(15),
           //------------------------LIST-------------------------------
@@ -146,7 +190,9 @@ class _ManagePostScreenState extends State<ManagePostScreen> {
                       style: const ButtonStyle(
                           backgroundColor:
                               MaterialStatePropertyAll(Pallete.sideBarColor)),
-                      onPressed: () {},
+                      onPressed: () {
+                        showDetailDialog(context);
+                      },
                       child: const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
@@ -204,7 +250,7 @@ class _DataSource extends DataTableSource {
       ),
       DataCell(Text(auction.name.toString())),
       DataCell(Text(DateFormat("dd-MM-yyyy hh:mm:ss")
-          .format(DateTime.parse(auction.openTime.toString())))),
+          .format(DateTime.parse(auction.biddingStartTime.toString())))),
       DataCell(Text('${auction.revervePrice.toString()} triệu')),
       DataCell(Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

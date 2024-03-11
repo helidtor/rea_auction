@@ -73,9 +73,9 @@ class _PreviewAuction extends State<PreviewAuction> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  (auctionModel.createdAt != null)
+                  (auctionModel.biddingStartTime != null)
                       ? DateFormat("dd-MM-yyyy hh:mm:ss")
-                          .format(DateTime.parse(auctionModel.createdAt!))
+                          .format(DateTime.parse(auctionModel.biddingStartTime!))
                       : "",
                   style: const TextStyle(
                       fontSize: 18,

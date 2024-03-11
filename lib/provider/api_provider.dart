@@ -105,7 +105,7 @@ class ApiProvider {
           'files',
           images[i],
           filename: imageNames[i], // Tên tệp tinh chỉnh
-          contentType: MediaType('image', 'jpeg'), // Định dạng của hình ảnh
+          contentType: MediaType('image', 'jpeg'), // Định dạng hình ảnh
         ),
       );
     }
@@ -294,6 +294,7 @@ class ApiProvider {
               .map<PropertyModel>((postJson) => PropertyModel.fromMap(postJson))
               .toList();
           print("Thông tin get all property: $properties");
+          return properties;
         } else {
           print("Không get được list tài sản");
         }
@@ -303,6 +304,35 @@ class ApiProvider {
     }
 
     return properties;
+  }
+
+// <<<< Get property by id>>>>
+  static Future<PropertyModel?> getPropertyById(int id) async {
+    PropertyModel? property;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+
+    try {
+      var url = "$baseUrl/v1/auction/property/$id";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response = await http.get(Uri.parse(url.toString()), headers: header);
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
+        if (bodyConvert['isError'] == false) {
+          var postsJson = bodyConvert['result'];
+          property = PropertyModel.fromMap(postsJson);
+          print("Thông tin get property by id: $property");
+          return property;
+        } else {
+          print("Không get được tài sản");
+        }
+      }
+    } catch (e) {
+      print("Loi get tài sản bằng id: $e");
+    }
+
+    return property;
   }
 
 // <<<< Get all post auction >>>>
@@ -388,6 +418,35 @@ class ApiProvider {
       }
     } catch (e) {
       print("Lỗi gửi đơn: $e");
+      return false;
+    }
+    return false;
+  }
+
+//Tạo đấu giá
+  static Future<bool> createAuction(AuctionModel auctionModel) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+    try {
+      var url = "$baseUrl/v1/auction/auction/staff/new";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var body = json.encode(auctionModel.toMap());
+      var response = await http.post(Uri.parse(url.toString()),
+          headers: header, body: body);
+      print(response.body);
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(response.body);
+        if (bodyConvert['isError'] == false) {
+          print("Tạo auction thành công");
+          return true;
+        } else {
+          print("Lỗi tạo auction: ${response.body}");
+          return false;
+        }
+      }
+    } catch (e) {
+      print("Lỗi tạo: $e");
       return false;
     }
     return false;
