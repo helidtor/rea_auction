@@ -1,6 +1,7 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:swp_project_web/models/response/auction_model.dart';
 import 'package:swp_project_web/models/response/form_auction.dart';
 import 'package:swp_project_web/models/response/property_model.dart';
@@ -97,6 +98,8 @@ class _CreateAuctionState extends State<CreateAuction> {
               inforAuction.propertyId = propertyModel.id;
               inforAuction.name = propertyModel.name;
               inforAuction.revervePrice = propertyModel.revervePrice;
+              inforAuction.content = propertyModel.post!.content;
+              inforAuction.title = propertyModel.post!.title;
             }
             isShow = true;
           } else if (state is AuctionError) {
@@ -435,8 +438,9 @@ class _CreateAuctionState extends State<CreateAuction> {
                                             onTap: () {},
                                             onChangeText: (value) {
                                               setState(() {
+                                                String date = value;
                                                 inforAuction.biddingStartTime =
-                                                    value;
+                                                    convertDateTimeFormat(date);
                                               });
                                             },
                                           ),
@@ -444,8 +448,9 @@ class _CreateAuctionState extends State<CreateAuction> {
                                             labelText: 'Thời gian kết thúc',
                                             onChangeText: (value) {
                                               setState(() {
+                                                String date = value;
                                                 inforAuction.biddingEndTime =
-                                                    value;
+                                                    convertDateTimeFormat(date);
                                               });
                                             },
                                           ),
@@ -472,5 +477,13 @@ class _CreateAuctionState extends State<CreateAuction> {
         },
       ),
     );
+  }
+
+  String convertDateTimeFormat(String inputDateTime) {
+    final inputFormat = DateFormat("dd-MM-yyyy HH:mm:ss");
+    final outputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    final dateTime = inputFormat.parse(inputDateTime);
+    final formattedDateTime = outputFormat.format(dateTime);
+    return formattedDateTime;
   }
 }

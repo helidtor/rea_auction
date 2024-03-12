@@ -10,6 +10,7 @@ class AuctionModel {
   int? id;
   int? auctionStatus;
   String? name;
+  String? title;
   String? biddingStartTime;
   String? biddingEndTime;
   double? revervePrice;
@@ -17,12 +18,14 @@ class AuctionModel {
   int? propertyId;
   int? authorId;
   int? propertyTypeId;
-  PropertyModel? propertyModel;
+  String? content;
+  PropertyModel? property;
   List<String>? auctionImages;
   AuctionModel({
     this.id,
     this.auctionStatus,
     this.name,
+    this.title,
     this.biddingStartTime,
     this.biddingEndTime,
     this.revervePrice,
@@ -30,7 +33,8 @@ class AuctionModel {
     this.propertyId,
     this.authorId,
     this.propertyTypeId,
-    this.propertyModel,
+    this.content,
+    this.property,
     this.auctionImages,
   });
 
@@ -38,6 +42,7 @@ class AuctionModel {
     int? id,
     int? auctionStatus,
     String? name,
+    String? title,
     String? biddingStartTime,
     String? biddingEndTime,
     double? revervePrice,
@@ -45,13 +50,15 @@ class AuctionModel {
     int? propertyId,
     int? authorId,
     int? propertyTypeId,
-    PropertyModel? propertyModel,
+    String? content,
+    PropertyModel? property,
     List<String>? auctionImages,
   }) {
     return AuctionModel(
       id: id ?? this.id,
       auctionStatus: auctionStatus ?? this.auctionStatus,
       name: name ?? this.name,
+      title: title ?? this.title,
       biddingStartTime: biddingStartTime ?? this.biddingStartTime,
       biddingEndTime: biddingEndTime ?? this.biddingEndTime,
       revervePrice: revervePrice ?? this.revervePrice,
@@ -59,7 +66,8 @@ class AuctionModel {
       propertyId: propertyId ?? this.propertyId,
       authorId: authorId ?? this.authorId,
       propertyTypeId: propertyTypeId ?? this.propertyTypeId,
-      propertyModel: propertyModel ?? this.propertyModel,
+      content: content ?? this.content,
+      property: property ?? this.property,
       auctionImages: auctionImages ?? this.auctionImages,
     );
   }
@@ -69,6 +77,7 @@ class AuctionModel {
       'id': id,
       'auctionStatus': auctionStatus,
       'name': name,
+      'title': title,
       'biddingStartTime': biddingStartTime,
       'biddingEndTime': biddingEndTime,
       'revervePrice': revervePrice,
@@ -76,7 +85,8 @@ class AuctionModel {
       'propertyId': propertyId,
       'authorId': authorId,
       'propertyTypeId': propertyTypeId,
-      'propertyModel': propertyModel?.toMap(),
+      'content': content,
+      'property': property?.toMap(),
       'auctionImages': auctionImages,
     };
   }
@@ -87,6 +97,7 @@ class AuctionModel {
       auctionStatus:
           map['auctionStatus'] != null ? map['auctionStatus'] as int : null,
       name: map['name'] != null ? map['name'] as String : null,
+      title: map['title'] != null ? map['title'] as String : null,
       biddingStartTime: map['biddingStartTime'] != null
           ? map['biddingStartTime'] as String
           : null,
@@ -101,54 +112,16 @@ class AuctionModel {
       authorId: map['authorId'] != null ? map['authorId'] as int : null,
       propertyTypeId:
           map['propertyTypeId'] != null ? map['propertyTypeId'] as int : null,
-      propertyModel: map['propertyModel'] != null
-          ? PropertyModel.fromMap(map['propertyModel'])
+      content: map['content'] != null ? map['content'] as String : null,
+      property: map['property'] != null
+          ? PropertyModel.fromMap(map['property'] as Map<String, dynamic>)
           : null,
       auctionImages: map['auctionImages'] != null
           ? List<String>.from((map['auctionImages']))
           : null,
     );
   }
-  // factory AuctionModel.fromMap(Map<String, dynamic> map) {
-  //   return AuctionModel(
-  //     id: map['id'] != null ? map['id'] as int : null,
-  //     auctionStatus:
-  //         map['auctionStatus'] != null ? map['auctionStatus'] as int : null,
-  //     name: map['name'] != null ? map['name'] as String : null,
-  //     createdAt: map['createdAt'] != null ? map['createdAt'] as String : null,
-  //     openTime: map['openTime'] != null ? map['openTime'] as String : null,
-  //     modifiedAt:
-  //         map['modifiedAt'] != null ? map['modifiedAt'] as String : null,
-  //     deletedAt: map['deletedAt'] != null ? map['deletedAt'] as String : null,
-  //     endTime: map['endTime'] != null ? map['endTime'] as String : null,
-  //     biddingStartTime: map['biddingStartTime'] != null
-  //         ? map['biddingStartTime'] as String
-  //         : null,
-  //     biddingEndTime: map['biddingEndTime'] != null
-  //         ? map['biddingEndTime'] as String
-  //         : null,
-  //     revervePrice:
-  //         map['revervePrice'] != null ? map['revervePrice'] as double : null,
-  //     joiningFee:
-  //         map['joiningFee'] != null ? map['joiningFee'] as double : null,
-  //     finalPrice:
-  //         map['finalPrice'] != null ? map['finalPrice'] as double : null,
-  //     stepFee: map['stepFee'] != null ? map['stepFee'] as double : null,
-  //     deposit: map['deposit'] != null ? map['deposit'] as double : null,
-  //     method: map['method'] != null ? map['method'] as String : null,
-  //     propertyId: map['propertyId'] != null ? map['propertyId'] as int : null,
-  //     authorId: map['authorId'] != null ? map['authorId'] as int : null,
-  //     propertyTypeId:
-  //         map['propertyTypeId'] != null ? map['propertyTypeId'] as int : null,
-  //     propertyType: map['propertyType'] != null
-  //         ? PropertyTypeModel.fromMap(
-  //             map['propertyType'] as Map<String, dynamic>)
-  //         : null,
-  //     auctionImages: map['auctionImages'] != null
-  //         ? List<String>.from((map['auctionImages']))
-  //         : null,
-  //   );
-  // }
+
   String toJson() => json.encode(toMap());
 
   factory AuctionModel.fromJson(String source) =>
@@ -156,7 +129,7 @@ class AuctionModel {
 
   @override
   String toString() {
-    return 'AuctionModel(id: $id, auctionStatus: $auctionStatus, name: $name, biddingStartTime: $biddingStartTime, biddingEndTime: $biddingEndTime, revervePrice: $revervePrice, finalPrice: $finalPrice, propertyId: $propertyId, authorId: $authorId, propertyTypeId: $propertyTypeId, propertyModel: $propertyModel, auctionImages: $auctionImages)';
+    return 'AuctionModel(id: $id, auctionStatus: $auctionStatus, name: $name, title: $title, biddingStartTime: $biddingStartTime, biddingEndTime: $biddingEndTime, revervePrice: $revervePrice, finalPrice: $finalPrice, propertyId: $propertyId, authorId: $authorId, propertyTypeId: $propertyTypeId, content: $content, property: $property, auctionImages: $auctionImages)';
   }
 
   @override
@@ -166,6 +139,7 @@ class AuctionModel {
     return other.id == id &&
         other.auctionStatus == auctionStatus &&
         other.name == name &&
+        other.title == title &&
         other.biddingStartTime == biddingStartTime &&
         other.biddingEndTime == biddingEndTime &&
         other.revervePrice == revervePrice &&
@@ -173,7 +147,8 @@ class AuctionModel {
         other.propertyId == propertyId &&
         other.authorId == authorId &&
         other.propertyTypeId == propertyTypeId &&
-        other.propertyModel == propertyModel &&
+        other.content == content &&
+        other.property == property &&
         listEquals(other.auctionImages, auctionImages);
   }
 
@@ -182,6 +157,7 @@ class AuctionModel {
     return id.hashCode ^
         auctionStatus.hashCode ^
         name.hashCode ^
+        title.hashCode ^
         biddingStartTime.hashCode ^
         biddingEndTime.hashCode ^
         revervePrice.hashCode ^
@@ -189,7 +165,8 @@ class AuctionModel {
         propertyId.hashCode ^
         authorId.hashCode ^
         propertyTypeId.hashCode ^
-        propertyModel.hashCode ^
+        content.hashCode ^
+        property.hashCode ^
         auctionImages.hashCode;
   }
 }

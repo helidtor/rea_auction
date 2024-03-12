@@ -9,6 +9,8 @@ class FormAuction {
   String? biddingEndTime;
   double? revervePrice;
   int? propertyId;
+  String? content;
+  String? title;
   List<String>? auctionImages;
   FormAuction({
     this.name,
@@ -16,6 +18,8 @@ class FormAuction {
     this.biddingEndTime,
     this.revervePrice,
     this.propertyId,
+    this.content,
+    this.title,
     this.auctionImages,
   });
 
@@ -25,6 +29,8 @@ class FormAuction {
     String? biddingEndTime,
     double? revervePrice,
     int? propertyId,
+    String? content,
+    String? title,
     List<String>? auctionImages,
   }) {
     return FormAuction(
@@ -33,6 +39,8 @@ class FormAuction {
       biddingEndTime: biddingEndTime ?? this.biddingEndTime,
       revervePrice: revervePrice ?? this.revervePrice,
       propertyId: propertyId ?? this.propertyId,
+      content: content ?? this.content,
+      title: title ?? this.title,
       auctionImages: auctionImages ?? this.auctionImages,
     );
   }
@@ -44,6 +52,8 @@ class FormAuction {
       'biddingEndTime': biddingEndTime,
       'revervePrice': revervePrice,
       'propertyId': propertyId,
+      'content': content,
+      'title': title,
       'auctionImages': auctionImages,
     };
   }
@@ -60,6 +70,8 @@ class FormAuction {
       revervePrice:
           map['revervePrice'] != null ? map['revervePrice'] as double : null,
       propertyId: map['propertyId'] != null ? map['propertyId'] as int : null,
+      content: map['content'] != null ? map['content'] as String : null,
+      title: map['title'] != null ? map['title'] as String : null,
       auctionImages: map['auctionImages'] != null
           ? List<String>.from((map['auctionImages']))
           : null,
@@ -73,7 +85,7 @@ class FormAuction {
 
   @override
   String toString() {
-    return 'FormAuction(name: $name, biddingStartTime: $biddingStartTime, biddingEndTime: $biddingEndTime, revervePrice: $revervePrice, propertyId: $propertyId, auctionImages: $auctionImages)';
+    return 'FormAuction(name: $name, biddingStartTime: $biddingStartTime, biddingEndTime: $biddingEndTime, revervePrice: $revervePrice, propertyId: $propertyId, content: $content, title: $title, auctionImages: $auctionImages)';
   }
 
   @override
@@ -85,6 +97,8 @@ class FormAuction {
         other.biddingEndTime == biddingEndTime &&
         other.revervePrice == revervePrice &&
         other.propertyId == propertyId &&
+        other.content == content &&
+        other.title == title &&
         listEquals(other.auctionImages, auctionImages);
   }
 
@@ -95,6 +109,8 @@ class FormAuction {
         biddingEndTime.hashCode ^
         revervePrice.hashCode ^
         propertyId.hashCode ^
+        content.hashCode ^
+        title.hashCode ^
         auctionImages.hashCode;
   }
 }

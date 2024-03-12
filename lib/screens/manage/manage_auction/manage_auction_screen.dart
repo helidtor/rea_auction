@@ -251,7 +251,7 @@ class _DataSource extends DataTableSource {
       DataCell(Text(auction.name.toString())),
       DataCell(Text(DateFormat("dd-MM-yyyy hh:mm:ss")
           .format(DateTime.parse(auction.biddingStartTime.toString())))),
-      DataCell(Text('${auction.revervePrice.toString()} triệu')),
+      DataCell(Text(auction.revervePrice.toString())),
       DataCell(Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(

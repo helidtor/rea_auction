@@ -1,11 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-// ignore: unused_import
-import 'package:swp_project_web/firebase/auth.dart';
 import 'package:swp_project_web/models/response/auction_model.dart';
 
-import 'package:swp_project_web/models/response/form_model.dart';
+import 'package:swp_project_web/screens/auction/detail_auction.dart';
 import 'package:swp_project_web/theme/pallete.dart';
 
 class PreviewAuction extends StatefulWidget {
@@ -74,8 +72,8 @@ class _PreviewAuction extends State<PreviewAuction> {
               children: [
                 Text(
                   (auctionModel.biddingStartTime != null)
-                      ? DateFormat("dd-MM-yyyy hh:mm:ss")
-                          .format(DateTime.parse(auctionModel.biddingStartTime!))
+                      ? DateFormat("dd-MM-yyyy hh:mm:ss").format(
+                          DateTime.parse(auctionModel.biddingStartTime!))
                       : "",
                   style: const TextStyle(
                       fontSize: 18,
@@ -117,6 +115,18 @@ class _PreviewAuction extends State<PreviewAuction> {
                   color: Colors.black,
                   fontWeight: FontWeight.bold),
             ),
+            const SizedBox(
+              height: 5,
+            ),
+            Text(
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+              auctionModel.content ?? "",
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+              ),
+            ),
             const Spacer(),
             RichText(
               text: TextSpan(
@@ -125,7 +135,8 @@ class _PreviewAuction extends State<PreviewAuction> {
                       text: 'Khởi điểm: ',
                       style: TextStyle(fontSize: 15, color: Pallete.hintColor)),
                   TextSpan(
-                    text: '${auctionModel.revervePrice} triệu',
+                    text:
+                        "${formatCurrency(auctionModel.revervePrice.toString())}VNĐ",
                     style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
@@ -140,7 +151,14 @@ class _PreviewAuction extends State<PreviewAuction> {
             Row(
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    print('Chi tiết đấu giá: ${auctionModel}');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                DetailAuction(auctionModel: auctionModel)));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Pallete.pinkBold,
                     shadowColor: Colors.transparent,
@@ -170,5 +188,14 @@ class _PreviewAuction extends State<PreviewAuction> {
         ),
       ),
     );
+  }
+
+  String formatCurrency(String input) {
+    // Định dạng số tiền có dấu phẩy ngăn cách hàng nghìn và dấu chấm phẩy phân cách phần thập phân
+    final formatter = NumberFormat("#,###");
+    // Chuyển đổi chuỗi thành số nguyên
+    final number = int.parse(input);
+    // Áp dụng định dạng tiền tệ và trả về chuỗi đã được định dạng
+    return formatter.format(number);
   }
 }
