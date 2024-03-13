@@ -32,7 +32,7 @@ class _PreviewAuction extends State<PreviewAuction> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Container(
-      height: screenHeight * 0.75,
+      height: 570,
       width: screenWidth * 0.2,
       decoration: BoxDecoration(
           border: Border.all(

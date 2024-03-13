@@ -292,7 +292,7 @@ class _DetailFormState extends State<DetailForm> {
                                     ),
                                     const Spacer(),
                                     Text(
-                                      formModel.propertyArea.toString() ?? "",
+                                      '${formatCurrency(formModel.propertyRevervePrice.toString())} VNĐ',
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 14,
@@ -342,6 +342,30 @@ class _DetailFormState extends State<DetailForm> {
                                     const Spacer(),
                                     Text(
                                       convertStatus(formModel.postStatus),
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, bottom: 10),
+                                child: Row(
+                                  children: [
+                                    const Text(
+                                      'Loại tài sản:',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      formModel.propertyType?.name ?? '',
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 14,
@@ -552,5 +576,11 @@ class _DetailFormState extends State<DetailForm> {
       default:
         return '';
     }
+  }
+
+  String formatCurrency(String input) {
+    final formatter = NumberFormat("#,###");
+    final number = int.parse(input);
+    return formatter.format(number);
   }
 }

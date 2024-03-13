@@ -39,8 +39,8 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
             },
             child: Image.asset(
               'assets/images/logo_web_auction.jpg',
-              width: screenWidth * 0.1,
-              height: screenHeight * 0.075,
+              width: 100,
+              height: 100,
             ),
           ),
           SizedBox(

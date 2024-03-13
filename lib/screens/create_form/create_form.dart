@@ -8,6 +8,7 @@ import 'package:swp_project_web/router/router.dart';
 import 'package:swp_project_web/screens/create_form/bloc/form_bloc.dart';
 import 'package:swp_project_web/screens/create_form/bloc/form_event.dart';
 import 'package:swp_project_web/screens/create_form/bloc/form_state.dart';
+import 'package:swp_project_web/theme/pallete.dart';
 import 'package:swp_project_web/widgets/bar/footer_web.dart';
 import 'package:swp_project_web/widgets/button/gradient_button.dart';
 import 'package:swp_project_web/widgets/input/input_field.dart';
@@ -26,6 +27,7 @@ class CreateForm extends StatefulWidget {
 }
 
 class _CreateFormStates extends State<CreateForm> {
+  String? dropdownValue;
   bool imageAvailable = false;
   late String imageName;
   late Uint8List imageFile;
@@ -168,17 +170,47 @@ class _CreateFormStates extends State<CreateForm> {
                           controller: _contentController,
                           widthInput: 0.61,
                         ),
-                        const SizedBox(height: 20),
-                        InputField(
-                            onChangeText: (value) {
+                        const SizedBox(height: 25),
+                        SizedBox(
+                          width: screenWidth * 0.61,
+                          child: DropdownButtonFormField<String>(
+                            decoration: const InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 2,
+                                  color: Pallete.gradient3,
+                                ),
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 168, 167, 167),
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                            ),
+                            hint: const Text('Loại tài sản'),
+                            value: dropdownValue,
+                            onChanged: (String? newValue) {
                               setState(() {
-                                formCreate.propertyTypeId = int.parse(value);
+                                dropdownValue = newValue!;
+                                if (dropdownValue == 'Nhà') {
+                                  formCreate.propertyTypeId = 1;
+                                } else if (dropdownValue == 'Đất') {
+                                  formCreate.propertyTypeId = 2;
+                                }
                               });
                             },
-                            content: 'Loại tài sản',
-                            controller: _typePropertyController,
-                            widthInput: 0.61),
-                        const SizedBox(height: 40),
+                            items: <String>['Nhà', 'Đất']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        const SizedBox(height: 35),
                         //Chọn hình ảnh/////////////////////////////////////////////////////
                         GestureDetector(
                           onTap: () async {

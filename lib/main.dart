@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:swp_project_web/firebase/firebase_options.dart';
 import 'package:swp_project_web/firebase/auth.dart';
 import 'package:swp_project_web/router/router.dart';
@@ -39,6 +40,9 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Rea Auction',
       theme: ThemeData.light().copyWith(
+        textTheme: GoogleFonts.notoSansTextTheme(
+          Theme.of(context).textTheme,
+        ),
         scaffoldBackgroundColor: Pallete.mainBackground,
       ),
       routerConfig: router,

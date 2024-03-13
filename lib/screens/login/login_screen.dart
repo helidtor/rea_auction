@@ -8,6 +8,7 @@ import 'package:swp_project_web/firebase/auth.dart';
 import 'package:swp_project_web/router/router.dart';
 import 'package:swp_project_web/theme/pallete.dart';
 import 'package:swp_project_web/widgets/bar/top_bar.dart';
+import 'package:swp_project_web/widgets/button/gradient_button.dart';
 import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
 import 'package:swp_project_web/widgets/input/login_field.dart';
@@ -237,31 +238,40 @@ class _LoginScreen extends State<LoginScreen> {
                                   SizedBox(
                                     height: screenHeight * 0.02,
                                   ),
-                                  // const Padding(
-                                  //   padding: EdgeInsets.only(left: 17),
-                                  //   child: GradientButton(
-                                  //     s: 'Đăng nhập',
-                                  //     widthButton: 0.25,
-                                  //   ),
-                                  // ),
-                                  InkWell(
-                                    onTap: () {
-                                      String username = usernameController.text;
-                                      String password = passwordController.text;
-                                      _bloc.add(StartLoginEvent(
-                                          username: username,
-                                          password: password));
-                                    },
-                                    child: const Text(
-                                      "Đăng nhập",
-                                      style: TextStyle(
-                                        color: Pallete.gradient3,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 17),
+                                    child: GradientButton(
+                                      onPressed: () {
+                                        String username =
+                                            usernameController.text;
+                                        String password =
+                                            passwordController.text;
+                                        _bloc.add(StartLoginEvent(
+                                            username: username,
+                                            password: password));
+                                      },
+                                      s: 'Đăng nhập',
+                                      widthButton: 0.25,
                                     ),
                                   ),
+                                  // InkWell(
+                                  //   onTap: () {
+                                  //     String username = usernameController.text;
+                                  //     String password = passwordController.text;
+                                  //     _bloc.add(StartLoginEvent(
+                                  //         username: username,
+                                  //         password: password));
+                                  //   },
+                                  //   child: const Text(
+                                  //     "Đăng nhập",
+                                  //     style: TextStyle(
+                                  //       color: Pallete.gradient3,
+                                  //       fontSize: 18,
+                                  //       fontWeight: FontWeight.bold,
+                                  //     ),
+                                  //     textAlign: TextAlign.center,
+                                  //   ),
+                                  // ),
                                   const Text(
                                     'hoặc',
                                     style: TextStyle(

@@ -27,3 +27,26 @@ class AuctionError extends AuctionState {
   @override
   List<Object> get props => [error];
 }
+
+class AuctionJoinedState extends AuctionState {
+  final int joined;
+
+  const AuctionJoinedState({required this.joined});
+}
+
+class JoinAuctionSuccessState extends AuctionState {}
+
+class JoinAuctionErrorState extends AuctionState {
+  final String error;
+
+  const JoinAuctionErrorState({required this.error});
+}
+
+class AuctionClosed extends AuctionState {
+  final String noti;
+  final int joined;
+
+  const AuctionClosed({required this.noti, required this.joined});
+
+
+}

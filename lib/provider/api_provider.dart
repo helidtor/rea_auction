@@ -307,6 +307,32 @@ class ApiProvider {
     return properties;
   }
 
+// <<<< Check join auction>>>>
+  static Future<bool?> checkJoinAuction(int idAuction) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+    bool isJoin = false;
+    try {
+      var url =
+          "$baseUrl/v1/auction/userauction/check-join-auction?auctionId=$idAuction";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response = await http.get(Uri.parse(url.toString()), headers: header);
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
+        if (bodyConvert['isError'] == false) {
+          isJoin = bodyConvert['result'];
+          return isJoin;
+        } else {
+          print("Lỗi check tham gia đấu gia");
+        }
+      }
+    } catch (e) {
+      print("Error check joining: $e");
+    }
+    return isJoin;
+  }
+
 // <<<< Get property by id>>>>
   static Future<PropertyModel?> getPropertyById(int id) async {
     PropertyModel? property;
@@ -393,6 +419,27 @@ class ApiProvider {
     }
 
     return users;
+  }
+
+  //Đăng ký đấu giá
+  static Future<bool> joinAuction(int idAuction) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+    try {
+      var url =
+          "$baseUrl/v1/auction/userauction/member/join-auction?auctionId=$idAuction";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response =
+          await http.post(Uri.parse(url.toString()), headers: header);
+      if (response.statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      print("Lỗi đăng ký: $e");
+      return false;
+    }
+    return false;
   }
 
   //Tạo đơn

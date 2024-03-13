@@ -46,12 +46,12 @@ class _ProfileButtonState extends State<ProfileButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
+      padding: const EdgeInsets.only(right: 30),
       child: Row(
         children: [
           TextContent(
             contentText: userName ?? "Đang tải...",
-            color: Pallete.gradient3,
+            color: Pallete.pinkBold,
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),

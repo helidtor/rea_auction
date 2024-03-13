@@ -23,6 +23,8 @@ class CreateAuction extends StatefulWidget {
 }
 
 class _CreateAuctionState extends State<CreateAuction> {
+  String formattedDateTimeStart = getCurrentDateTimeFormatted();
+  String formattedDateTimeEnd = getCurrentDateTimeFormatted();
   final _bloc = AuctionBloc();
   late List<PropertyModel>? listProperty;
   List<String> listNameProperty = [];
@@ -34,6 +36,7 @@ class _CreateAuctionState extends State<CreateAuction> {
   List<String> listImage = [];
   String selectedImage = "";
 
+  //ràng buộc thêm field khác để hết lỗi trùng/////////////////////////////////////////////////////////
   int? idPropertyChosen(String value) {
     for (int i = 0; i < listProperty!.length; i++) {
       if (listProperty![i].post!.title == value) {
@@ -401,70 +404,140 @@ class _CreateAuctionState extends State<CreateAuction> {
                             ),
                             Expanded(
                               flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 30),
-                                    child: Text(
-                                      'Cài đặt',
-                                      style: TextStyle(
-                                          color: Colors.black.withOpacity(0.6),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                    left: 15, right: 20, top: 5, bottom: 15),
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  border: Border.all(
+                                    width: 1,
+                                    color: const Color.fromARGB(
+                                        128, 157, 153, 153),
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        left: 15,
-                                        right: 20,
-                                        top: 5,
-                                        bottom: 15),
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(10)),
-                                      border: Border.all(
-                                        width: 1,
-                                        color: const Color.fromARGB(
-                                            128, 157, 153, 153),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 5,
                                       ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20),
-                                      child: Column(
-                                        children: [
-                                          InputHaveLabel(
-                                            labelText: 'Thời gian mở',
-                                            onTap: () {},
-                                            onChangeText: (value) {
+                                      //Thời gian mở
+                                      Text(
+                                        'Thời gian bắt đầu',
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color:
+                                                Colors.black.withOpacity(0.6)),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Container(
+                                        decoration: const BoxDecoration(
+                                          color: Color.fromARGB(
+                                              174, 239, 237, 237),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                        ),
+                                        child: TextButton(
+                                          onPressed: () async {
+                                            final DateTime? selectedDateTime =
+                                                await showDateTimePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime(2000),
+                                              lastDate: DateTime(2100),
+                                            );
+
+                                            if (selectedDateTime != null) {
                                               setState(() {
-                                                String date = value;
+                                                formattedDateTimeStart =
+                                                    convertDateTimeFormat(
+                                                        selectedDateTime
+                                                            .toString());
                                                 inforAuction.biddingStartTime =
-                                                    convertDateTimeFormat(date);
+                                                    formattedDateTimeStart;
                                               });
-                                            },
+                                            }
+                                          },
+                                          child: Text(
+                                            convertDateTimeDisplay(
+                                                formattedDateTimeStart), // Hiển thị dữ liệu
+                                            style: const TextStyle(
+                                                color: Colors.black),
                                           ),
-                                          InputHaveLabel(
-                                            labelText: 'Thời gian kết thúc',
-                                            onChangeText: (value) {
-                                              setState(() {
-                                                String date = value;
-                                                inforAuction.biddingEndTime =
-                                                    convertDateTimeFormat(date);
-                                              });
-                                            },
-                                          ),
-                                          const InputHaveLabel(
-                                            readOnly: true,
-                                            labelText: 'Bước giá',
-                                            initialText:
-                                                '1% (theo giá khởi điểm)',
-                                          ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
+
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+
+                                      //Thời gian kết thúc
+                                      Text(
+                                        'Thời gian kết thúc',
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color:
+                                                Colors.black.withOpacity(0.6)),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Container(
+                                        decoration: const BoxDecoration(
+                                          color: Color.fromARGB(
+                                              174, 239, 237, 237),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                        ),
+                                        child: TextButton(
+                                          onPressed: () async {
+                                            final DateTime? selectedDateTime =
+                                                await showDateTimePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime(2000),
+                                              lastDate: DateTime(2100),
+                                            );
+
+                                            if (selectedDateTime != null) {
+                                              setState(() {
+                                                formattedDateTimeEnd =
+                                                    convertDateTimeFormat(
+                                                        selectedDateTime
+                                                            .toString());
+                                                inforAuction.biddingEndTime =
+                                                    formattedDateTimeEnd;
+                                              });
+                                            }
+                                          },
+                                          child: Text(
+                                            convertDateTimeDisplay(
+                                                formattedDateTimeEnd), // Hiển thị dữ liệu
+                                            style: const TextStyle(
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+
+                                      const InputHaveLabel(
+                                        readOnly: true,
+                                        labelText: 'Bước giá',
+                                        initialText: '1% (theo giá khởi điểm)',
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
                             ),
                           ],
@@ -480,10 +553,61 @@ class _CreateAuctionState extends State<CreateAuction> {
   }
 
   String convertDateTimeFormat(String inputDateTime) {
-    final inputFormat = DateFormat("dd-MM-yyyy HH:mm:ss");
+    final inputFormat = DateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     final outputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
     final dateTime = inputFormat.parse(inputDateTime);
     final formattedDateTime = outputFormat.format(dateTime);
     return formattedDateTime;
   }
+
+  String convertDateTimeDisplay(String inputDateTime) {
+    final inputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    final outputFormat = DateFormat("dd/MM/yyyy - HH:mm");
+    final dateTime = inputFormat.parse(inputDateTime);
+    final formattedDateTime = outputFormat.format(dateTime);
+    return formattedDateTime;
+  }
+}
+
+String getCurrentDateTimeFormatted() {
+  final DateFormat formatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+  final String formattedDateTime = formatter.format(DateTime.now());
+  return formattedDateTime;
+}
+
+Future<DateTime?> showDateTimePicker({
+  required BuildContext context,
+  DateTime? initialDate,
+  DateTime? firstDate,
+  DateTime? lastDate,
+}) async {
+  initialDate ??= DateTime.now();
+  firstDate ??= initialDate.subtract(const Duration(days: 365));
+  lastDate ??= firstDate.add(const Duration(days: 365 * 2));
+
+  final DateTime? selectedDate = await showDatePicker(
+    context: context,
+    initialDate: initialDate,
+    firstDate: firstDate,
+    lastDate: lastDate,
+  );
+
+  if (selectedDate == null) return null;
+
+  if (!context.mounted) return selectedDate;
+
+  final TimeOfDay? selectedTime = await showTimePicker(
+    context: context,
+    initialTime: TimeOfDay.fromDateTime(selectedDate),
+  );
+
+  return selectedTime == null
+      ? selectedDate
+      : DateTime(
+          selectedDate.year,
+          selectedDate.month,
+          selectedDate.day,
+          selectedTime.hour,
+          selectedTime.minute,
+        );
 }

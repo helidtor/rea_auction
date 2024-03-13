@@ -34,12 +34,12 @@ class AuctionBloc extends Bloc<AuctionEvent, AuctionState> {
               listNameProperty.add(listProperty[i].post!.title!);
             }
           }
+          emit(SuccessGetListProperty(
+              list: listProperty, listName: listNameProperty));
         } else {
           emit(AuctionError(
               error: 'Lỗi list khi lấy tài sản: ${listProperty.toString()}'));
         }
-        emit(SuccessGetListProperty(
-            list: listProperty, listName: listNameProperty));
       } else if (event is GetPropertyById) {
         var propertyModel = await ApiProvider.getPropertyById(event.id);
         if (propertyModel != null) {

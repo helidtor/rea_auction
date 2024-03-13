@@ -65,45 +65,32 @@ class _ManagePropertyScreenState extends State<ManagePropertyScreen> {
         },
       ),
       DataColumn(
-        label: const Text('Tên đường'),
+        label: const Text('Khả dụng'),
+        onSort: (columnIndex, ascending) {
+          setState(() {
+            listProperty.sort(
+              (a, b) {
+                // Sắp xếp theo giá trị boolean của trường isAvailable
+                if (ascending) {
+                  return a.isAvailable == b.isAvailable
+                      ? 0
+                      : (a.isAvailable! ? 1 : -1);
+                } else {
+                  return a.isAvailable == b.isAvailable
+                      ? 0
+                      : (a.isAvailable! ? -1 : 1);
+                }
+              },
+            );
+          });
+        },
+      ),
+      DataColumn(
+        label: const Text('Địa chỉ'),
         onSort: (columnIndex, ascending) {
           setState(() {
             listProperty
                 .sort((a, b) => a.street!.compareTo(b.street as String));
-            if (!ascending) {
-              listProperty = listProperty.reversed.toList();
-            }
-          });
-        },
-      ),
-      DataColumn(
-        label: const Text('Phường/Xã'),
-        onSort: (columnIndex, ascending) {
-          setState(() {
-            listProperty.sort((a, b) => a.ward!.compareTo(b.ward as String));
-            if (!ascending) {
-              listProperty = listProperty.reversed.toList();
-            }
-          });
-        },
-      ),
-      DataColumn(
-        label: const Text('Quận/Huyện'),
-        onSort: (columnIndex, ascending) {
-          setState(() {
-            listProperty
-                .sort((a, b) => a.district!.compareTo(b.district as String));
-            if (!ascending) {
-              listProperty = listProperty.reversed.toList();
-            }
-          });
-        },
-      ),
-      DataColumn(
-        label: const Text('Tỉnh/Thành'),
-        onSort: (columnIndex, ascending) {
-          setState(() {
-            listProperty.sort((a, b) => a.city!.compareTo(b.city as String));
             if (!ascending) {
               listProperty = listProperty.reversed.toList();
             }
@@ -176,9 +163,9 @@ class _DataSource extends DataTableSource {
 
   @override
   DataRow getRow(int index) {
-    final post = listProperty[index];
+    final property = listProperty[index];
     return DataRow(cells: [
-      DataCell(Text(post.id.toString())),
+      DataCell(Text(property.id.toString())),
       DataCell(
         Container(
           width: 100,
@@ -191,19 +178,31 @@ class _DataSource extends DataTableSource {
             borderRadius: const BorderRadius.all(Radius.circular(5)),
             image: DecorationImage(
               fit: BoxFit.fill,
-              image: (post.images!.first.isEmpty)
+              image: (property.images!.first.isEmpty)
                   ? const AssetImage("assets/images/error_load_image.jpg")
-                  : Image.network(post.images!.first).image,
+                  : Image.network(property.images!.first).image,
             ),
           ),
         ),
       ),
-      DataCell(Text(post.name.toString())),
-      DataCell(Text('${post.area.toString()}m\u00b2')),
-      DataCell(Text(post.street.toString())),
-      DataCell(Text(post.ward.toString())),
-      DataCell(Text(post.district.toString())),
-      DataCell(Text(post.city.toString())),
+      DataCell(Text(property.name.toString())),
+      DataCell(Text('${property.area.toString()}m\u00b2')),
+      DataCell(Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: displayColor(property.isAvailable),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          convertStatus(property.isAvailable),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+        ),
+      )),
+      DataCell(
+        Text(
+            '${property.street}, ${property.ward}, ${property.district}, ${property.city}'),
+      ),
       DataCell(IconButton(
         onPressed: () {},
         icon: const Icon(Icons.remove_red_eye_outlined),
@@ -221,4 +220,20 @@ class _DataSource extends DataTableSource {
 
   @override
   int get selectedRowCount => 0;
+
+  String convertStatus(bool? isAvailbale) {
+    if (isAvailbale == true) {
+      return 'Có';
+    } else {
+      return 'Không';
+    }
+  }
+
+  Color displayColor(bool? isAvailbale) {
+    if (isAvailbale == true) {
+      return const Color.fromARGB(255, 72, 176, 76);
+    } else {
+      return const Color.fromARGB(255, 118, 128, 133);
+    }
+  }
 }

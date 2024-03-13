@@ -251,7 +251,7 @@ class _DataSource extends DataTableSource {
       DataCell(Text(auction.name.toString())),
       DataCell(Text(DateFormat("dd-MM-yyyy hh:mm:ss")
           .format(DateTime.parse(auction.biddingStartTime.toString())))),
-      DataCell(Text(auction.revervePrice.toString())),
+      DataCell(Text('${formatCurrency(auction.revervePrice.toString())} VNĐ')),
       DataCell(Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
@@ -306,5 +306,11 @@ class _DataSource extends DataTableSource {
       default:
         return Colors.white;
     }
+  }
+
+  String formatCurrency(String input) {
+    final formatter = NumberFormat("#,###");
+    final number = int.parse(input);
+    return formatter.format(number);
   }
 }
