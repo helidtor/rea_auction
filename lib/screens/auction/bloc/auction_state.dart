@@ -47,6 +47,12 @@ class AuctionClosed extends AuctionState {
   final int joined;
 
   const AuctionClosed({required this.noti, required this.joined});
-
-
 }
+
+class BidAuctionSuccessState extends AuctionState {
+  final double currentPrice;
+
+  const BidAuctionSuccessState({required this.currentPrice});
+}
+
+class BidAuctionFailureState extends AuctionState {}

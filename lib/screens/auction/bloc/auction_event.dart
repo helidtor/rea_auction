@@ -21,3 +21,10 @@ class JoinAuction extends AuctionEvent {
 
   const JoinAuction({required this.idAuction});
 }
+
+class BidAuction extends AuctionEvent {
+  final int idAuction;
+  final double bidAmount;
+
+  const BidAuction({required this.idAuction, required this.bidAmount});
+}

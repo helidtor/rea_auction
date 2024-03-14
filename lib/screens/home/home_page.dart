@@ -174,7 +174,7 @@ class _HomePage extends State<HomePage> {
                           ),
                         ),
                         const SizedBox(
-                          height: 100,
+                          height: 50,
                         ),
                         Container(
                           color: Colors.white,
@@ -183,14 +183,14 @@ class _HomePage extends State<HomePage> {
                             child: Column(
                               children: [
                                 const Text(
-                                  '- Tài sản sắp mở đấu giá -',
+                                  '- Tài sản đấu giá -',
                                   style: TextStyle(
                                       fontSize: 25,
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 const SizedBox(
-                                  height: 100,
+                                  height: 50,
                                 ),
                                 //------------------------LIST-------------------------------
                                 SizedBox(

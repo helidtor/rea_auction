@@ -49,6 +49,14 @@ class AuctionPostBloc extends Bloc<AuctionEvent, AuctionState> {
         } else {
           emit(const JoinAuctionErrorState(error: 'Lỗi đăng ký'));
         }
+      } else if (event is BidAuction) {
+        var resultBid =
+            await ApiProvider.bidAuction(event.idAuction, event.bidAmount);
+        if (resultBid) {
+          emit(BidAuctionSuccessState(currentPrice: event.bidAmount));
+        } else {
+          emit(BidAuctionFailureState());
+        }
       }
     } catch (e) {
       print("Loi bloc: $e");

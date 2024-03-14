@@ -421,6 +421,36 @@ class ApiProvider {
     return users;
   }
 
+  // <<<< Get all user >>>>
+  static Future<List<UserProfileModel>?> getTop3() async {
+    List<UserProfileModel>? users;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+
+    try {
+      var url = "$baseUrl/v1/auction/user/all";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response = await http.get(Uri.parse(url.toString()), headers: header);
+      // print("TEST get all posts: ${response.body}");
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
+        if (bodyConvert['isError'] == false) {
+          var postsJson = bodyConvert['result'];
+          users = postsJson
+              .map<UserProfileModel>(
+                  (postJson) => UserProfileModel.fromMap(postJson))
+              .toList();
+          // print("Thông tin get all users: $users");
+        }
+      }
+    } catch (e) {
+      print("Loi get all user: $e");
+    }
+
+    return users;
+  }
+
   //Đăng ký đấu giá
   static Future<bool> joinAuction(int idAuction) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -437,6 +467,35 @@ class ApiProvider {
       }
     } catch (e) {
       print("Lỗi đăng ký: $e");
+      return false;
+    }
+    return false;
+  }
+
+  //Đặt tiền đấu giá
+  static Future<bool> bidAuction(int idAuction, double bidAmount) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+    print('$idAuction và $bidAmount');
+    try {
+      var url =
+          "$baseUrl/v1/auction/userauction/bidding-amount?auctionId=$idAuction";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var body = {"biddingAmount": bidAmount};
+      var bodyConvert = json.encode(body);
+      var response = await http.patch(Uri.parse(url.toString()),
+          headers: header, body: bodyConvert);
+      var resultBody = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        print(resultBody);
+        return true;
+      } else {
+        print(resultBody);
+        return false;
+      }
+    } catch (e) {
+      print("Lỗi đặt tiền đấu giá: $e");
       return false;
     }
     return false;

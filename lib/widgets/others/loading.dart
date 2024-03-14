@@ -8,20 +8,29 @@ void onLoading(context) {
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
-      return WillPS(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              // child: CircularProgressIndicator(
-              //   color: Colors.blue,
-              // ),
-              child: SizedBox(
-                  width: 100,
-                  child: Image.asset("assets/images/loading-71.gif")),
+      return Stack(
+        children: [
+          Container(
+            color: Colors.white,
+            width: double.infinity,
+            // height: double.infinity,
+          ),
+          WillPS(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  // child: CircularProgressIndicator(
+                  //   color: Colors.blue,
+                  // ),
+                  child: SizedBox(
+                      width: 100,
+                      child: Image.asset("assets/images/loading-71.gif")),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       );
     },
   );
