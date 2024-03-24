@@ -33,16 +33,16 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
           SizedBox(
             width: screenWidth * 0.02,
           ),
-          InkWell(
-            onTap: () {
-              context.go(RouteName.home);
-            },
-            child: Image.asset(
-              'assets/images/logo_web_auction.jpg',
-              width: 100,
-              height: 100,
-            ),
-          ),
+          // InkWell(
+          //   onTap: () {
+          //     context.go(RouteName.home);
+          //   },
+          //   child: Image.asset(
+          //     'assets/images/logo_web_auction.jpg',
+          //     width: 100,
+          //     height: 100,
+          //   ),
+          // ),
           SizedBox(
             width: screenWidth * 0.02,
           ),
