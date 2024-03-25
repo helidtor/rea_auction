@@ -12,6 +12,7 @@ import 'package:toastification/toastification.dart';
 Future<void> clearToken() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString(myToken, "token");
+  prefs.setString("userLogin", "");
 }
 
 Future<UserProfileModel?> getUser() async {

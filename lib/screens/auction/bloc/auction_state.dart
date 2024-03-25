@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:swp_project_web/models/response/auction_model.dart';
+import 'package:swp_project_web/models/response/user_profile_model.dart';
 
 abstract class AuctionState extends Equatable {
   const AuctionState();
@@ -56,3 +57,10 @@ class BidAuctionSuccessState extends AuctionState {
 }
 
 class BidAuctionFailureState extends AuctionState {}
+
+class WinnerState extends AuctionState {
+  final UserProfileModel winner;
+
+  const WinnerState({required this.winner});
+
+}

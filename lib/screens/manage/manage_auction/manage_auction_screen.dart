@@ -290,6 +290,10 @@ class _DataSource extends DataTableSource {
         return 'Đang diễn ra';
       case 2:
         return 'Đã kết thúc';
+      case 3:
+        return 'Thành công';
+      case 4:
+        return 'Thất bại';
       default:
         return '';
     }
@@ -298,11 +302,15 @@ class _DataSource extends DataTableSource {
   Color displayColor(int? postStatus) {
     switch (postStatus) {
       case 0:
-        return const Color.fromARGB(255, 53, 110, 233);
+        return const Color.fromARGB(255, 233, 206, 53);
       case 1:
-        return const Color.fromARGB(255, 72, 176, 76);
+        return const Color.fromARGB(255, 53, 110, 233);
       case 2:
         return const Color.fromARGB(255, 118, 128, 133);
+      case 3:
+        return const Color.fromARGB(255, 72, 176, 76);
+      case 4:
+        return const Color.fromARGB(255, 169, 54, 54);
       default:
         return Colors.white;
     }

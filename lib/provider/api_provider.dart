@@ -8,6 +8,7 @@ import 'package:swp_project_web/models/response/auction_model.dart';
 import 'package:swp_project_web/models/response/form_auction.dart';
 import 'package:swp_project_web/models/response/form_model.dart';
 import 'package:swp_project_web/models/response/property_model.dart';
+import 'package:swp_project_web/models/response/top_3_model.dart';
 import 'package:swp_project_web/models/response/user_login_model.dart';
 import 'package:swp_project_web/models/response/user_profile_model.dart';
 import 'package:http_parser/http_parser.dart';
@@ -31,7 +32,7 @@ class ApiProvider {
       final body = {'username': username, 'password': password};
       var response = await http.post(Uri.parse(url.toString()),
           headers: header, body: jsonEncode(body));
-      print("TEST login: ${response.body}");
+      // print("TEST login: ${response.body}");
       if (response.statusCode == 200) {
         var bodyConvert = jsonDecode(response.body);
         if (bodyConvert['isError'] == false) {
@@ -391,6 +392,62 @@ class ApiProvider {
     return auctions;
   }
 
+  // <<<< Get auction by id >>>>
+  static Future<AuctionModel?> getAuctionById({required int id}) async {
+    AuctionModel? auctionModel;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+    try {
+      var url = "$baseUrl/v1/auction/auction/$id";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response = await http.get(Uri.parse(url.toString()), headers: header);
+      // print("TEST get auction by id: ${response.body}");
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
+        if (bodyConvert['isError'] == false) {
+          auctionModel = AuctionModel.fromMap(bodyConvert['result']);
+          // print("Thông tin model từ get profile: $userProfileModel");
+          return auctionModel;
+          // return userProfileModel =
+          //     UserProfileModel.fromMap(bodyConvert['result']);
+        }
+      }
+    } catch (e) {
+      print("Loi get profile: $e");
+    }
+    return auctionModel;
+  }
+
+// <<<< Get user by id>>>>
+  static Future<UserProfileModel?> getUserById(int id) async {
+    UserProfileModel? userProfileModel;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+
+    try {
+      var url = "$baseUrl/v1/auction/user/$id";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response = await http.get(Uri.parse(url.toString()), headers: header);
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
+        if (bodyConvert['isError'] == false) {
+          var postsJson = bodyConvert['result'];
+          userProfileModel = UserProfileModel.fromMap(postsJson);
+          print("Thông tin get user by id: $userProfileModel");
+          return userProfileModel;
+        } else {
+          print("Không get được user");
+        }
+      }
+    } catch (e) {
+      print("Loi get user bằng id: $e");
+    }
+
+    return userProfileModel;
+  }
+
 // <<<< Get all user >>>>
   static Future<List<UserProfileModel>?> getAllUsers() async {
     List<UserProfileModel>? users;
@@ -421,34 +478,35 @@ class ApiProvider {
     return users;
   }
 
-  // <<<< Get all user >>>>
-  static Future<List<UserProfileModel>?> getTop3() async {
-    List<UserProfileModel>? users;
+  // <<<< Get top 3 user >>>>
+  static Future<List<Top3Model>?> getTop3({required int idAuction}) async {
+    List<Top3Model>? listTop3;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(myToken);
-
+    print('id auction xét winner: $idAuction');
     try {
-      var url = "$baseUrl/v1/auction/user/all";
+      var url = "$baseUrl/v1/auction/userauction/get-top3?auctionId=$idAuction";
       Map<String, String> header = await getHeader();
       header.addAll({'Authorization': 'Bearer $token'});
       var response = await http.get(Uri.parse(url.toString()), headers: header);
-      // print("TEST get all posts: ${response.body}");
+      print("TEST get top 3: ${response.body}");
       if (response.statusCode == 200) {
         var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
         if (bodyConvert['isError'] == false) {
           var postsJson = bodyConvert['result'];
-          users = postsJson
-              .map<UserProfileModel>(
-                  (postJson) => UserProfileModel.fromMap(postJson))
+          listTop3 = postsJson
+              .map<Top3Model>((postJson) => Top3Model.fromMap(postJson))
               .toList();
-          // print("Thông tin get all users: $users");
+          print("Thông tin get top 3: $listTop3");
         }
+      } else {
+        return listTop3;
       }
     } catch (e) {
       print("Loi get all user: $e");
     }
 
-    return users;
+    return listTop3;
   }
 
   //Đăng ký đấu giá
@@ -618,5 +676,35 @@ class ApiProvider {
       print("Loi từ chối: $e");
     }
     return false;
+  }
+
+  //payment
+  static Future<String?> payment(
+      {required int userId, required double amount}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+    String? urlPayment;
+    try {
+      var url = "$baseUrl/v1/auction/VNPay?UserId=$userId&Amount=$amount";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response = await http.get(Uri.parse(url.toString()), headers: header);
+      // print(response.body);
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
+        if (bodyConvert['isError'] == false) {
+          var postsJson = bodyConvert['result'];
+          urlPayment = postsJson;
+          print('Link payment: {$urlPayment}');
+          return urlPayment;
+        } else {
+          return null;
+        }
+      }
+    } catch (e) {
+      print("Lỗi payment: $e");
+      return null;
+    }
+    return null;
   }
 }

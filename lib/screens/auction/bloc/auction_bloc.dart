@@ -21,14 +21,31 @@ class AuctionPostBloc extends Bloc<AuctionEvent, AuctionState> {
         } else {
           emit(const AuctionError(error: "Lỗi tải đấu giá"));
         }
+      }
+      if (event is GetWinner) {
+        var listTop3 = await ApiProvider.getTop3(idAuction: event.idAuction);
+        if (listTop3!.isNotEmpty) {
+          var winner = await ApiProvider.getUserById(listTop3.first.userId!);
+          emit(WinnerState(winner: winner!));
+        } else {
+          emit(const AuctionError(error: "Lỗi tải đấu giá"));
+        }
       } else if (event is CheckIsJoin) {
         var isJoined = await ApiProvider.checkJoinAuction(event.idAuction);
         if (event.statusAuction == 2) {
           //đã kết thúc
           emit(
               const AuctionClosed(noti: 'Cuộc đấu giá đã kết thúc', joined: 3));
+        }
+        if (event.statusAuction == 3) {
+          //đã kết thúc
+          emit(const AuctionJoinedState(joined: 6));
+        }
+        if (event.statusAuction == 4) {
+          //đã kết thúc
+          emit(const AuctionJoinedState(joined: 7));
         } else if (event.statusAuction == 0) {
-          //chưa diễn ra
+          //sắp diễn ra
           if (isJoined == true) {
             emit(const AuctionJoinedState(joined: 1)); //đã joined
           } else {

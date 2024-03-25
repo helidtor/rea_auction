@@ -37,7 +37,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               username: event.username, password: event.password);
           if (user != null) {
             prefs.setString(myToken, user.accessToken ?? "");
-            prefs.setString("password", event.password);
+            prefs.setString("userLogin", event.username);
 
             var userLogin = await ApiProvider.getProfile();
             // await AuthService()

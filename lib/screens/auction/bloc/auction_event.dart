@@ -28,3 +28,9 @@ class BidAuction extends AuctionEvent {
 
   const BidAuction({required this.idAuction, required this.bidAmount});
 }
+
+class GetWinner extends AuctionEvent {
+  final int idAuction;
+
+  const GetWinner({required this.idAuction});
+}

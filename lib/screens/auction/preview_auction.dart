@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swp_project_web/models/response/auction_model.dart';
 
 import 'package:swp_project_web/screens/auction/detail_auction.dart';
@@ -151,13 +152,15 @@ class _PreviewAuction extends State<PreviewAuction> {
             Row(
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    print('Chi tiết đấu giá: ${auctionModel}');
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    prefs.setInt("idAuction", auctionModel.id!);
+                    // print('Chi tiết đấu giá: ${auctionModel}');
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                DetailAuction(auctionModel: auctionModel)));
+                            builder: (context) => DetailAuction()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Pallete.pinkBold,
