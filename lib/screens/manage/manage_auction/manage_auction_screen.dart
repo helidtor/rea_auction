@@ -302,7 +302,7 @@ class _DataSource extends DataTableSource {
   Color displayColor(int? postStatus) {
     switch (postStatus) {
       case 0:
-        return const Color.fromARGB(255, 233, 206, 53);
+        return const Color.fromARGB(255, 233, 155, 53);
       case 1:
         return const Color.fromARGB(255, 53, 110, 233);
       case 2:

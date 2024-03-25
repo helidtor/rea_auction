@@ -23,6 +23,7 @@ class CreateAuction extends StatefulWidget {
 }
 
 class _CreateAuctionState extends State<CreateAuction> {
+  DateTime selectedDateTimeEnd = DateTime.now();
   String formattedDateTimeStart = getCurrentDateTimeFormatted();
   String formattedDateTimeEnd = getCurrentDateTimeFormatted();
   final _bloc = AuctionBloc();
@@ -39,7 +40,8 @@ class _CreateAuctionState extends State<CreateAuction> {
   //ràng buộc thêm field khác để hết lỗi trùng/////////////////////////////////////////////////////////
   int? idPropertyChosen(String value) {
     for (int i = 0; i < listProperty!.length; i++) {
-      if (listProperty![i].post!.title == value) {
+      if (listProperty![i].post!.title == value &&
+          listProperty![i].isAvailable == true) {
         return listProperty![i].id;
       }
     }
@@ -103,6 +105,7 @@ class _CreateAuctionState extends State<CreateAuction> {
               inforAuction.revervePrice = propertyModel.revervePrice;
               inforAuction.content = propertyModel.post!.content;
               inforAuction.title = propertyModel.post!.title;
+              inforAuction.stepFee = propertyModel.revervePrice! * 0.1;
             }
             isShow = true;
           } else if (state is AuctionError) {
@@ -207,10 +210,43 @@ class _CreateAuctionState extends State<CreateAuction> {
                                 children: [
                                   TextButton(
                                       onPressed: () {
-                                        print(
-                                            "Thông tin tạo auction lúc nhập: $inforAuction");
-                                        _bloc.add(CreateAuctionPost(
-                                            formAuction: inforAuction));
+                                        if (inforAuction.biddingStartTime ==
+                                                null ||
+                                            inforAuction.biddingEndTime ==
+                                                null) {
+                                          toastification.show(
+                                              pauseOnHover: false,
+                                              progressBarTheme:
+                                                  const ProgressIndicatorThemeData(
+                                                color: Colors.orange,
+                                              ),
+                                              icon: const Icon(
+                                                Icons.check_circle,
+                                                color: Colors.orange,
+                                              ),
+                                              foregroundColor: Colors.black,
+                                              context: context,
+                                              type: ToastificationType.warning,
+                                              style:
+                                                  ToastificationStyle.minimal,
+                                              title: const TextContent(
+                                                contentText:
+                                                    'Vui lòng chọn ngày bắt đầu và kết thúc hợp lệ!',
+                                                fontWeight: FontWeight.bold,
+                                                color: Color.fromARGB(
+                                                    255, 61, 42, 42),
+                                              ),
+                                              autoCloseDuration: const Duration(
+                                                  milliseconds: 2500),
+                                              animationDuration: const Duration(
+                                                  milliseconds: 500),
+                                              alignment: Alignment.topRight);
+                                        } else {
+                                          print(
+                                              "Thông tin tạo auction lúc nhập: $inforAuction");
+                                          _bloc.add(CreateAuctionPost(
+                                              formAuction: inforAuction));
+                                        }
                                       },
                                       child: Container(
                                         width: 120,
@@ -450,12 +486,17 @@ class _CreateAuctionState extends State<CreateAuction> {
                                                 await showDateTimePicker(
                                               context: context,
                                               initialDate: DateTime.now(),
-                                              firstDate: DateTime(2000),
-                                              lastDate: DateTime(2100),
+                                              firstDate: DateTime.now(),
+                                              lastDate: DateTime.now().add(
+                                                  const Duration(days: 30)),
                                             );
 
-                                            if (selectedDateTime != null) {
+                                            if (selectedDateTime != null &&
+                                                selectedDateTime
+                                                    .isAfter(DateTime.now())) {
                                               setState(() {
+                                                selectedDateTimeEnd =
+                                                    selectedDateTime;
                                                 formattedDateTimeStart =
                                                     convertDateTimeFormat(
                                                         selectedDateTime
@@ -463,6 +504,39 @@ class _CreateAuctionState extends State<CreateAuction> {
                                                 inforAuction.biddingStartTime =
                                                     formattedDateTimeStart;
                                               });
+                                            } else if (selectedDateTime !=
+                                                null) {
+                                              toastification.show(
+                                                  pauseOnHover: false,
+                                                  progressBarTheme:
+                                                      const ProgressIndicatorThemeData(
+                                                    color: Colors.orange,
+                                                  ),
+                                                  icon: const Icon(
+                                                    Icons.check_circle,
+                                                    color: Colors.orange,
+                                                  ),
+                                                  foregroundColor: Colors.black,
+                                                  context: context,
+                                                  type: ToastificationType
+                                                      .warning,
+                                                  style: ToastificationStyle
+                                                      .minimal,
+                                                  title: const TextContent(
+                                                    contentText:
+                                                        'Vui lòng chọn thời gian bắt đầu trong tương lai!',
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Color.fromARGB(
+                                                        255, 61, 42, 42),
+                                                  ),
+                                                  autoCloseDuration:
+                                                      const Duration(
+                                                          milliseconds: 2500),
+                                                  animationDuration:
+                                                      const Duration(
+                                                          milliseconds: 500),
+                                                  alignment:
+                                                      Alignment.topRight);
                                             }
                                           },
                                           child: Text(
@@ -502,12 +576,20 @@ class _CreateAuctionState extends State<CreateAuction> {
                                             final DateTime? selectedDateTime =
                                                 await showDateTimePicker(
                                               context: context,
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime(2000),
-                                              lastDate: DateTime(2100),
+                                              initialDate: selectedDateTimeEnd!
+                                                  .add(const Duration(
+                                                      minutes: 30)),
+                                              firstDate: selectedDateTimeEnd!
+                                                  .add(const Duration(
+                                                      minutes: 30)),
+                                              lastDate: selectedDateTimeEnd!
+                                                  .add(
+                                                      const Duration(days: 30)),
                                             );
 
-                                            if (selectedDateTime != null) {
+                                            if (selectedDateTime != null &&
+                                                selectedDateTime.isAfter(
+                                                    selectedDateTimeEnd!)) {
                                               setState(() {
                                                 formattedDateTimeEnd =
                                                     convertDateTimeFormat(
@@ -516,6 +598,39 @@ class _CreateAuctionState extends State<CreateAuction> {
                                                 inforAuction.biddingEndTime =
                                                     formattedDateTimeEnd;
                                               });
+                                            } else if (selectedDateTime !=
+                                                null) {
+                                              toastification.show(
+                                                  pauseOnHover: false,
+                                                  progressBarTheme:
+                                                      const ProgressIndicatorThemeData(
+                                                    color: Colors.orange,
+                                                  ),
+                                                  icon: const Icon(
+                                                    Icons.check_circle,
+                                                    color: Colors.orange,
+                                                  ),
+                                                  foregroundColor: Colors.black,
+                                                  context: context,
+                                                  type: ToastificationType
+                                                      .warning,
+                                                  style: ToastificationStyle
+                                                      .minimal,
+                                                  title: const TextContent(
+                                                    contentText:
+                                                        'Vui lòng chọn thời gian kết thúc sau thời gian bắt đầu!',
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Color.fromARGB(
+                                                        255, 61, 42, 42),
+                                                  ),
+                                                  autoCloseDuration:
+                                                      const Duration(
+                                                          milliseconds: 2500),
+                                                  animationDuration:
+                                                      const Duration(
+                                                          milliseconds: 500),
+                                                  alignment:
+                                                      Alignment.topRight);
                                             }
                                           },
                                           child: Text(

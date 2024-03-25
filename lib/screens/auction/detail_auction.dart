@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:swp_project_web/models/response/auction_model.dart';
 import 'package:swp_project_web/models/response/user_profile_model.dart';
 import 'package:swp_project_web/provider/api_provider.dart';
@@ -13,6 +12,7 @@ import 'package:swp_project_web/router/router.dart';
 import 'package:swp_project_web/screens/auction/bloc/auction_bloc.dart';
 import 'package:swp_project_web/screens/auction/bloc/auction_event.dart';
 import 'package:swp_project_web/screens/auction/bloc/auction_state.dart';
+import 'package:swp_project_web/screens/home/home_page.dart';
 import 'package:swp_project_web/theme/pallete.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:swp_project_web/widgets/button/gradient_button.dart';
@@ -97,7 +97,10 @@ class _DetailAuctionState extends State<DetailAuction> {
               color: Colors.white,
             ),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => const HomePage()));
             },
           ),
           actions: [
@@ -211,12 +214,13 @@ class _DetailAuctionState extends State<DetailAuction> {
                         context: context,
                         type: ToastificationType.info,
                         style: ToastificationStyle.minimal,
-                        title: const TextContent(
-                          contentText: 'Đấu giá thất bại',
+                        title: TextContent(
+                          contentText:
+                              'Giá đấu tối thiểu lớn hơn hoặc bằng: ${formatCurrency((auctionModel!.finalPrice! + auctionModel!.stepFee!).toString())} VNĐ',
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
-                        autoCloseDuration: const Duration(milliseconds: 2000),
+                        autoCloseDuration: const Duration(milliseconds: 3000),
                         animationDuration: const Duration(milliseconds: 500),
                         alignment: Alignment.topRight);
                   } else if (state is AuctionClosed) {
@@ -333,7 +337,9 @@ class _DetailAuctionState extends State<DetailAuction> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                                'Giá hiện tại: ${formatCurrency(auctionModel!.finalPrice.toString())} VNĐ',
+                                (auctionModel!.finalPrice != 0)
+                                    ? 'Giá hiện tại: ${formatCurrency(auctionModel!.finalPrice.toString())} VNĐ'
+                                    : 'Giá hiện tại: ${formatCurrency(auctionModel!.revervePrice.toString())} VNĐ',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
@@ -837,7 +843,7 @@ class _DetailAuctionState extends State<DetailAuction> {
                                                     ),
                                                     const Spacer(),
                                                     Text(
-                                                      "${formatCurrency(auctionModel!.revervePrice.toString())}VNĐ",
+                                                      "${formatCurrency(auctionModel!.revervePrice.toString())} VNĐ",
                                                       style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -849,22 +855,25 @@ class _DetailAuctionState extends State<DetailAuction> {
                                                   ],
                                                 ),
                                               ),
-                                              const Padding(
-                                                padding: EdgeInsets.only(
+                                              Padding(
+                                                padding: const EdgeInsets.only(
                                                     left: 10, bottom: 10),
                                                 child: Row(
                                                   children: [
-                                                    Text(
+                                                    const Text(
                                                       'Bước giá:',
                                                       style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize: 13,
                                                       ),
                                                     ),
-                                                    Spacer(),
+                                                    const Spacer(),
                                                     Text(
-                                                      "1% (so với giá khởi điểm)",
-                                                      style: TextStyle(
+                                                      (auctionModel!.stepFee !=
+                                                              null)
+                                                          ? "${formatCurrency(auctionModel!.stepFee.toString())} VNĐ"
+                                                          : "1% (so với giá khởi điểm)",
+                                                      style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         fontSize: 13,
@@ -995,7 +1004,7 @@ class _DetailAuctionState extends State<DetailAuction> {
                                                               const Spacer(),
                                                               Text(
                                                                 (winner != null)
-                                                                    ? "${formatCurrency(auctionModel!.finalPrice!.toString())}VNĐ"
+                                                                    ? "${formatCurrency(auctionModel!.finalPrice!.toString())} VNĐ"
                                                                     : 'Chưa xác định',
                                                                 style:
                                                                     const TextStyle(
