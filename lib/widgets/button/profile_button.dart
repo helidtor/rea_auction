@@ -37,9 +37,11 @@ class _ProfileButtonState extends State<ProfileButton> {
   }
 
   Future<void> _loadUserName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     final name = await getNameUser();
     setState(() {
       userName = name;
+      prefs.setString("fullNameUserLogin", name);
     });
   }
 
@@ -68,6 +70,23 @@ class _ProfileButtonState extends State<ProfileButton> {
                   isHovered = false;
                 });
               },
+              // child: Container(
+              //   width: 30,
+              //   height: 30,
+              //   decoration: BoxDecoration(
+              //     border: Border.all(
+              //       color: const Color.fromARGB(253, 255, 255, 255),
+              //     ),
+              //     color: const Color.fromARGB(253, 255, 255, 255),
+              //     borderRadius: const BorderRadius.all(Radius.circular(5)),
+              //     image: DecorationImage(
+              //       fit: BoxFit.fill,
+              //       image: (avatarUrl == null)
+              //           ? const AssetImage("assets/images/error_load_image.jpg")
+              //           : Image.network(avatarUrl!).image,
+              //     ),
+              //   ),
+              // ),
               child: Icon(
                 Icons.account_circle,
                 color: isHovered
@@ -101,6 +120,15 @@ class _ProfileButtonState extends State<ProfileButton> {
                   title: const Text('Tạo đơn đấu giá'),
                   onTap: () {
                     router.go(RouteName.createForm);
+                  },
+                ),
+              ),
+              PopupMenuItem(
+                child: ListTile(
+                  leading: const Icon(Icons.attach_money_outlined),
+                  title: const Text('Tạo đơn giải ngân cọc'),
+                  onTap: () {
+                    router.go(RouteName.formComplete);
                   },
                 ),
               ),

@@ -4,9 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swp_project_web/constant/myToken.dart';
 import 'package:swp_project_web/screens/create_form/create_form.dart';
+import 'package:swp_project_web/screens/create_form_complete/create_form_complete.dart';
 import 'package:swp_project_web/screens/home/home_page.dart';
 import 'package:swp_project_web/screens/login/login_screen.dart';
 import 'package:swp_project_web/screens/manage/navigator_manage.dart';
+import 'package:swp_project_web/screens/payment/pay_fail.dart';
+import 'package:swp_project_web/screens/payment/pay_success.dart';
 import 'package:swp_project_web/screens/profile/profile_screen.dart';
 import 'package:swp_project_web/screens/signup/sign_up_screen.dart';
 
@@ -17,6 +20,9 @@ class RouteName {
   static const String profile = '/profile';
   static const String createForm = '/create_form';
   static const String manage = '/manage';
+  static const String formComplete = '/form_complete';
+  static const String paymentSuccess = '/payment_success';
+  static const String paymentFail = '/payment_failed';
 
   static const publicRoutes = [
     login,
@@ -45,6 +51,18 @@ final router = GoRouter(
     return RouteName.login;
   },
   routes: [
+    GoRoute(
+      path: RouteName.paymentFail,
+      builder: (context, state) => const PayFail(),
+    ),
+    GoRoute(
+      path: RouteName.paymentSuccess,
+      builder: (context, state) => const PaySuccess(),
+    ),
+    GoRoute(
+      path: RouteName.formComplete,
+      builder: (context, state) => const FormComplete(),
+    ),
     GoRoute(
       path: RouteName.home,
       builder: (context, state) => const HomePage(),

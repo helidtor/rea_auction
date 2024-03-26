@@ -6,6 +6,7 @@ import 'package:swp_project_web/constant/baseUrl.dart';
 import 'package:swp_project_web/constant/myToken.dart';
 import 'package:swp_project_web/models/response/auction_model.dart';
 import 'package:swp_project_web/models/response/form_auction.dart';
+import 'package:swp_project_web/models/response/form_done_model.dart';
 import 'package:swp_project_web/models/response/form_model.dart';
 import 'package:swp_project_web/models/response/property_model.dart';
 import 'package:swp_project_web/models/response/top_3_model.dart';
@@ -308,6 +309,32 @@ class ApiProvider {
     return properties;
   }
 
+// <<<< Payment cọc>>>>
+  static Future<bool?> paymentDeposit(int idAuction) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+    try {
+      var url =
+          "$baseUrl/v1/auction/payment/member/pay-deposit-auction?auctionId=$idAuction";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response =
+          await http.post(Uri.parse(url.toString()), headers: header);
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
+        if (bodyConvert['isError'] == false) {
+          return true;
+        } else {
+          print("Thanh toán lỗi");
+          return false;
+        }
+      }
+    } catch (e) {
+      print("Error payment: $e");
+    }
+    return false;
+  }
+
 // <<<< Check join auction>>>>
   static Future<bool?> checkJoinAuction(int idAuction) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -588,6 +615,35 @@ class ApiProvider {
     return false;
   }
 
+  //Tạo đơn lấy cọc
+  static Future<bool> createFormDone(FormDoneModel formCreate) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+    try {
+      var url = "$baseUrl/v1/auction/TransferForm/member/new";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var body = json.encode(formCreate.toMap());
+      var response = await http.post(Uri.parse(url.toString()),
+          headers: header, body: body);
+      print(response.body);
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(response.body);
+        if (bodyConvert['isError'] == false) {
+          print("Gửi đơn thành công");
+          return true;
+        } else {
+          print("Lỗi gửi đơn: ${response.body}");
+          return false;
+        }
+      }
+    } catch (e) {
+      print("Lỗi gửi đơn: $e");
+      return false;
+    }
+    return false;
+  }
+
 //Tạo đấu giá
   static Future<bool> createAuction(FormAuction auctionModel) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -706,5 +762,37 @@ class ApiProvider {
       return null;
     }
     return null;
+  }
+
+  // <<<< Get all property is done>>>>
+  static Future<List<PropertyModel>?> getAllPropertyAvailable() async {
+    List<PropertyModel>? properties;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+
+    try {
+      var url = "$baseUrl/v1/auction/property/available";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response = await http.get(Uri.parse(url.toString()), headers: header);
+      print("TEST get all getAllPropertyAvailable: ${response.body}");
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
+        if (bodyConvert['isError'] == false) {
+          var postsJson = bodyConvert['result'];
+          properties = postsJson
+              .map<PropertyModel>((postJson) => PropertyModel.fromMap(postJson))
+              .toList();
+          print("Thông tin get all property available: $properties");
+          return properties;
+        } else {
+          print("Không get được list tài sản available");
+        }
+      }
+    } catch (e) {
+      print("Loi get all tài sản available: $e");
+    }
+
+    return properties;
   }
 }

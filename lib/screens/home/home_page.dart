@@ -193,22 +193,26 @@ class _HomePage extends State<HomePage> {
                                   height: 50,
                                 ),
                                 //------------------------LIST-------------------------------
-                                SizedBox(
-                                  width: screenWidth * 0.85,
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      children: List.generate(
-                                        listAuction.length,
-                                        (index) => Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: PreviewAuction(
-                                              auctionModel: listAuction[index]),
+                                (listAuction.isNotEmpty)
+                                    ? SizedBox(
+                                        width: screenWidth * 0.85,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            children: List.generate(
+                                              listAuction.length,
+                                              (index) => Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                child: PreviewAuction(
+                                                    auctionModel:
+                                                        listAuction[index]),
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                      )
+                                    : const SizedBox(),
                                 const SizedBox(
                                   height: 50,
                                 ),

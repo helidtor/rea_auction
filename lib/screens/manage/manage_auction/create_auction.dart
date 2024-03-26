@@ -37,7 +37,6 @@ class _CreateAuctionState extends State<CreateAuction> {
   List<String> listImage = [];
   String selectedImage = "";
 
-  //ràng buộc thêm field khác để hết lỗi trùng/////////////////////////////////////////////////////////
   int? idPropertyChosen(String value) {
     for (int i = 0; i < listProperty!.length; i++) {
       if (listProperty![i].post!.title == value &&

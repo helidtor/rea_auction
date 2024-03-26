@@ -40,6 +40,7 @@ class _DetailAuctionState extends State<DetailAuction> {
   List<String> listImage = [];
   String selectedImage = "";
   int isJoinAuction = 0;
+  String? fullName;
 
   Future<AuctionModel?> getAuctionDetail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -73,6 +74,8 @@ class _DetailAuctionState extends State<DetailAuction> {
 
   Future<void> _initStateAsync() async {
     await _loadAuctionDetail();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    fullName = prefs.getString('fullNameUserLogin');
     if (auctionModel != null) {
       _bloc.add(
         CheckIsJoin(
@@ -104,21 +107,29 @@ class _DetailAuctionState extends State<DetailAuction> {
             },
           ),
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.replay_outlined,
-                  color: Colors.white,
-                  size: 20,
+            Row(
+              children: [
+                Text(
+                  fullName!,
+                  style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => super.widget));
-                },
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.replay_outlined,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => super.widget));
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -215,8 +226,9 @@ class _DetailAuctionState extends State<DetailAuction> {
                         type: ToastificationType.info,
                         style: ToastificationStyle.minimal,
                         title: TextContent(
-                          contentText:
-                              'Giá đấu tối thiểu lớn hơn hoặc bằng: ${formatCurrency((auctionModel!.finalPrice! + auctionModel!.stepFee!).toString())} VNĐ',
+                          contentText: (auctionModel!.finalPrice! != 0)
+                              ? 'Giá đấu tối thiểu lớn hơn hoặc bằng: ${formatCurrency((auctionModel!.finalPrice! + auctionModel!.stepFee!).toString())} VNĐ'
+                              : 'Giá đấu tối thiểu lớn hơn hoặc bằng: ${formatCurrency((auctionModel!.revervePrice! + auctionModel!.stepFee!).toString())} VNĐ',
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -336,6 +348,14 @@ class _DetailAuctionState extends State<DetailAuction> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            // Text(
+                            //     (winner != null)
+                            //         ? 'Người trả giá: ${winner!.firstName}'
+                            //         : 'Người trả giá: Chưa rõ',
+                            //     style: const TextStyle(
+                            //       fontWeight: FontWeight.bold,
+                            //       fontSize: 18,
+                            //     )),
                             Text(
                                 (auctionModel!.finalPrice != 0)
                                     ? 'Giá hiện tại: ${formatCurrency(auctionModel!.finalPrice.toString())} VNĐ'
@@ -628,8 +648,7 @@ class _DetailAuctionState extends State<DetailAuction> {
                               padding: const EdgeInsets.all(30),
                               child: Text(
                                 textAlign: TextAlign.left,
-                                auctionModel!.property?.post?.title ??
-                                    "Số nhà 22, ngõ 861 đường Quang Trung, phường Phú La, quận Hà Đông, thành phố Hà Nội, theo Giấy chứng nhận Quyền sử dụng đất số AM 27156",
+                                auctionModel!.title ?? "Đợi cập nhật",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 22,
@@ -1070,14 +1089,24 @@ class _DetailAuctionState extends State<DetailAuction> {
                                                                     0.3,
                                                                 onPressed:
                                                                     () async {
+                                                                  SharedPreferences
+                                                                      prefs =
+                                                                      await SharedPreferences
+                                                                          .getInstance();
+
+                                                                  prefs.setInt(
+                                                                      "idAuctionPayment",
+                                                                      auctionModel!
+                                                                          .id!);
                                                                   var urlPayment =
                                                                       await ApiProvider
                                                                           .payment(
                                                                     userId:
                                                                         winner!
                                                                             .id!,
-                                                                    amount: auctionModel!
-                                                                        .finalPrice!,
+                                                                    amount:
+                                                                        auctionModel!.finalPrice! *
+                                                                            0.1,
                                                                   );
                                                                   if (urlPayment !=
                                                                           null &&
@@ -1229,6 +1258,7 @@ class _DetailAuctionState extends State<DetailAuction> {
     if (await canLaunch(url)) {
       // ignore: deprecated_member_use
       await launch(url);
+      Navigator.pop(context);
     } else {
       throw 'Could not launch $url';
     }
