@@ -10,8 +10,6 @@ import 'package:swp_project_web/router/router.dart';
 import 'package:swp_project_web/screens/create_form_complete/bloc/form_complete_bloc.dart';
 import 'package:swp_project_web/screens/create_form_complete/bloc/form_complete_event.dart';
 import 'package:swp_project_web/screens/create_form_complete/bloc/form_complete_state.dart';
-import 'package:swp_project_web/screens/manage/manage_auction/bloc/auction_event.dart';
-import 'package:swp_project_web/theme/pallete.dart';
 import 'package:swp_project_web/widgets/bar/footer_web.dart';
 import 'package:swp_project_web/widgets/button/gradient_button.dart';
 import 'package:swp_project_web/widgets/input/input_field.dart';

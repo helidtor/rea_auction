@@ -160,7 +160,7 @@ class _PreviewAuction extends State<PreviewAuction> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => DetailAuction()));
+                            builder: (context) => const DetailAuction()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Pallete.pinkBold,

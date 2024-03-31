@@ -34,8 +34,8 @@ class FormCompleteBloc extends Bloc<FormCompleteEvent, FormCompleteState> {
           emit(SuccessGetListPropertyDone(
               list: listProperty, listName: listNameProperty));
         } else {
-          emit(FormCompleteFailure(
-              error: 'Lỗi list khi lấy tài sản: ${listProperty.toString()}'));
+          emit(const FormCompleteFailure(
+              error: 'Chưa có tài sản đấu giá thành công'));
         }
       }
     } catch (e) {

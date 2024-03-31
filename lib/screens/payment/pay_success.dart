@@ -40,6 +40,7 @@ class _PaySuccessState extends State<PaySuccess> {
                     var checkPay = await ApiProvider.paymentDeposit(idAuction);
                     if (checkPay == true) {
                       Navigator.pushReplacement(
+                          // ignore: use_build_context_synchronously
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
