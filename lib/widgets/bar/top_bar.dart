@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swp_project_web/constant/myToken.dart';
 import 'package:swp_project_web/router/router.dart';
-import 'package:swp_project_web/screens/contact/contact_infor.dart';
+import 'package:swp_project_web/screens/customer/contact/contact_infor.dart';
 import 'package:swp_project_web/widgets/button/profile_button.dart';
 import 'package:swp_project_web/widgets/selection_app_bar.dart';
 

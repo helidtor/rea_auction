@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swp_project_web/constant/baseUrl.dart';
 import 'package:swp_project_web/constant/myToken.dart';
+import 'package:swp_project_web/models/response/auction_history.dart';
 import 'package:swp_project_web/models/response/auction_model.dart';
 import 'package:swp_project_web/models/response/form_auction.dart';
 import 'package:swp_project_web/models/response/form_done_model.dart';
@@ -277,6 +278,35 @@ class ApiProvider {
     return posts;
   }
 
+// <<<< Get all my post >>>>
+  static Future<List<FormsModel>?> getAllMyPosts() async {
+    List<FormsModel>? posts;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+
+    try {
+      var url = "$baseUrl/v1/auction/post/user/available";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response = await http.get(Uri.parse(url.toString()), headers: header);
+      // print("TEST get all posts của tôi: ${response.body}");
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
+        if (bodyConvert['isError'] == false) {
+          var postsJson = bodyConvert['result'];
+          posts = postsJson
+              .map<FormsModel>((postJson) => FormsModel.fromMap(postJson))
+              .toList();
+          // print("Thông tin get all my form: $posts");
+        }
+      }
+    } catch (e) {
+      print("Loi get all my form: $e");
+    }
+
+    return posts;
+  }
+
   // <<<< Get all property >>>>
   static Future<List<PropertyModel>?> getAllProperties() async {
     List<PropertyModel>? properties;
@@ -444,6 +474,39 @@ class ApiProvider {
       print("Loi get profile: $e");
     }
     return auctionModel;
+  }
+
+  // <<<< Get history auction by id>>>>
+  static Future<List<AuctionHistory>?> getAuctionHistory(
+      {required int idAuction}) async {
+    List<AuctionHistory>? listAuctionHistory;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+
+    try {
+      var url =
+          "$baseUrl/v1/auction/history/Get-Histoy-By-Auction?auctionId=$idAuction";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response = await http.get(Uri.parse(url.toString()), headers: header);
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
+        if (bodyConvert['isError'] == false) {
+          var postsJson = bodyConvert['result'];
+          listAuctionHistory = postsJson
+              .map<AuctionHistory>(
+                  (postJson) => AuctionHistory.fromMap(postJson))
+              .toList();
+          print("Thông tin get list history auction: $listAuctionHistory");
+          return listAuctionHistory;
+        } else {
+          print("Không get được list lịch sử");
+        }
+      }
+    } catch (e) {
+      print("Loi get list history auction bằng id: $e");
+    }
+    return listAuctionHistory;
   }
 
 // <<<< Get user by id>>>>
@@ -702,7 +765,7 @@ class ApiProvider {
     return false;
   }
 
-  //Phê duyệt đơn
+  //Từ chối đơn
   static Future<bool?> declineForm(
       {required int idForm, required String reason}) async {
     var url = '$baseUrl/v1/auction/post/reject?postId=$idForm';

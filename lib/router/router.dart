@@ -3,15 +3,16 @@ import 'dart:js';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swp_project_web/constant/myToken.dart';
-import 'package:swp_project_web/screens/create_form/create_form.dart';
-import 'package:swp_project_web/screens/create_form_complete/create_form_complete.dart';
-import 'package:swp_project_web/screens/home/home_page.dart';
+import 'package:swp_project_web/screens/customer/create_form/create_form.dart';
+import 'package:swp_project_web/screens/customer/create_form_complete/create_form_complete.dart';
+import 'package:swp_project_web/screens/customer/home/home_page.dart';
+import 'package:swp_project_web/screens/customer/my_form/form_create/my_form_screen.dart';
 import 'package:swp_project_web/screens/login/login_screen.dart';
-import 'package:swp_project_web/screens/manage/navigator_manage.dart';
-import 'package:swp_project_web/screens/payment/pay_fail.dart';
-import 'package:swp_project_web/screens/payment/pay_success.dart';
-import 'package:swp_project_web/screens/profile/profile_screen.dart';
-import 'package:swp_project_web/screens/signup/sign_up_screen.dart';
+import 'package:swp_project_web/screens/staff/navigator_manage.dart';
+import 'package:swp_project_web/screens/customer/payment/pay_fail.dart';
+import 'package:swp_project_web/screens/customer/payment/pay_success.dart';
+import 'package:swp_project_web/screens/customer/profile/profile_screen.dart';
+import 'package:swp_project_web/screens/customer/signup/sign_up_screen.dart';
 
 class RouteName {
   static const String home = '/home';
@@ -23,6 +24,7 @@ class RouteName {
   static const String formComplete = '/form_complete';
   static const String paymentSuccess = '/payment_success';
   static const String paymentFail = '/payment_failed';
+  static const String myForm = '/my_form';
 
   static const publicRoutes = [
     login,
@@ -51,6 +53,10 @@ final router = GoRouter(
     return RouteName.login;
   },
   routes: [
+    GoRoute(
+      path: RouteName.myForm,
+      builder: (context, state) => const MyCreateForm(),
+    ),
     GoRoute(
       path: RouteName.paymentFail,
       builder: (context, state) => const PayFail(),

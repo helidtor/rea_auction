@@ -134,6 +134,15 @@ class _ProfileButtonState extends State<ProfileButton> {
               ),
               PopupMenuItem(
                 child: ListTile(
+                  leading: const Icon(Icons.email_outlined),
+                  title: const Text('Đơn của tôi'),
+                  onTap: () {
+                    router.go(RouteName.myForm);
+                  },
+                ),
+              ),
+              PopupMenuItem(
+                child: ListTile(
                   leading: const Icon(Icons.logout),
                   title: const Text('Đăng xuất'),
                   onTap: () {
