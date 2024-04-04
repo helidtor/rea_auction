@@ -42,9 +42,10 @@ class _FormCompleteStates extends State<FormComplete> {
   FormDoneModel formDoneModel = FormDoneModel();
 
   int? idPropertyChosen(String value) {
+    print('aaaa ${listProperty?.length}');
     for (int i = 0; i < listProperty!.length; i++) {
       if (listProperty![i].post!.title == value &&
-          listProperty![i].isAvailable == true) {
+          listProperty![i].isAvailable == false) {
         return listProperty![i].id;
       }
     }
@@ -78,6 +79,7 @@ class _FormCompleteStates extends State<FormComplete> {
             Navigator.pop(context);
             listProperty = state.list;
             listNameProperty = state.listName;
+            print('xxxx: $listNameProperty');
           } else if (state is FormCompleteSuccess) {
             router.go(RouteName.home);
             toastification.show(

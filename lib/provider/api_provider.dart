@@ -682,6 +682,7 @@ class ApiProvider {
   static Future<bool> createFormDone(FormDoneModel formCreate) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(myToken);
+    print('xyz: $formCreate');
     try {
       var url = "$baseUrl/v1/auction/TransferForm/member/new";
       Map<String, String> header = await getHeader();

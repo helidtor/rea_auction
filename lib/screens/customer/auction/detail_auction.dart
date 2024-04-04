@@ -577,159 +577,6 @@ class _DetailAuctionState extends State<DetailAuction> {
                         width: screenWidth * 0.77,
                         child: Column(
                           children: [
-                            (isJoinAuction == 4)
-                                ? Container(
-                                    margin: const EdgeInsets.only(top: 20),
-                                    width: screenWidth * 0.74,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        //------------------------LIST LỊCH SỬ ĐẤU GIÁ-------------------------------
-                                        Expanded(
-                                          flex: 1,
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.grey
-                                                          .withOpacity(0.1),
-                                                      spreadRadius: 5,
-                                                      blurRadius: 5,
-                                                      offset:
-                                                          const Offset(0, 3),
-                                                    )
-                                                  ],
-                                                  border: Border.all(
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              42,
-                                                              166,
-                                                              164,
-                                                              164)),
-                                                  color: const Color.fromARGB(
-                                                      253, 255, 255, 255),
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                height: 300,
-                                                // width: 100,
-                                                child: SingleChildScrollView(
-                                                  child: Column(
-                                                    children: List.generate(
-                                                      auctionHistory.length,
-                                                      (index) => RowHistory(
-                                                          auctionHistory:
-                                                              auctionHistory[
-                                                                  index]),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 15,
-                                        ),
-                                        Expanded(
-                                          flex: 3,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.1),
-                                                  spreadRadius: 5,
-                                                  blurRadius: 5,
-                                                  offset: const Offset(0, 3),
-                                                )
-                                              ],
-                                              border: Border.all(
-                                                  color: const Color.fromARGB(
-                                                      42, 166, 164, 164)),
-                                              color: const Color.fromARGB(
-                                                  253, 255, 255, 255),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            constraints: BoxConstraints(
-                                                minWidth: screenWidth * 0.3,
-                                                minHeight: 300),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                // Text(
-                                                //     (winner != null)
-                                                //         ? 'Người trả giá: ${winner!.firstName}'
-                                                //         : 'Người trả giá: Chưa rõ',
-                                                //     style: const TextStyle(
-                                                //       fontWeight: FontWeight.bold,
-                                                //       fontSize: 18,
-                                                //     )),
-                                                Text(
-                                                    (auctionModel!.finalPrice !=
-                                                            0)
-                                                        ? 'Giá hiện tại: ${FormatProvider().formatCurrency(auctionModel!.finalPrice.toString())} VNĐ'
-                                                        : 'Giá hiện tại: ${FormatProvider().formatCurrency(auctionModel!.revervePrice.toString())} VNĐ',
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18,
-                                                    )),
-                                                FieldProfile(
-                                                  widthInput: 0.2,
-                                                  readOnly: false,
-                                                  content: '',
-                                                  onChangeText: (value) {
-                                                    setState(() {
-                                                      bidAmount = value;
-                                                    });
-                                                  },
-                                                ),
-                                                TextButton(
-                                                    onPressed: () {
-                                                      _bloc.add(BidAuction(
-                                                          idAuction:
-                                                              auctionModel!.id!,
-                                                          bidAmount:
-                                                              double.parse(
-                                                                  bidAmount)));
-                                                    },
-                                                    child: Container(
-                                                      width: screenWidth * 0.2,
-                                                      height: 50,
-                                                      decoration: BoxDecoration(
-                                                          border: Border.all(
-                                                              color:
-                                                                  Colors.white),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          color: Colors.green),
-                                                      child: const Center(
-                                                        child: Text(
-                                                          'Đấu giá',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 15,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    )),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : const SizedBox(),
                             Padding(
                               padding: const EdgeInsets.all(30),
                               child: Text(
@@ -1229,6 +1076,159 @@ class _DetailAuctionState extends State<DetailAuction> {
                                 // ),
                               ],
                             ),
+                            (isJoinAuction == 4)
+                                ? Container(
+                                    margin: const EdgeInsets.only(top: 20),
+                                    width: screenWidth * 0.74,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        //------------------------LIST LỊCH SỬ ĐẤU GIÁ-------------------------------
+                                        Expanded(
+                                          flex: 1,
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.1),
+                                                      spreadRadius: 5,
+                                                      blurRadius: 5,
+                                                      offset:
+                                                          const Offset(0, 3),
+                                                    )
+                                                  ],
+                                                  border: Border.all(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              42,
+                                                              166,
+                                                              164,
+                                                              164)),
+                                                  color: const Color.fromARGB(
+                                                      253, 255, 255, 255),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                height: 300,
+                                                // width: 100,
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    children: List.generate(
+                                                      auctionHistory.length,
+                                                      (index) => RowHistory(
+                                                          auctionHistory:
+                                                              auctionHistory[
+                                                                  index]),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 15,
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.1),
+                                                  spreadRadius: 5,
+                                                  blurRadius: 5,
+                                                  offset: const Offset(0, 3),
+                                                )
+                                              ],
+                                              border: Border.all(
+                                                  color: const Color.fromARGB(
+                                                      42, 166, 164, 164)),
+                                              color: const Color.fromARGB(
+                                                  253, 255, 255, 255),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            constraints: BoxConstraints(
+                                                minWidth: screenWidth * 0.3,
+                                                minHeight: 300),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                // Text(
+                                                //     (winner != null)
+                                                //         ? 'Người trả giá: ${winner!.firstName}'
+                                                //         : 'Người trả giá: Chưa rõ',
+                                                //     style: const TextStyle(
+                                                //       fontWeight: FontWeight.bold,
+                                                //       fontSize: 18,
+                                                //     )),
+                                                Text(
+                                                    (auctionModel!.finalPrice !=
+                                                            0)
+                                                        ? 'Giá hiện tại: ${FormatProvider().formatCurrency(auctionModel!.finalPrice.toString())} VNĐ'
+                                                        : 'Giá hiện tại: ${FormatProvider().formatCurrency(auctionModel!.revervePrice.toString())} VNĐ',
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18,
+                                                    )),
+                                                FieldProfile(
+                                                  widthInput: 0.2,
+                                                  readOnly: false,
+                                                  content: '',
+                                                  onChangeText: (value) {
+                                                    setState(() {
+                                                      bidAmount = value;
+                                                    });
+                                                  },
+                                                ),
+                                                TextButton(
+                                                    onPressed: () {
+                                                      _bloc.add(BidAuction(
+                                                          idAuction:
+                                                              auctionModel!.id!,
+                                                          bidAmount:
+                                                              double.parse(
+                                                                  bidAmount)));
+                                                    },
+                                                    child: Container(
+                                                      width: screenWidth * 0.2,
+                                                      height: 50,
+                                                      decoration: BoxDecoration(
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.white),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          color: Colors.green),
+                                                      child: const Center(
+                                                        child: Text(
+                                                          'Đấu giá',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : const SizedBox(),
                             Padding(
                               padding: const EdgeInsets.all(30),
                               child: Container(

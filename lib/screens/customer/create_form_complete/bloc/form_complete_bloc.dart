@@ -27,7 +27,7 @@ class FormCompleteBloc extends Bloc<FormCompleteEvent, FormCompleteState> {
         List<String> listNameProperty = [];
         if (listProperty!.isNotEmpty) {
           for (int i = 0; i < listProperty.length; i++) {
-            if (listProperty[i].isAvailable == true) {
+            if (listProperty[i].isAvailable == false) {
               listNameProperty.add(listProperty[i].post!.title!);
             }
           }
