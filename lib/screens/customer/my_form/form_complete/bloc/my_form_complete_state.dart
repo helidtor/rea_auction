@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:swp_project_web/models/response/form_done_model.dart';
 import 'package:swp_project_web/models/response/form_model.dart';
 import 'package:swp_project_web/screens/staff/manage_form/detail_form.dart';
 
@@ -14,7 +15,7 @@ class MyFormCompleteInitial extends MyFormCompleteStates {}
 class MyFormCompleteLoading extends MyFormCompleteStates {}
 
 class MyFormCompleteSuccess extends MyFormCompleteStates {
-  final List<FormsModel> list;
+  final List<FormDoneModel> list;
   const MyFormCompleteSuccess({required this.list});
   @override
   List<Object> get props => [list];

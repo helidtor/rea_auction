@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
+import 'package:swp_project_web/format/format_provider.dart';
 import 'package:swp_project_web/models/response/form_model.dart';
 import 'package:swp_project_web/provider/api_provider.dart';
 import 'package:swp_project_web/router/router.dart';
@@ -13,6 +14,7 @@ import 'package:swp_project_web/widgets/bar/footer_web.dart';
 import 'package:swp_project_web/widgets/button/gradient_button.dart';
 import 'package:swp_project_web/widgets/input/input_field.dart';
 import 'package:swp_project_web/widgets/bar/top_bar.dart';
+import 'package:swp_project_web/widgets/input/input_price.dart';
 import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/notification/toast.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
@@ -380,11 +382,12 @@ class _CreateFormStates extends State<CreateForm> {
                               widthInput: 0.3,
                             ),
                             const SizedBox(width: 20),
-                            InputField(
+                            InputPrice(
                                 onChangeText: (value) {
                                   setState(() {
                                     formCreate.propertyRevervePrice =
-                                        double.parse(value);
+                                        double.parse(FormatProvider()
+                                            .formatString(value));
                                   });
                                 },
                                 content: "Giá khởi điểm",

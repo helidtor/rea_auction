@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swp_project_web/models/response/form_model.dart';
 import 'package:swp_project_web/router/router.dart';
+import 'package:swp_project_web/screens/customer/my_form/form_complete/my_form_complete_screen.dart';
 import 'package:swp_project_web/screens/customer/my_form/form_create/bloc/my_form_bloc.dart';
 import 'package:swp_project_web/screens/customer/my_form/form_create/bloc/my_form_event.dart';
 import 'package:swp_project_web/screens/customer/my_form/form_create/bloc/my_form_state.dart';
@@ -160,11 +161,11 @@ class _MyCreateFormState extends State<MyCreateForm> {
                           )),
                       TextButton(
                           onPressed: () {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        super.widget));
+                                        const MyCompleteForm()));
                           },
                           child: Container(
                             decoration: BoxDecoration(

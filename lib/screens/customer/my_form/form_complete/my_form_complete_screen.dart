@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:swp_project_web/models/response/form_done_model.dart';
 import 'package:swp_project_web/models/response/form_model.dart';
 import 'package:swp_project_web/router/router.dart';
-import 'package:swp_project_web/screens/customer/my_form/form_create/bloc/my_form_bloc.dart';
-import 'package:swp_project_web/screens/customer/my_form/form_create/bloc/my_form_event.dart';
-import 'package:swp_project_web/screens/customer/my_form/form_create/bloc/my_form_state.dart';
+import 'package:swp_project_web/screens/customer/my_form/form_complete/bloc/my_form_complete_bloc.dart';
+import 'package:swp_project_web/screens/customer/my_form/form_complete/bloc/my_form_complete_event.dart';
+import 'package:swp_project_web/screens/customer/my_form/form_complete/bloc/my_form_complete_state.dart';
+import 'package:swp_project_web/screens/customer/my_form/form_complete/detail_my_form_complete.dart';
 import 'package:swp_project_web/screens/customer/my_form/form_create/detail_my_form.dart';
+import 'package:swp_project_web/screens/customer/my_form/form_create/my_form_screen.dart';
 import 'package:swp_project_web/screens/staff/navigator_manage.dart';
 import 'package:swp_project_web/theme/pallete.dart';
 import 'package:swp_project_web/widgets/bar/top_bar.dart';
@@ -24,13 +27,13 @@ class MyCompleteForm extends StatefulWidget {
 
 class _MyCompleteFormState extends State<MyCompleteForm> {
   final bool reloadWidget = false;
-  List<FormsModel> listPost = [];
-  final _bloc = MyFormBloc();
+  List<FormDoneModel> listPost = [];
+  final _bloc = MyFormCompleteBloc();
 
   @override
   void initState() {
     super.initState();
-    _bloc.add(GetAllListPost());
+    _bloc.add(GetAllListCompletePost());
   }
 
   @override
@@ -39,17 +42,17 @@ class _MyCompleteFormState extends State<MyCompleteForm> {
     double screenHeight = MediaQuery.of(context).size.height;
     //cột trong bảng
     final List<DataColumn> _columns = [
-      DataColumn(
-        label: const Text('ID'),
-        onSort: (columnIndex, ascending) {
-          setState(() {
-            listPost.sort((a, b) => a.id!.compareTo(b.id as num));
-            if (!ascending) {
-              listPost = listPost.reversed.toList();
-            }
-          });
-        },
-      ),
+      // DataColumn(
+      //   label: const Text('ID'),
+      //   onSort: (columnIndex, ascending) {
+      //     setState(() {
+      //       listPost.sort((a, b) => a.id!.compareTo(b.id as num));
+      //       if (!ascending) {
+      //         listPost = listPost.reversed.toList();
+      //       }
+      //     });
+      //   },
+      // ),
       const DataColumn(
         label: Text('Ảnh bìa'),
       ),
@@ -68,8 +71,8 @@ class _MyCompleteFormState extends State<MyCompleteForm> {
         label: const Text('Trạng thái'),
         onSort: (columnIndex, ascending) {
           setState(() {
-            listPost
-                .sort((a, b) => a.postStatus!.compareTo(b.postStatus as num));
+            listPost.sort((a, b) =>
+                a.tranferFormStatus!.compareTo(b.tranferFormStatus as num));
             if (!ascending) {
               listPost = listPost.reversed.toList();
             }
@@ -87,16 +90,16 @@ class _MyCompleteFormState extends State<MyCompleteForm> {
         screenHeight: screenHeight,
         screenWidth: screenWidth,
       ),
-      body: BlocConsumer<MyFormBloc, MyFormStates>(
+      body: BlocConsumer<MyFormCompleteBloc, MyFormCompleteStates>(
         bloc: _bloc,
         listener: (context, state) async {
-          if (state is MyFormLoading) {
+          if (state is MyFormCompleteLoading) {
             onLoading(context);
             return;
-          } else if (state is MyFormSuccess) {
+          } else if (state is MyFormCompleteSuccess) {
             Navigator.pop(context);
             listPost = state.list;
-          } else if (state is MyFormError) {
+          } else if (state is MyFormCompleteError) {
             toastification.show(
               pauseOnHover: false,
               progressBarTheme: const ProgressIndicatorThemeData(
@@ -130,63 +133,62 @@ class _MyCompleteFormState extends State<MyCompleteForm> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      super.widget));
-                        },
-                        child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                            border: Border.all(
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const MyCreateForm()));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: const Color.fromARGB(253, 255, 255, 255),
+                              ),
                               color: const Color.fromARGB(253, 255, 255, 255),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            color: const Color.fromARGB(253, 255, 255, 255),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: Text(
-                              'Đơn tạo đấu giá',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                'Đơn tạo đấu giá',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          ///////////////////
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 5),
-                          height: 50,
-                          decoration: BoxDecoration(
-                            border: Border.all(
+                          )),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const MyCompleteForm()));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: const Color.fromARGB(253, 255, 255, 255),
+                              ),
                               color: const Color.fromARGB(253, 255, 255, 255),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            color: const Color.fromARGB(253, 255, 255, 255),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: Text(
-                              'Đơn giải ngân cọc',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                'Đơn giải ngân',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      )
+                          )),
                     ],
                   ),
                 ),
@@ -215,7 +217,7 @@ class _MyCompleteFormState extends State<MyCompleteForm> {
 }
 
 class _DataSource extends DataTableSource {
-  final List<FormsModel> listPost;
+  final List<FormDoneModel> listPost;
   final BuildContext context;
 
   _DataSource(this.listPost, this.context);
@@ -225,7 +227,7 @@ class _DataSource extends DataTableSource {
     final post = listPost[index];
     //dữ liệu từng cột
     return DataRow(cells: [
-      DataCell(Text(post.id.toString())),
+      // DataCell(Text(post.id.toString())),
       DataCell(
         Container(
           width: 100,
@@ -238,9 +240,9 @@ class _DataSource extends DataTableSource {
             borderRadius: const BorderRadius.all(Radius.circular(5)),
             image: DecorationImage(
               fit: BoxFit.fill,
-              image: (post.propertyImages!.isEmpty)
+              image: (post.transferImages!.isEmpty)
                   ? const AssetImage("assets/images/error_load_image.jpg")
-                  : Image.network(post.propertyImages!.first).image,
+                  : Image.network(post.transferImages!.first).image,
             ),
           ),
         ),
@@ -257,11 +259,11 @@ class _DataSource extends DataTableSource {
       DataCell(Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: displayColor(post.postStatus),
+          color: displayColor(post.tranferFormStatus),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
-          convertStatus(post.postStatus),
+          convertStatus(post.tranferFormStatus),
           style:
               const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         ),
@@ -325,7 +327,7 @@ class _DataSource extends DataTableSource {
     }
   }
 
-  void _showDetailDialog(BuildContext context, FormsModel formModel) {
+  void _showDetailDialog(BuildContext context, FormDoneModel formModel) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     showDialog(
@@ -364,7 +366,7 @@ class _DataSource extends DataTableSource {
               minHeight: screenHeight * 0.6,
               minWidth: screenWidth * 0.77,
             ),
-            child: DetailMyForm(formModel: formModel),
+            child: DetailMyFormComplete(formModel: formModel),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),

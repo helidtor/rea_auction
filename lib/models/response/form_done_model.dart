@@ -7,25 +7,41 @@ class FormDoneModel {
   String? title;
   String? content;
   List<String>? transferImages;
+  List<String>? transactionImages;
   int? propertyId;
+  String? reason;
+  int? tranferFormStatus;
+  String? createdAt;
   FormDoneModel({
     this.title,
     this.content,
     this.transferImages,
+    this.transactionImages,
     this.propertyId,
+    this.reason,
+    this.tranferFormStatus,
+    this.createdAt,
   });
 
   FormDoneModel copyWith({
     String? title,
     String? content,
     List<String>? transferImages,
+    List<String>? transactionImages,
     int? propertyId,
+    String? reason,
+    int? tranferFormStatus,
+    String? createdAt,
   }) {
     return FormDoneModel(
       title: title ?? this.title,
       content: content ?? this.content,
       transferImages: transferImages ?? this.transferImages,
+      transactionImages: transactionImages ?? this.transactionImages,
       propertyId: propertyId ?? this.propertyId,
+      reason: reason ?? this.reason,
+      tranferFormStatus: tranferFormStatus ?? this.tranferFormStatus,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -34,7 +50,11 @@ class FormDoneModel {
       'title': title,
       'content': content,
       'transferImages': transferImages,
+      'transactionImages': transactionImages,
       'propertyId': propertyId,
+      'reason': reason,
+      'tranferFormStatus': tranferFormStatus,
+      'createdAt': createdAt,
     };
   }
 
@@ -45,7 +65,15 @@ class FormDoneModel {
       transferImages: map['transferImages'] != null
           ? List<String>.from((map['transferImages']))
           : null,
+      transactionImages: map['transactionImages'] != null
+          ? List<String>.from((map['transactionImages']))
+          : null,
       propertyId: map['propertyId'] != null ? map['propertyId'] as int : null,
+      reason: map['reason'] != null ? map['reason'] as String : null,
+      tranferFormStatus: map['tranferFormStatus'] != null
+          ? map['tranferFormStatus'] as int
+          : null,
+      createdAt: map['createdAt'] != null ? map['createdAt'] as String : null,
     );
   }
 
@@ -56,7 +84,7 @@ class FormDoneModel {
 
   @override
   String toString() {
-    return 'FormDoneModel(title: $title, content: $content, transferImages: $transferImages, propertyId: $propertyId)';
+    return 'FormDoneModel(title: $title, content: $content, transferImages: $transferImages, transactionImages: $transactionImages, propertyId: $propertyId, reason: $reason, tranferFormStatus: $tranferFormStatus, createdAt: $createdAt)';
   }
 
   @override
@@ -66,7 +94,11 @@ class FormDoneModel {
     return other.title == title &&
         other.content == content &&
         listEquals(other.transferImages, transferImages) &&
-        other.propertyId == propertyId;
+        listEquals(other.transactionImages, transactionImages) &&
+        other.propertyId == propertyId &&
+        other.reason == reason &&
+        other.tranferFormStatus == tranferFormStatus &&
+        other.createdAt == createdAt;
   }
 
   @override
@@ -74,6 +106,10 @@ class FormDoneModel {
     return title.hashCode ^
         content.hashCode ^
         transferImages.hashCode ^
-        propertyId.hashCode;
+        transactionImages.hashCode ^
+        propertyId.hashCode ^
+        reason.hashCode ^
+        tranferFormStatus.hashCode ^
+        createdAt.hashCode;
   }
 }

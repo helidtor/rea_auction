@@ -61,6 +61,10 @@ dependencies:
   flutter_fast_forms: ^15.0.0
   flutter_timer_countdown: ^1.0.7
   url_launcher: ^6.2.5
+  webview_flutter: ^4.7.0
+  webview_flutter_platform_interface: ^2.10.0
+  webview_flutter_web: ^0.2.2+4
+
 
 dev_dependencies:
   flutter_test:

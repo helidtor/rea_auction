@@ -37,15 +37,15 @@ class _PaySuccessState extends State<PaySuccess> {
                       await SharedPreferences.getInstance();
                   int? idAuction = prefs.getInt("idAuctionPayment");
                   if (idAuction != null) {
-                    var checkPay = await ApiProvider.paymentDeposit(idAuction);
-                    if (checkPay == true) {
-                      Navigator.pushReplacement(
-                          // ignore: use_build_context_synchronously
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const HomePage()));
-                    }
+                    // var checkPay = await ApiProvider.paymentDeposit(idAuction);
+                    // if (checkPay == true) {
+                    //   Navigator.pushReplacement(
+                    //       // ignore: use_build_context_synchronously
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (BuildContext context) =>
+                    //               const HomePage()));
+                    // }
                   }
                 },
               ),

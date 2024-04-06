@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:swp_project_web/models/response/form_done_model.dart';
 import 'package:swp_project_web/models/response/form_model.dart';
 import 'package:swp_project_web/screens/staff/manage_form/bloc/form_bloc.dart';
 import 'package:swp_project_web/screens/staff/manage_form/bloc/form_event.dart';
@@ -12,7 +13,7 @@ import 'package:swp_project_web/widgets/others/loading.dart';
 import 'package:toastification/toastification.dart';
 
 class DetailMyFormComplete extends StatefulWidget {
-  final FormsModel? formModel;
+  final FormDoneModel? formModel;
   const DetailMyFormComplete({super.key, this.formModel});
 
   @override
@@ -20,7 +21,7 @@ class DetailMyFormComplete extends StatefulWidget {
 }
 
 class _DetailMyFormCompleteState extends State<DetailMyFormComplete> {
-  late FormsModel formModel;
+  late FormDoneModel formModel;
   final _bloc = FormBloc();
   List<String> listImage = [];
   String selectedImage = "";
@@ -32,8 +33,8 @@ class _DetailMyFormCompleteState extends State<DetailMyFormComplete> {
     if (widget.formModel != null) {
       formModel = widget.formModel!;
 
-      if (formModel.propertyImages!.isNotEmpty) {
-        listImage = formModel.propertyImages!;
+      if (formModel.transferImages!.isNotEmpty) {
+        listImage = formModel.transferImages!;
         selectedImage = listImage.first;
       }
     }
@@ -171,30 +172,30 @@ class _DetailMyFormCompleteState extends State<DetailMyFormComplete> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 10, bottom: 10, top: 10),
-                                child: Row(
-                                  children: [
-                                    const Text(
-                                      'ID:',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Text(
-                                      formModel.id.toString() ?? "",
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              // Padding(
+                              //   padding: const EdgeInsets.only(
+                              //       left: 10, bottom: 10, top: 10),
+                              //   child: Row(
+                              //     children: [
+                              //       const Text(
+                              //         'ID:',
+                              //         style: TextStyle(
+                              //           color: Colors.black,
+                              //           fontWeight: FontWeight.bold,
+                              //           fontSize: 16,
+                              //         ),
+                              //       ),
+                              //       const Spacer(),
+                              //       Text(
+                              //         formModel.id.toString() ?? "",
+                              //         style: const TextStyle(
+                              //           color: Colors.black,
+                              //           fontSize: 14,
+                              //         ),
+                              //       ),
+                              //     ],
+                              //   ),
+                              // ),
                               Padding(
                                 padding:
                                     const EdgeInsets.only(left: 10, bottom: 10),
@@ -223,111 +224,32 @@ class _DetailMyFormCompleteState extends State<DetailMyFormComplete> {
                                   ],
                                 ),
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, bottom: 10),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Địa chỉ:',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                      overflow: TextOverflow.visible,
-                                    ),
-                                    const Spacer(),
-                                    Flexible(
-                                      child: Text(
-                                        formModel.propertyWard != null
-                                            ? '${formModel.propertyStreet}, ${formModel.propertyWard}, ${formModel.propertyDistrict}, ${formModel.propertyCity}'
-                                            : '',
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                        ),
-                                        overflow: TextOverflow.visible,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, bottom: 10),
-                                child: Row(
-                                  children: [
-                                    const Text(
-                                      'Diện tích:',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Text(
-                                      '${formModel.propertyArea.toString()}m\u00b2' ??
-                                          "",
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, bottom: 10),
-                                child: Row(
-                                  children: [
-                                    const Text(
-                                      'Giá khởi điểm:',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Text(
-                                      '${formatCurrency(formModel.propertyRevervePrice.toString())} VNĐ',
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, bottom: 10),
-                                child: Row(
-                                  children: [
-                                    const Text(
-                                      'Chủ sở hữu:',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Text(
-                                      '${formModel.author!.firstName} ${formModel.author!.lastName}' ??
-                                          "",
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+
+                              // Padding(
+                              //   padding:
+                              //       const EdgeInsets.only(left: 10, bottom: 10),
+                              //   child: Row(
+                              //     children: [
+                              //       const Text(
+                              //         'Chủ sở hữu:',
+                              //         style: TextStyle(
+                              //           color: Colors.black,
+                              //           fontWeight: FontWeight.bold,
+                              //           fontSize: 16,
+                              //         ),
+                              //       ),
+                              //       const Spacer(),
+                              //       Text(
+                              //         '${formModel.author!.firstName} ${formModel.author!.lastName}' ??
+                              //             "",
+                              //         style: const TextStyle(
+                              //           color: Colors.black,
+                              //           fontSize: 14,
+                              //         ),
+                              //       ),
+                              //     ],
+                              //   ),
+                              // ),
                               Padding(
                                 padding:
                                     const EdgeInsets.only(left: 10, bottom: 10),
@@ -343,7 +265,8 @@ class _DetailMyFormCompleteState extends State<DetailMyFormComplete> {
                                     ),
                                     const Spacer(),
                                     Text(
-                                      convertStatus(formModel.postStatus),
+                                      convertStatus(
+                                          formModel.tranferFormStatus),
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 14,
@@ -352,31 +275,7 @@ class _DetailMyFormCompleteState extends State<DetailMyFormComplete> {
                                   ],
                                 ),
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, bottom: 10),
-                                child: Row(
-                                  children: [
-                                    const Text(
-                                      'Loại tài sản:',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Text(
-                                      formModel.propertyTypeId?.toString() ??
-                                          'Không có',
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+
                               const SizedBox(
                                 height: 60,
                               ),
@@ -397,9 +296,9 @@ class _DetailMyFormCompleteState extends State<DetailMyFormComplete> {
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount: (formModel
-                                            .propertyImages!.first.isEmpty)
+                                            .transferImages!.first.isEmpty)
                                         ? 1
-                                        : formModel.propertyImages!.length,
+                                        : formModel.transferImages!.length,
                                     itemBuilder: (context, index) {
                                       return GestureDetector(
                                         onTap: () {
@@ -498,102 +397,6 @@ class _DetailMyFormCompleteState extends State<DetailMyFormComplete> {
                                     overflow: TextOverflow.visible,
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 100, top: 50, bottom: 20),
-                            child: Row(
-                              children: [
-                                TextButton(
-                                    onPressed: () {
-                                      _bloc.add(ApproveForm(id: formModel.id!));
-                                    },
-                                    child: Container(
-                                      width: 120,
-                                      height: 35,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.green),
-                                      child: const Center(
-                                        child: Text(
-                                          'Phê duyệt',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ),
-                                    )),
-                                TextButton(
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title: const Text('Lý do từ chối'),
-                                            content: TextField(
-                                              controller: _reasonController,
-                                              decoration: const InputDecoration(
-                                                  hintText:
-                                                      'Nhập lý do từ chối'),
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  // Đóng dialog khi nhấn nút Cancel
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('Hủy'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  String inputReason =
-                                                      _reasonController.text;
-                                                  print(
-                                                      'Lý do từ chối là: $inputReason');
-                                                  _bloc.add(
-                                                    DeclinedForm(
-                                                      id: formModel.id!,
-                                                      reason: inputReason
-                                                              .isNotEmpty
-                                                          ? inputReason
-                                                          : 'Đơn không hợp lệ',
-                                                    ),
-                                                  );
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('Xác nhận'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                      // _bloc.add(
-                                      //   DeclinedForm(
-                                      //       id: formModel.id!,
-                                      //       reason: 'Đơn không hợp lệ'),
-                                      // );
-                                    },
-                                    child: Container(
-                                      width: 120,
-                                      height: 35,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.red),
-                                      child: const Center(
-                                        child: Text(
-                                          'Từ chối',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ),
-                                    )),
                               ],
                             ),
                           ),

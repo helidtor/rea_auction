@@ -7,7 +7,7 @@ abstract class MyFormCompleteEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetAllListPost extends MyFormCompleteEvent {}
+class GetAllListCompletePost extends MyFormCompleteEvent {}
 
 class ApproveMyFormComplete extends MyFormCompleteEvent {
   final int id;

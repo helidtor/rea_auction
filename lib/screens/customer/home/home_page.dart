@@ -53,27 +53,28 @@ class _HomePage extends State<HomePage> {
               Navigator.pop(context);
               listAuction = state.list;
             } else if (state is AuctionError) {
-              toastification.show(
-                  pauseOnHover: false,
-                  progressBarTheme: const ProgressIndicatorThemeData(
-                    color: Colors.red,
-                  ),
-                  icon: const Icon(
-                    Icons.error_outline_rounded,
-                    color: Colors.red,
-                  ),
-                  foregroundColor: Colors.black,
-                  context: context,
-                  type: ToastificationType.error,
-                  style: ToastificationStyle.minimal,
-                  title: TextContent(
-                    contentText: state.error,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                  autoCloseDuration: const Duration(milliseconds: 1500),
-                  animationDuration: const Duration(milliseconds: 500),
-                  alignment: Alignment.topRight);
+              Navigator.pop(context);
+              //   toastification.show(
+              //       pauseOnHover: false,
+              //       progressBarTheme: const ProgressIndicatorThemeData(
+              //         color: Colors.red,
+              //       ),
+              //       icon: const Icon(
+              //         Icons.error_outline_rounded,
+              //         color: Colors.red,
+              //       ),
+              //       foregroundColor: Colors.black,
+              //       context: context,
+              //       type: ToastificationType.error,
+              //       style: ToastificationStyle.minimal,
+              //       title: TextContent(
+              //         contentText: state.error,
+              //         fontWeight: FontWeight.bold,
+              //         color: Colors.black,
+              //       ),
+              //       autoCloseDuration: const Duration(milliseconds: 1500),
+              //       animationDuration: const Duration(milliseconds: 500),
+              //       alignment: Alignment.topRight);
             }
           },
           builder: (context, state) {

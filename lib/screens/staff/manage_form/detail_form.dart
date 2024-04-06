@@ -394,10 +394,10 @@ class _DetailFormState extends State<DetailForm> {
                                   height: 100,
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: (formModel
-                                            .propertyImages!.first.isEmpty)
-                                        ? 1
-                                        : formModel.propertyImages!.length,
+                                    itemCount:
+                                        (formModel.propertyImages!.isEmpty)
+                                            ? 0
+                                            : formModel.propertyImages!.length,
                                     itemBuilder: (context, index) {
                                       return GestureDetector(
                                         onTap: () {
@@ -502,98 +502,109 @@ class _DetailFormState extends State<DetailForm> {
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: 100, top: 50, bottom: 20),
-                            child: Row(
-                              children: [
-                                TextButton(
-                                    onPressed: () {
-                                      _bloc.add(ApproveForm(id: formModel.id!));
-                                    },
-                                    child: Container(
-                                      width: 120,
-                                      height: 35,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.green),
-                                      child: const Center(
-                                        child: Text(
-                                          'Phê duyệt',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ),
-                                    )),
-                                TextButton(
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title: const Text('Lý do từ chối'),
-                                            content: TextField(
-                                              controller: _reasonController,
-                                              decoration: const InputDecoration(
-                                                  hintText:
-                                                      'Nhập lý do từ chối'),
+                            child: (convertStatus(formModel.postStatus) ==
+                                    'Đã duyệt')
+                                ? const SizedBox()
+                                : Row(
+                                    children: [
+                                      TextButton(
+                                          onPressed: () {
+                                            _bloc.add(
+                                                ApproveForm(id: formModel.id!));
+                                          },
+                                          child: Container(
+                                            width: 120,
+                                            height: 35,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.green),
+                                            child: const Center(
+                                              child: Text(
+                                                'Phê duyệt',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
                                             ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  // Đóng dialog khi nhấn nút Cancel
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('Hủy'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  String inputReason =
-                                                      _reasonController.text;
-                                                  print(
-                                                      'Lý do từ chối là: $inputReason');
-                                                  _bloc.add(
-                                                    DeclinedForm(
-                                                      id: formModel.id!,
-                                                      reason: inputReason
-                                                              .isNotEmpty
-                                                          ? inputReason
-                                                          : 'Đơn không hợp lệ',
+                                          )),
+                                      TextButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: const Text(
+                                                      'Lý do từ chối'),
+                                                  content: TextField(
+                                                    controller:
+                                                        _reasonController,
+                                                    decoration:
+                                                        const InputDecoration(
+                                                            hintText:
+                                                                'Nhập lý do từ chối'),
+                                                  ),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        // Đóng dialog khi nhấn nút Cancel
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: const Text('Hủy'),
                                                     ),
-                                                  );
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('Xác nhận'),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        String inputReason =
+                                                            _reasonController
+                                                                .text;
+                                                        print(
+                                                            'Lý do từ chối là: $inputReason');
+                                                        _bloc.add(
+                                                          DeclinedForm(
+                                                            id: formModel.id!,
+                                                            reason: inputReason
+                                                                    .isNotEmpty
+                                                                ? inputReason
+                                                                : 'Đơn không hợp lệ',
+                                                          ),
+                                                        );
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: const Text(
+                                                          'Xác nhận'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                            // _bloc.add(
+                                            //   DeclinedForm(
+                                            //       id: formModel.id!,
+                                            //       reason: 'Đơn không hợp lệ'),
+                                            // );
+                                          },
+                                          child: Container(
+                                            width: 120,
+                                            height: 35,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.red),
+                                            child: const Center(
+                                              child: Text(
+                                                'Từ chối',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 15,
+                                                ),
                                               ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                      // _bloc.add(
-                                      //   DeclinedForm(
-                                      //       id: formModel.id!,
-                                      //       reason: 'Đơn không hợp lệ'),
-                                      // );
-                                    },
-                                    child: Container(
-                                      width: 120,
-                                      height: 35,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.red),
-                                      child: const Center(
-                                        child: Text(
-                                          'Từ chối',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ),
-                                    )),
-                              ],
-                            ),
+                                            ),
+                                          )),
+                                    ],
+                                  ),
                           ),
                         ],
                       ),

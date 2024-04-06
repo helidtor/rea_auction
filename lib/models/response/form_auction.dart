@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class FormAuction {
+  int? maxStepFee;
   String? name;
   String? biddingStartTime;
   String? biddingEndTime;
@@ -14,6 +15,7 @@ class FormAuction {
   String? title;
   List<String>? auctionImages;
   FormAuction({
+    this.maxStepFee,
     this.name,
     this.biddingStartTime,
     this.biddingEndTime,
@@ -26,6 +28,7 @@ class FormAuction {
   });
 
   FormAuction copyWith({
+    int? maxStepFee,
     String? name,
     String? biddingStartTime,
     String? biddingEndTime,
@@ -37,6 +40,7 @@ class FormAuction {
     List<String>? auctionImages,
   }) {
     return FormAuction(
+      maxStepFee: maxStepFee ?? this.maxStepFee,
       name: name ?? this.name,
       biddingStartTime: biddingStartTime ?? this.biddingStartTime,
       biddingEndTime: biddingEndTime ?? this.biddingEndTime,
@@ -51,6 +55,7 @@ class FormAuction {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'maxStepFee': maxStepFee,
       'name': name,
       'biddingStartTime': biddingStartTime,
       'biddingEndTime': biddingEndTime,
@@ -65,6 +70,7 @@ class FormAuction {
 
   factory FormAuction.fromMap(Map<String, dynamic> map) {
     return FormAuction(
+      maxStepFee: map['maxStepFee'] != null ? map['maxStepFee'] as int : null,
       name: map['name'] != null ? map['name'] as String : null,
       biddingStartTime: map['biddingStartTime'] != null
           ? map['biddingStartTime'] as String
@@ -84,26 +90,6 @@ class FormAuction {
     );
   }
 
-  // factory FormAuction.fromMap(Map<String, dynamic> map) {
-  //   return FormAuction(
-  //     name: map['name'] != null ? map['name'] as String : null,
-  //     biddingStartTime: map['biddingStartTime'] != null
-  //         ? map['biddingStartTime'] as String
-  //         : null,
-  //     biddingEndTime: map['biddingEndTime'] != null
-  //         ? map['biddingEndTime'] as String
-  //         : null,
-  //     revervePrice:
-  //         map['revervePrice'] != null ? map['revervePrice'] as double : null,
-  //     propertyId: map['propertyId'] != null ? map['propertyId'] as int : null,
-  //     content: map['content'] != null ? map['content'] as String : null,
-  //     title: map['title'] != null ? map['title'] as String : null,
-  //     auctionImages: map['auctionImages'] != null
-  //         ? List<String>.from((map['auctionImages']))
-  //         : null,
-  //   );
-  // }
-
   String toJson() => json.encode(toMap());
 
   factory FormAuction.fromJson(String source) =>
@@ -111,14 +97,15 @@ class FormAuction {
 
   @override
   String toString() {
-    return 'FormAuction(name: $name, biddingStartTime: $biddingStartTime, biddingEndTime: $biddingEndTime, revervePrice: $revervePrice, stepFee: $stepFee, propertyId: $propertyId, content: $content, title: $title, auctionImages: $auctionImages)';
+    return 'FormAuction(maxStepFee: $maxStepFee, name: $name, biddingStartTime: $biddingStartTime, biddingEndTime: $biddingEndTime, revervePrice: $revervePrice, stepFee: $stepFee, propertyId: $propertyId, content: $content, title: $title, auctionImages: $auctionImages)';
   }
 
   @override
   bool operator ==(covariant FormAuction other) {
     if (identical(this, other)) return true;
 
-    return other.name == name &&
+    return other.maxStepFee == maxStepFee &&
+        other.name == name &&
         other.biddingStartTime == biddingStartTime &&
         other.biddingEndTime == biddingEndTime &&
         other.revervePrice == revervePrice &&
@@ -131,7 +118,8 @@ class FormAuction {
 
   @override
   int get hashCode {
-    return name.hashCode ^
+    return maxStepFee.hashCode ^
+        name.hashCode ^
         biddingStartTime.hashCode ^
         biddingEndTime.hashCode ^
         revervePrice.hashCode ^

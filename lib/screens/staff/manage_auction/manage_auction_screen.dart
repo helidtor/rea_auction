@@ -241,7 +241,7 @@ class _DataSource extends DataTableSource {
             borderRadius: const BorderRadius.all(Radius.circular(5)),
             image: DecorationImage(
               fit: BoxFit.fill,
-              image: (auction.auctionImages!.first.isEmpty)
+              image: (auction.auctionImages!.isEmpty)
                   ? const AssetImage("assets/images/error_load_image.jpg")
                   : Image.network(auction.auctionImages!.first).image,
             ),

@@ -34,7 +34,7 @@ class ApiProvider {
       final body = {'username': username, 'password': password};
       var response = await http.post(Uri.parse(url.toString()),
           headers: header, body: jsonEncode(body));
-      // print("TEST login: ${response.body}");
+      print("TEST login: ${response.body}");
       if (response.statusCode == 200) {
         var bodyConvert = jsonDecode(response.body);
         if (bodyConvert['isError'] == false) {
@@ -278,7 +278,36 @@ class ApiProvider {
     return posts;
   }
 
-// <<<< Get all my post >>>>
+// <<<< Get all my post complete>>>>
+  static Future<List<FormDoneModel>?> getAllMyCompletePosts() async {
+    List<FormDoneModel>? transferForm;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+
+    try {
+      var url = "$baseUrl/v1/auction/TransferForm/user/available";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response = await http.get(Uri.parse(url.toString()), headers: header);
+      // print("TEST get all transfer form của tôi: ${response.body}");
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
+        if (bodyConvert['isError'] == false) {
+          var postsJson = bodyConvert['result'];
+          transferForm = postsJson
+              .map<FormDoneModel>((postJson) => FormDoneModel.fromMap(postJson))
+              .toList();
+          print("Thông tin get all my transfer form: $transferForm");
+        }
+      }
+    } catch (e) {
+      print("Loi get all my transfer form: $e");
+    }
+
+    return transferForm;
+  }
+
+// <<<< Get all my post create >>>>
   static Future<List<FormsModel>?> getAllMyPosts() async {
     List<FormsModel>? posts;
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -340,29 +369,36 @@ class ApiProvider {
   }
 
 // <<<< Payment cọc>>>>
-  static Future<bool?> paymentDeposit(int idAuction) async {
+  static Future<String?> paymentDeposit(
+      {required int idAuction,
+      required double amount,
+      required int idUser}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(myToken);
+    String? urlPayment;
+    print('data nhận vào payment deposit là: $idAuction $amount $idUser');
     try {
       var url =
-          "$baseUrl/v1/auction/payment/member/pay-deposit-auction?auctionId=$idAuction";
+          "$baseUrl/v1/auction/VNPay/Payment-For-Deposit?UserId=$idUser&Amount=$amount&AuctionId=$idAuction";
       Map<String, String> header = await getHeader();
       header.addAll({'Authorization': 'Bearer $token'});
-      var response =
-          await http.post(Uri.parse(url.toString()), headers: header);
+      var response = await http.get(Uri.parse(url.toString()), headers: header);
       if (response.statusCode == 200) {
         var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
         if (bodyConvert['isError'] == false) {
-          return true;
+          var postsJson = bodyConvert['result'];
+          urlPayment = postsJson;
+          print('Link payment: {$urlPayment}');
+          return urlPayment;
         } else {
           print("Thanh toán lỗi");
-          return false;
+          return null;
         }
       }
     } catch (e) {
       print("Error payment: $e");
     }
-    return false;
+    return null;
   }
 
 // <<<< Check join auction>>>>
@@ -431,7 +467,7 @@ class ApiProvider {
       Map<String, String> header = await getHeader();
       header.addAll({'Authorization': 'Bearer $token'});
       var response = await http.get(Uri.parse(url.toString()), headers: header);
-      // print("TEST get all posts: ${response.body}");
+      print("TEST get all posts: ${response.body}");
       if (response.statusCode == 200) {
         var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
         if (bodyConvert['isError'] == false) {
@@ -439,7 +475,7 @@ class ApiProvider {
           auctions = postsJson
               .map<AuctionModel>((postJson) => AuctionModel.fromMap(postJson))
               .toList();
-          print("Thông tin get all auction: $auctions");
+          // print("Thông tin get all auction: $auctions");
         }
       }
     } catch (e) {
@@ -489,6 +525,7 @@ class ApiProvider {
       Map<String, String> header = await getHeader();
       header.addAll({'Authorization': 'Bearer $token'});
       var response = await http.get(Uri.parse(url.toString()), headers: header);
+      print("Thông tin get list history auction: ${response.body}");
       if (response.statusCode == 200) {
         var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
         if (bodyConvert['isError'] == false) {
@@ -514,6 +551,7 @@ class ApiProvider {
     UserProfileModel? userProfileModel;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(myToken);
+    prefs.setInt('idUser', id);
 
     try {
       var url = "$baseUrl/v1/auction/user/$id";

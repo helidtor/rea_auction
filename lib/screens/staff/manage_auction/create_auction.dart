@@ -2,6 +2,7 @@ import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:swp_project_web/format/format_provider.dart';
 import 'package:swp_project_web/models/response/auction_model.dart';
 import 'package:swp_project_web/models/response/form_auction.dart';
 import 'package:swp_project_web/models/response/property_model.dart';
@@ -24,8 +25,9 @@ class CreateAuction extends StatefulWidget {
 
 class _CreateAuctionState extends State<CreateAuction> {
   DateTime selectedDateTimeEnd = DateTime.now();
-  String formattedDateTimeStart = getCurrentDateTimeFormatted();
-  String formattedDateTimeEnd = getCurrentDateTimeFormatted();
+  String formattedDateTimeStart =
+      FormatProvider().getCurrentDateTimeFormatted();
+  String formattedDateTimeEnd = FormatProvider().getCurrentDateTimeFormatted();
   final _bloc = AuctionBloc();
   late List<PropertyModel>? listProperty;
   List<String> listNameProperty = [];
@@ -402,22 +404,30 @@ class _CreateAuctionState extends State<CreateAuction> {
                                             initialText:
                                                 propertyModel.post?.title ??
                                                     'Tiêu đề trống',
+                                            onChangeText: (value) {
+                                              setState(() {
+                                                inforAuction.title = value;
+                                              });
+                                            },
                                           ),
                                           InputHaveLabel(
+                                            readOnly: true,
                                             labelText: 'Địa chỉ',
                                             initialText:
                                                 '${propertyModel.ward}, ${propertyModel.district}, ${propertyModel.city}',
                                           ),
                                           InputHaveLabel(
-                                            labelText: 'Diện tích',
+                                            readOnly: true,
+                                            labelText: 'Diện tích (m\u00b2)',
                                             initialText:
                                                 propertyModel.area.toString(),
                                           ),
                                           InputHaveLabel(
-                                            labelText: 'Giá khởi điểm',
-                                            initialText: propertyModel
-                                                .revervePrice
-                                                .toString(),
+                                            labelText: 'Giá khởi điểm (VNĐ)',
+                                            initialText: FormatProvider()
+                                                .formatCurrency(propertyModel
+                                                    .revervePrice
+                                                    .toString()),
                                             onChangeText: (value) {
                                               setState(() {
                                                 inforAuction.revervePrice =
@@ -429,6 +439,11 @@ class _CreateAuctionState extends State<CreateAuction> {
                                             labelText: 'Nội dung',
                                             initialText:
                                                 propertyModel.post!.content,
+                                            onChangeText: (value) {
+                                              setState(() {
+                                                inforAuction.content = value;
+                                              });
+                                            },
                                           ),
                                         ],
                                       ),
@@ -497,9 +512,10 @@ class _CreateAuctionState extends State<CreateAuction> {
                                                 selectedDateTimeEnd =
                                                     selectedDateTime;
                                                 formattedDateTimeStart =
-                                                    convertDateTimeFormat(
-                                                        selectedDateTime
-                                                            .toString());
+                                                    FormatProvider()
+                                                        .convertDateTimeFormat(
+                                                            selectedDateTime
+                                                                .toString());
                                                 inforAuction.biddingStartTime =
                                                     formattedDateTimeStart;
                                               });
@@ -539,7 +555,7 @@ class _CreateAuctionState extends State<CreateAuction> {
                                             }
                                           },
                                           child: Text(
-                                            convertDateTimeDisplay(
+                                            FormatProvider().convertDateTimeDisplay(
                                                 formattedDateTimeStart), // Hiển thị dữ liệu
                                             style: const TextStyle(
                                                 color: Colors.black),
@@ -591,9 +607,10 @@ class _CreateAuctionState extends State<CreateAuction> {
                                                     selectedDateTimeEnd!)) {
                                               setState(() {
                                                 formattedDateTimeEnd =
-                                                    convertDateTimeFormat(
-                                                        selectedDateTime
-                                                            .toString());
+                                                    FormatProvider()
+                                                        .convertDateTimeFormat(
+                                                            selectedDateTime
+                                                                .toString());
                                                 inforAuction.biddingEndTime =
                                                     formattedDateTimeEnd;
                                               });
@@ -633,7 +650,7 @@ class _CreateAuctionState extends State<CreateAuction> {
                                             }
                                           },
                                           child: Text(
-                                            convertDateTimeDisplay(
+                                            FormatProvider().convertDateTimeDisplay(
                                                 formattedDateTimeEnd), // Hiển thị dữ liệu
                                             style: const TextStyle(
                                                 color: Colors.black),
@@ -648,6 +665,17 @@ class _CreateAuctionState extends State<CreateAuction> {
                                         readOnly: true,
                                         labelText: 'Bước giá',
                                         initialText: '1% (theo giá khởi điểm)',
+                                      ),
+
+                                      InputHaveLabel(
+                                        labelText: 'Số bước giá tối đa',
+                                        initialText: '5',
+                                        onChangeText: (value) {
+                                          setState(() {
+                                            inforAuction.maxStepFee =
+                                                int.parse(value);
+                                          });
+                                        },
                                       ),
                                     ],
                                   ),
@@ -666,62 +694,40 @@ class _CreateAuctionState extends State<CreateAuction> {
     );
   }
 
-  String convertDateTimeFormat(String inputDateTime) {
-    final inputFormat = DateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-    final outputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-    final dateTime = inputFormat.parse(inputDateTime);
-    final formattedDateTime = outputFormat.format(dateTime);
-    return formattedDateTime;
+  Future<DateTime?> showDateTimePicker({
+    required BuildContext context,
+    DateTime? initialDate,
+    DateTime? firstDate,
+    DateTime? lastDate,
+  }) async {
+    initialDate ??= DateTime.now();
+    firstDate ??= initialDate.subtract(const Duration(days: 365));
+    lastDate ??= firstDate.add(const Duration(days: 365 * 2));
+
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    );
+
+    if (selectedDate == null) return null;
+
+    if (!context.mounted) return selectedDate;
+
+    final TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(selectedDate),
+    );
+
+    return selectedTime == null
+        ? selectedDate
+        : DateTime(
+            selectedDate.year,
+            selectedDate.month,
+            selectedDate.day,
+            selectedTime.hour,
+            selectedTime.minute,
+          );
   }
-
-  String convertDateTimeDisplay(String inputDateTime) {
-    final inputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-    final outputFormat = DateFormat("dd/MM/yyyy - HH:mm");
-    final dateTime = inputFormat.parse(inputDateTime);
-    final formattedDateTime = outputFormat.format(dateTime);
-    return formattedDateTime;
-  }
-}
-
-String getCurrentDateTimeFormatted() {
-  final DateFormat formatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-  final String formattedDateTime = formatter.format(DateTime.now());
-  return formattedDateTime;
-}
-
-Future<DateTime?> showDateTimePicker({
-  required BuildContext context,
-  DateTime? initialDate,
-  DateTime? firstDate,
-  DateTime? lastDate,
-}) async {
-  initialDate ??= DateTime.now();
-  firstDate ??= initialDate.subtract(const Duration(days: 365));
-  lastDate ??= firstDate.add(const Duration(days: 365 * 2));
-
-  final DateTime? selectedDate = await showDatePicker(
-    context: context,
-    initialDate: initialDate,
-    firstDate: firstDate,
-    lastDate: lastDate,
-  );
-
-  if (selectedDate == null) return null;
-
-  if (!context.mounted) return selectedDate;
-
-  final TimeOfDay? selectedTime = await showTimePicker(
-    context: context,
-    initialTime: TimeOfDay.fromDateTime(selectedDate),
-  );
-
-  return selectedTime == null
-      ? selectedDate
-      : DateTime(
-          selectedDate.year,
-          selectedDate.month,
-          selectedDate.day,
-          selectedTime.hour,
-          selectedTime.minute,
-        );
 }

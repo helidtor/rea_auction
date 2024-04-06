@@ -81,15 +81,19 @@ class UserLoginModel {
       address: map['address'] != null ? map['address'] as String : null,
       avatarUrl: map['avatarUrl'] != null ? map['avatarUrl'] as String : null,
       role: map['role'] != null ? map['role'] as int : null,
-      phoneNumber: map['phoneNumber'] != null ? map['phoneNumber'] as String : null,
-      dateOfBirth: map['dateOfBirth'] != null ? map['dateOfBirth'] as String : null,
-      accessToken: map['accessToken'] != null ? map['accessToken'] as String : null,
+      phoneNumber:
+          map['phoneNumber'] != null ? map['phoneNumber'] as String : null,
+      dateOfBirth:
+          map['dateOfBirth'] != null ? map['dateOfBirth'] as String : null,
+      accessToken:
+          map['accessToken'] != null ? map['accessToken'] as String : null,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory UserLoginModel.fromJson(String source) => UserLoginModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory UserLoginModel.fromJson(String source) =>
+      UserLoginModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -99,33 +103,32 @@ class UserLoginModel {
   @override
   bool operator ==(covariant UserLoginModel other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.firstName == firstName &&
-      other.lastName == lastName &&
-      other.username == username &&
-      other.password == password &&
-      other.email == email &&
-      other.address == address &&
-      other.avatarUrl == avatarUrl &&
-      other.role == role &&
-      other.phoneNumber == phoneNumber &&
-      other.dateOfBirth == dateOfBirth &&
-      other.accessToken == accessToken;
+
+    return other.firstName == firstName &&
+        other.lastName == lastName &&
+        other.username == username &&
+        other.password == password &&
+        other.email == email &&
+        other.address == address &&
+        other.avatarUrl == avatarUrl &&
+        other.role == role &&
+        other.phoneNumber == phoneNumber &&
+        other.dateOfBirth == dateOfBirth &&
+        other.accessToken == accessToken;
   }
 
   @override
   int get hashCode {
     return firstName.hashCode ^
-      lastName.hashCode ^
-      username.hashCode ^
-      password.hashCode ^
-      email.hashCode ^
-      address.hashCode ^
-      avatarUrl.hashCode ^
-      role.hashCode ^
-      phoneNumber.hashCode ^
-      dateOfBirth.hashCode ^
-      accessToken.hashCode;
+        lastName.hashCode ^
+        username.hashCode ^
+        password.hashCode ^
+        email.hashCode ^
+        address.hashCode ^
+        avatarUrl.hashCode ^
+        role.hashCode ^
+        phoneNumber.hashCode ^
+        dateOfBirth.hashCode ^
+        accessToken.hashCode;
   }
 }
