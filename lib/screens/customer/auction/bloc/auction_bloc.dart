@@ -32,6 +32,9 @@ class AuctionPostBloc extends Bloc<AuctionEvent, AuctionState> {
           emit(const AuctionError(error: "Lỗi tải đấu giá"));
         }
       } else if (event is CheckIsJoin) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        int? id = prefs.getInt('idUser');
+        int? idAuthor = prefs.getInt('idAuthor');
         var isJoined = await ApiProvider.checkJoinAuction(event.idAuction);
         if (event.statusAuction == 2) {
           //đã kết thúc
@@ -50,23 +53,32 @@ class AuctionPostBloc extends Bloc<AuctionEvent, AuctionState> {
           if (isJoined == true) {
             emit(AuctionJoinedState(joined: 1)); //đã joined
           } else {
-            emit(AuctionJoinedState(joined: 2)); //chưa joined
+            if (id != null && id != idAuthor) {
+              emit(AuctionJoinedState(joined: 2)); //chưa joined, không phải chủ
+            } else {
+              emit(AuctionJoinedState(joined: 10));
+            }
           }
         } else if (event.statusAuction == 1) {
           //đang diễn ra
           if (isJoined == true) {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             int? idAuction = prefs.getInt("idAuction");
-            var historyAuction = await ApiProvider.getAuctionHistory(idAuction: idAuction!);
-            emit(AuctionJoinedState(joined: 4, auctionHistory: historyAuction)); //đã joined
+            var historyAuction =
+                await ApiProvider.getAuctionHistory(idAuction: idAuction!);
+            emit(AuctionJoinedState(
+                joined: 4, auctionHistory: historyAuction)); //đã joined
           } else {
             emit(AuctionJoinedState(joined: 5)); //chưa joined
           }
         }
       } else if (event is JoinAuction) {
-        var isJoine = await ApiProvider.joinAuction(event.idAuction);
-        if (isJoine == true) {
-          emit(JoinAuctionSuccessState());
+        // var isJoine = await ApiProvider.joinAuction(event.idAuction);
+        var urlJoining =
+            await ApiProvider.paymentJoining(idAuction: event.idAuction);
+
+        if (urlJoining != null) {
+          emit(JoinAuctionSuccessState(url: urlJoining));
         } else {
           emit(const JoinAuctionErrorState(error: 'Lỗi đăng ký'));
         }

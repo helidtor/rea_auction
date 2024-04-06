@@ -657,19 +657,52 @@ class _CreateAuctionState extends State<CreateAuction> {
                                           ),
                                         ),
                                       ),
+
+                                      // const InputHaveLabel(
+                                      //   readOnly: true,
+                                      //   labelText: 'Bước giá',
+                                      //   initialText: '1% (theo giá khởi điểm)',
+                                      // ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Bước giá',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black
+                                                    .withOpacity(0.6)),
+                                          ),
+                                          Container(
+                                            decoration: const BoxDecoration(
+                                              color: Color.fromARGB(
+                                                  174, 239, 237, 237),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10)),
+                                            ),
+                                            child: const Padding(
+                                              padding: EdgeInsets.all(5),
+                                              child: Text(
+                                                  '1% so với giá khởi điểm',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                  )),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                       const SizedBox(
                                         height: 20,
                                       ),
-
-                                      const InputHaveLabel(
-                                        readOnly: true,
-                                        labelText: 'Bước giá',
-                                        initialText: '1% (theo giá khởi điểm)',
-                                      ),
-
                                       InputHaveLabel(
                                         labelText: 'Số bước giá tối đa',
-                                        initialText: '5',
+                                        initialText: 'Không giới hạn',
                                         onChangeText: (value) {
                                           setState(() {
                                             inforAuction.maxStepFee =

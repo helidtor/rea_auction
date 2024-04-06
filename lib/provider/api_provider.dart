@@ -401,6 +401,37 @@ class ApiProvider {
     return null;
   }
 
+// <<<< Payment cọc>>>>
+  static Future<String?> paymentJoining({required int idAuction}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(myToken);
+    String? urlPayment;
+    int? idUser = prefs.getInt('idUser');
+    print('data nhận vào payment joining là: $idAuction $idUser');
+    try {
+      var url =
+          "$baseUrl/v1/auction/VNPay/Payment-For-Joining?UserId=$idUser&Amount=50000&AuctionId=$idAuction";
+      Map<String, String> header = await getHeader();
+      header.addAll({'Authorization': 'Bearer $token'});
+      var response = await http.get(Uri.parse(url.toString()), headers: header);
+      if (response.statusCode == 200) {
+        var bodyConvert = jsonDecode(utf8.decode(response.bodyBytes));
+        if (bodyConvert['isError'] == false) {
+          var postsJson = bodyConvert['result'];
+          urlPayment = postsJson;
+          print('Link payment: {$urlPayment}');
+          return urlPayment;
+        } else {
+          print("Thanh toán lỗi");
+          return null;
+        }
+      }
+    } catch (e) {
+      print("Error payment: $e");
+    }
+    return null;
+  }
+
 // <<<< Check join auction>>>>
   static Future<bool?> checkJoinAuction(int idAuction) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -550,8 +581,8 @@ class ApiProvider {
   static Future<UserProfileModel?> getUserById(int id) async {
     UserProfileModel? userProfileModel;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString(myToken);
     prefs.setInt('idUser', id);
+    String? token = prefs.getString(myToken);
 
     try {
       var url = "$baseUrl/v1/auction/user/$id";
@@ -818,7 +849,7 @@ class ApiProvider {
     try {
       var response = await http.patch(Uri.parse(url.toString()),
           headers: header, body: json.encode(body));
-      print("TEST decline: ${response.body}");
+      print("TEST decline: ${response.statusCode}");
       if (response.statusCode == 200) {
         var bodyConvert = jsonDecode(response.body);
         if (bodyConvert['isError'] == false) {

@@ -377,7 +377,7 @@ class _CreateFormStates extends State<CreateForm> {
                                   formCreate.propertyArea = double.parse(value);
                                 });
                               },
-                              content: "Diện tích",
+                              content: "Diện tích(m\u00b2)",
                               controller: _areaController,
                               widthInput: 0.3,
                             ),

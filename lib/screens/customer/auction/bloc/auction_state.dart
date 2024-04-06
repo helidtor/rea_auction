@@ -1,4 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
+
 import 'package:swp_project_web/models/response/auction_history.dart';
 import 'package:swp_project_web/models/response/auction_model.dart';
 import 'package:swp_project_web/models/response/user_profile_model.dart';
@@ -37,7 +39,12 @@ class AuctionJoinedState extends AuctionState {
   AuctionJoinedState({required this.joined, this.auctionHistory});
 }
 
-class JoinAuctionSuccessState extends AuctionState {}
+class JoinAuctionSuccessState extends AuctionState {
+  String url;
+  JoinAuctionSuccessState({
+    required this.url,
+  });
+}
 
 class JoinAuctionErrorState extends AuctionState {
   final String error;

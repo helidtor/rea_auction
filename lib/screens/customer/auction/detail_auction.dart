@@ -11,17 +11,14 @@ import 'package:swp_project_web/models/response/auction_history.dart';
 import 'package:swp_project_web/models/response/auction_model.dart';
 import 'package:swp_project_web/models/response/user_profile_model.dart';
 import 'package:swp_project_web/provider/api_provider.dart';
-import 'package:swp_project_web/router/router.dart';
 import 'package:swp_project_web/screens/customer/auction/bloc/auction_bloc.dart';
 import 'package:swp_project_web/screens/customer/auction/bloc/auction_event.dart';
 import 'package:swp_project_web/screens/customer/auction/bloc/auction_state.dart';
 import 'package:swp_project_web/screens/customer/auction/row_history.dart';
 import 'package:swp_project_web/screens/customer/home/home_page.dart';
-import 'package:swp_project_web/screens/web_view/web_view.dart';
 import 'package:swp_project_web/theme/pallete.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:swp_project_web/widgets/button/gradient_button.dart';
-import 'package:swp_project_web/widgets/field_profile.dart';
 import 'package:swp_project_web/widgets/input/input_price.dart';
 import 'package:swp_project_web/widgets/input/text_content.dart';
 import 'package:swp_project_web/widgets/others/loading.dart';
@@ -160,31 +157,32 @@ class _DetailAuctionState extends State<DetailAuction> {
             print('Người chiến thắng: $winner');
           } else if (state is JoinAuctionSuccessState) {
             Navigator.pop(context);
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => super.widget));
-            toastification.show(
-                pauseOnHover: false,
-                progressBarTheme: const ProgressIndicatorThemeData(
-                  color: Colors.green,
-                ),
-                icon: const Icon(
-                  Icons.check_circle,
-                  color: Colors.green,
-                ),
-                foregroundColor: Colors.black,
-                context: context,
-                type: ToastificationType.success,
-                style: ToastificationStyle.minimal,
-                title: const TextContent(
-                  contentText: 'Đăng ký thành công',
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-                autoCloseDuration: const Duration(milliseconds: 1500),
-                animationDuration: const Duration(milliseconds: 500),
-                alignment: Alignment.topRight);
+            // Navigator.pushReplacement(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (BuildContext context) => super.widget));
+            _launchURL(state.url);
+            // toastification.show(
+            //     pauseOnHover: false,
+            //     progressBarTheme: const ProgressIndicatorThemeData(
+            //       color: Colors.green,
+            //     ),
+            //     icon: const Icon(
+            //       Icons.check_circle,
+            //       color: Colors.green,
+            //     ),
+            //     foregroundColor: Colors.black,
+            //     context: context,
+            //     type: ToastificationType.success,
+            //     style: ToastificationStyle.minimal,
+            //     title: const TextContent(
+            //       contentText: 'Đăng ký thành công',
+            //       fontWeight: FontWeight.bold,
+            //       color: Colors.black,
+            //     ),
+            //     autoCloseDuration: const Duration(milliseconds: 1500),
+            //     animationDuration: const Duration(milliseconds: 500),
+            //     alignment: Alignment.topRight);
           } else if (state is BidAuctionSuccessState) {
             // Navigator.pop(context);
             Navigator.pushReplacement(
@@ -235,10 +233,12 @@ class _DetailAuctionState extends State<DetailAuction> {
                 context: context,
                 type: ToastificationType.info,
                 style: ToastificationStyle.minimal,
-                title: TextContent(
-                  contentText: (auctionModel!.finalPrice! != 0)
-                      ? 'Giá đấu tối thiểu lớn hơn hoặc bằng: ${FormatProvider().formatCurrency((auctionModel!.finalPrice! + auctionModel!.stepFee!).toString())} VNĐ'
-                      : 'Giá đấu tối thiểu lớn hơn hoặc bằng: ${FormatProvider().formatCurrency((auctionModel!.revervePrice! + auctionModel!.stepFee!).toString())} VNĐ',
+                title: const TextContent(
+                  contentText:
+                      // (auctionModel!.finalPrice! != 0)
+                      //     ? 'Giá đấu tối thiểu lớn hơn hoặc bằng: ${FormatProvider().formatCurrency((auctionModel!.finalPrice! + auctionModel!.stepFee!).toString())} VNĐ'
+                      //     : 'Giá đấu tối thiểu lớn hơn hoặc bằng: ${FormatProvider().formatCurrency((auctionModel!.revervePrice! + auctionModel!.stepFee!).toString())} VNĐ',
+                      'Lỗi đấu giá',
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -287,7 +287,7 @@ class _DetailAuctionState extends State<DetailAuction> {
                 type: ToastificationType.error,
                 style: ToastificationStyle.minimal,
                 title: const TextContent(
-                  contentText: 'Đăng ký thất bại',
+                  contentText: 'Không thể đăng ký cuộc đấu giá của bản thân',
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -328,22 +328,28 @@ class _DetailAuctionState extends State<DetailAuction> {
               );
             } else if (isJoinAuction == 3) {
               //đã kết thúc
-              return const Row(
+              return Row(
                 children: [
-                  Text(
+                  const Text(
                     'Trạng thái:',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 13,
                     ),
                   ),
-                  Spacer(),
-                  Text(
-                    'Đã kết thúc',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 180, 23, 26),
-                      fontSize: 13,
+                  const Spacer(),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromARGB(255, 213, 135, 17),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Text(
+                        'Đã kết thúc',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white, fontSize: 17),
+                      ),
                     ),
                   ),
                 ],
@@ -372,44 +378,56 @@ class _DetailAuctionState extends State<DetailAuction> {
               );
               // return const Text('Đang diễn ra, chưa đăng ký');
             } else if (isJoinAuction == 6) {
-              return const Row(
+              return Row(
                 children: [
-                  Text(
+                  const Text(
                     'Trạng thái:',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 13,
                     ),
                   ),
-                  Spacer(),
-                  Text(
-                    'Thành công',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 180, 23, 26),
-                      fontSize: 13,
+                  const Spacer(),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromARGB(255, 34, 143, 37),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Text(
+                        'Thành công',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white, fontSize: 17),
+                      ),
                     ),
                   ),
                 ],
               );
               // return const Text('Thành công');
             } else if (isJoinAuction == 7) {
-              return const Row(
+              return Row(
                 children: [
-                  Text(
+                  const Text(
                     'Trạng thái:',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 13,
                     ),
                   ),
-                  Spacer(),
-                  Text(
-                    'Thất bại',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 180, 23, 26),
-                      fontSize: 13,
+                  const Spacer(),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromARGB(255, 185, 49, 40),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Text(
+                        'Thất bại',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white, fontSize: 17),
+                      ),
                     ),
                   ),
                 ],
@@ -1054,17 +1072,17 @@ class _DetailAuctionState extends State<DetailAuction> {
                                                                         null &&
                                                                     urlPayment
                                                                         .isNotEmpty) {
-                                                                  // _launchURL(
-                                                                  //     urlPayment);
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .push(
-                                                                    MaterialPageRoute(
-                                                                        builder: (context) =>
-                                                                            WebView(
-                                                                              url: urlPayment,
-                                                                            )),
-                                                                  );
+                                                                  _launchURL(
+                                                                      urlPayment);
+                                                                  // Navigator.of(
+                                                                  //         context)
+                                                                  //     .push(
+                                                                  //   MaterialPageRoute(
+                                                                  //       builder: (context) =>
+                                                                  //           WebView(
+                                                                  //             url: urlPayment,
+                                                                  //           )),
+                                                                  // );
                                                                 } else {
                                                                   throw 'URL payment is invalid';
                                                                 }
@@ -1127,17 +1145,28 @@ class _DetailAuctionState extends State<DetailAuction> {
                                               ),
                                               height: 300,
                                               // width: 100,
-                                              child: SingleChildScrollView(
-                                                child: Column(
-                                                  children: List.generate(
-                                                    auctionHistory.length,
-                                                    (index) => RowHistory(
-                                                        auctionHistory:
-                                                            auctionHistory[
-                                                                index]),
-                                                  ),
-                                                ),
-                                              ),
+                                              child: (auctionHistory.isNotEmpty)
+                                                  ? SingleChildScrollView(
+                                                      child: Column(
+                                                        children: List.generate(
+                                                          auctionHistory.length,
+                                                          (index) => RowHistory(
+                                                              auctionHistory:
+                                                                  auctionHistory[
+                                                                      index]),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Center(
+                                                      child: SizedBox(
+                                                        width: 250,
+                                                        height: 250,
+                                                        child: Image.asset(
+                                                          'assets/images/empty_transaction.png',
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
                                             ),
                                           ],
                                         ),
